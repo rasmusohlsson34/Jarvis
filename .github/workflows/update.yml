@@ -11,7 +11,6 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-
     steps:
       - name: Hämta koden
         uses: actions/checkout@v4
@@ -21,10 +20,8 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Installera beroenden
-        run: |
-          pip install playwright
-          playwright install --with-deps chromium
+      - name: Installera requests
+        run: pip install requests
 
       - name: Kör scrapern
         run: python scrape.py
