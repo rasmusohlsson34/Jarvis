@@ -2,9 +2,8 @@ name: JARVIS Refresh
 
 on:
   schedule:
-    # Var 15:e minut, måndag–fredag 07:00–15:45 UTC (= 09:00–17:45 Stockholm sommartid)
     - cron: '*/15 7-15 * * 1-5'
-  workflow_dispatch: # Möjliggör manuell körning via GitHub-sajten
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -24,9 +23,8 @@ jobs:
 
       - name: Installera beroenden
         run: |
-          pip install playwright==1.44.0
-          playwright install chromium
-          playwright install-deps chromium
+          pip install playwright
+          playwright install --with-deps chromium
 
       - name: Kör scrapern
         run: python scrape.py
