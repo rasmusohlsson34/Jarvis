@@ -57,7 +57,7 @@ tbody tr:hover{background:rgba(0,229,255,0.04)}
       <div class="status-dot"></div>
       <span class="status-text">0/7 live · FALLBACK · 12 Jun 2026</span>
     </div>
-    <div class="status-right">Senast uppdaterad: 12 Jun 2026 17:06:28 · Auto-refresh om 15 min</div>
+    <div class="status-right">Senast uppdaterad: 12 Jun 2026 23:06:16 · Auto-refresh om 15 min</div>
   </div>
   <div class="cards">
     <div class="card">
@@ -72,14 +72,14 @@ tbody tr:hover{background:rgba(0,229,255,0.04)}
     </div>
     <div class="card">
       <div class="card-label">Total P&amp;L</div>
-      <div class="card-value pos">+{fmt_sek(total_pl)} kr</div>
-      <div class="card-sub pos">+{abs(total_pl_pct):.2f}%</div>
+      <div class="card-value pos">+16 966 kr</div>
+      <div class="card-sub pos">+2.43%</div>
     </div>
     <div class="card">
       <div class="card-label">Bäst / Sämst</div>
       <div class="card-value" style="font-size:1rem;line-height:1.6">
-        <span class="pos">{best["ticker"]} {fmt_pct(best["vs_noll_pct"])}</span><br>
-        <span style="color:#a0c8d8;font-size:0.85rem">{worst["ticker"]} {fmt_pct(worst["vs_noll_pct"])}</span>
+        <span class="pos">AZA +3.88%</span><br>
+        <span style="color:#a0c8d8;font-size:0.85rem">NDA-SE +1.03%</span>
       </div>
     </div>
   </div>
@@ -88,15 +88,86 @@ tbody tr:hover{background:rgba(0,229,255,0.04)}
       <thead><tr>
         <th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag %</th><th>Vs noll %</th><th>P&amp;L (SEK)</th><th style="width:90px"></th>
       </tr></thead>
-      <tbody>{rows}</tbody>
+      <tbody>
+        <tr>
+          <td><div class="ticker-name">NDA-SE <span class="badge badge-fallback">FALLBACK</span></div>
+              <div class="stock-fullname">Nordea Bank</div></td>
+          <td>175,25</td>
+          <td><strong style="color:#e0f4ff;">177,05</strong></td>
+          <td class="pos">+1.58%</td>
+          <td class="pos">+1.03%</td>
+          <td class="pos">+1 026</td>
+          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:26.5%;background:#00ff88;"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><div class="ticker-name">SHB-A <span class="badge badge-fallback">FALLBACK</span></div>
+              <div class="stock-fullname">Handelsbanken A</div></td>
+          <td>135,15</td>
+          <td><strong style="color:#e0f4ff;">137,25</strong></td>
+          <td class="pos">+1.82%</td>
+          <td class="pos">+1.55%</td>
+          <td class="pos">+1 554</td>
+          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:40.0%;background:#00ff88;"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><div class="ticker-name">SHB-B <span class="badge badge-fallback">FALLBACK</span></div>
+              <div class="stock-fullname">Handelsbanken B</div></td>
+          <td>224,20</td>
+          <td><strong style="color:#e0f4ff;">229,00</strong></td>
+          <td class="pos">+1.60%</td>
+          <td class="pos">+2.14%</td>
+          <td class="pos">+2 141</td>
+          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:55.2%;background:#00ff88;"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><div class="ticker-name">SEB-A <span class="badge badge-fallback">FALLBACK</span></div>
+              <div class="stock-fullname">SEB A</div></td>
+          <td>184,00</td>
+          <td><strong style="color:#e0f4ff;">188,30</strong></td>
+          <td class="pos">+2.81%</td>
+          <td class="pos">+2.34%</td>
+          <td class="pos">+2 335</td>
+          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:60.2%;background:#00ff88;"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><div class="ticker-name">SEB-C <span class="badge badge-fallback">FALLBACK</span></div>
+              <div class="stock-fullname">SEB C</div></td>
+          <td>188,20</td>
+          <td><strong style="color:#e0f4ff;">193,80</strong></td>
+          <td class="pos">+2.32%</td>
+          <td class="pos">+2.98%</td>
+          <td class="pos">+2 974</td>
+          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:76.7%;background:#00ff88;"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><div class="ticker-name">SWED-A <span class="badge badge-fallback">FALLBACK</span></div>
+              <div class="stock-fullname">Swedbank A</div></td>
+          <td>336,10</td>
+          <td><strong style="color:#e0f4ff;">346,40</strong></td>
+          <td class="pos">+2.24%</td>
+          <td class="pos">+3.06%</td>
+          <td class="pos">+3 059</td>
+          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:79.0%;background:#00ff88;"></div></div></div></td>
+        </tr>
+        <tr>
+          <td><div class="ticker-name">AZA <span class="badge badge-fallback">FALLBACK</span></div>
+              <div class="stock-fullname">Avanza Bank Holding</div></td>
+          <td>358,10</td>
+          <td><strong style="color:#e0f4ff;">372,00</strong></td>
+          <td class="pos">+5.65%</td>
+          <td class="pos">+3.88%</td>
+          <td class="pos">+3 878</td>
+          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:100.0%;background:#00ff88;"></div></div></div></td>
+        </tr>
+      </tbody>
       <tfoot>
         <tr class="total-row">
           <td><div class="ticker-name">TOTALT</div></td>
-          <td style="color:#a0c8d8">{ti_str} kr</td>
-          <td style="color:#e0f4ff"><strong>{tv_str} kr</strong></td>
+          <td style="color:#a0c8d8">699 474 kr</td>
+          <td style="color:#e0f4ff"><strong>716 441 kr</strong></td>
           <td style="color:#a0c8d8">–</td>
-          <td class="{pl_cls}">{pl_sign}{abs(total_pl_pct):.2f}%</td>
-          <td class="{pl_cls}">{pl_sign}{fmt_sek(total_pl)}</td>
+          <td class="pos">+2.43%</td>
+          <td class="pos">+16 966</td>
           <td></td>
         </tr>
       </tfoot>
