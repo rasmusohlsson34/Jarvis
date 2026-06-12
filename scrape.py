@@ -177,7 +177,7 @@ body::after{{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .status-dot{{width:8px;height:8px;border-radius:50%;background:{dot_color};box-shadow:0 0 6px {dot_color};flex-shrink:0}}
 .status-text{{color:{dot_color}}}
 .status-right{{color:rgba(0,229,255,0.7)}}
-.cards{{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}}
+.cards{{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20py}}
 .card{{background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.18);border-radius:6px;padding:14px 16px}}
 .card-label{{font-size:0.68rem;color:rgba(0,229,255,0.5);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px}}
 .card-value{{font-size:1.25rem;color:#00e5ff}}
@@ -214,7 +214,7 @@ tbody tr:hover{{background:rgba(0,229,255,0.04)}}
       <div class="status-dot"></div>
       <span class="status-text">{status_text}</span>
     </div>
-    <div class="status-right">Uppdaterad: {update_time} · Auto-refresh om 15 min</div>
+    <div class="status-right">Senast uppdaterad: {update_date} {update_time} · Auto-refresh om 15 min</div>
   </div>
   <div class="cards">
     <div class="card">
