@@ -4,14 +4,15 @@
 import requests
 from datetime import datetime, timezone, timedelta
 
+# ── Nollpunkt 9 juni 2026 kl 10:30 ────────────────────────────────────────
 STOCKS = [
-    {"ticker": "NDA-SE",  "name": "Nordea Bank",         "id": "5249",  "noll": 175.25, "antal": 570,  "investerat": 99892.50},
-    {"ticker": "SHB-A",   "name": "Handelsbanken A",     "id": "5264",  "noll": 135.15, "antal": 740,  "investerat": 100011.00},
-    {"ticker": "SHB-B",   "name": "Handelsbanken B",     "id": "5265",  "noll": 224.20, "antal": 446,  "investerat": 99993.20},
-    {"ticker": "SEB-A",   "name": "SEB A",               "id": "5255",  "noll": 184.00, "antal": 543,  "investerat": 99912.00},
-    {"ticker": "SEB-C",   "name": "SEB C",               "id": "5256",  "noll": 188.20, "antal": 531,  "investerat": 99934.20},
-    {"ticker": "SWED-A",  "name": "Swedbank A",          "id": "5241",  "noll": 336.10, "antal": 297,  "investerat": 99821.70},
-    {"ticker": "AZA",     "name": "Avanza Bank Holding", "id": "5361",  "noll": 358.10, "antal": 279,  "investerat": 99909.90},
+    {"ticker": "NDA-SE",  "name": "Nordea Bank",         "id": "5249",  "noll": 175.25, "antal": 570, "investerat": 99892.50},
+    {"ticker": "SHB-A",   "name": "Handelsbanken A",     "id": "5264",  "noll": 135.15, "antal": 740, "investerat": 100011.00},
+    {"ticker": "SHB-B",   "name": "Handelsbanken B",     "id": "5265",  "noll": 224.20, "antal": 446, "investerat": 99993.20},
+    {"ticker": "SEB-A",   "name": "SEB A",               "id": "5255",  "noll": 184.00, "antal": 543, "investerat": 99912.00},
+    {"ticker": "SEB-C",   "name": "SEB C",               "id": "5256",  "noll": 188.20, "antal": 531, "investerat": 99934.20},
+    {"ticker": "SWED-A",  "name": "Swedbank A",          "id": "5241",  "noll": 336.10, "antal": 297, "investerat": 99821.70},
+    {"ticker": "AZA",     "name": "Avanza Bank Holding", "id": "5361",  "noll": 358.10, "antal": 279, "investerat": 99909.90},
 ]
 
 FALLBACK = {
@@ -48,7 +49,7 @@ def fetch_stock(stock):
     return fb[0], fb[1], "FALLBACK"
 
 def fmt_sek(n):
-    return f"{abs(n):,.0f}".replace(",", "\u00a0")
+    return f"{abs(n):,.0f}".replace(",", " ")
 
 def fmt_pct(n, dec=2):
     sign = "+" if n >= 0 else ""
@@ -58,7 +59,8 @@ def generate_html(results):
     total_inv   = sum(r["investerat"] for r in results)
     total_varde = sum(r["varde"]      for r in results)
     total_pl    = total_varde - total_inv
-    total_pl_pct = (total_pl / total_inv) * 100
+    total_pl_pct    = (total_pl / total_inv) * 100
+    total_vs_noll   = total_pl_pct
 
     live_count = sum(1 for r in results if r["status"] == "LIVE")
     best  = max(results, key=lambda r: r["vs_noll_pct"])
@@ -85,17 +87,18 @@ def generate_html(results):
 
     rows = ""
     for r in results:
-        bc    = "badge-live" if r["status"] == "LIVE" else "badge-fallback"
-        bt    = "LIVE" if r["status"] == "LIVE" else "FALLBACK"
-        dstr  = fmt_pct(r["day_pct"]) if r["day_pct"] is not None else "–"
-        dcls  = ("pos" if r.get("day_pct", 0) >= 0 else "neg") if r["day_pct"] is not None else "neutral"
-        vcls  = "pos" if r["vs_noll_pct"] >= 0 else "neg"
-        pcls  = "pos" if r["pl"] >= 0 else "neg"
-        bar   = min(100, abs(r["pl_pct"]) / max_pl * 100)
-        bcol  = "#00ff88" if r["pl"] >= 0 else "#ff1744"
+        bc  = "badge-live" if r["status"] == "LIVE" else "badge-fallback"
+        bt  = "LIVE" if r["status"] == "LIVE" else "FALLBACK"
+        dstr = fmt_pct(r["day_pct"]) if r["day_pct"] is not None else "–"
+        dcls = ("pos" if r.get("day_pct", 0) >= 0 else "neg") if r["day_pct"] is not None else "neutral"
+        vcls = "pos" if r["vs_noll_pct"] >= 0 else "neg"
+        pcls = "pos" if r["pl"] >= 0 else "neg"
+        bar  = min(100, abs(r["pl_pct"]) / max_pl * 100)
+        bcol = "#00ff88" if r["pl"] >= 0 else "#ff1744"
         psign = "+" if r["pl"] >= 0 else "−"
-        price_str = f"{r['price']:,.2f}".replace(",", "\u00a0").replace(".", ",")
-        noll_str  = f"{r['noll']:,.2f}".replace(",", "\u00a0").replace(".", ",")
+        price_str = f"{r['price']:,.2f}".replace(",", " ").replace(".", ",")
+        noll_str  = f"{r['noll']:,.2f}".replace(",", " ").replace(".", ",")
+
         rows += f"""
         <tr>
           <td><div class="ticker-name">{r["ticker"]} <span class="badge {bc}">{bt}</span></div>
@@ -108,8 +111,8 @@ def generate_html(results):
           <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:{bar:.1f}%;background:{bcol};"></div></div></div></td>
         </tr>"""
 
-    tv_str = f"{total_varde:,.0f}".replace(",", "\u00a0")
-    ti_str = f"{total_inv:,.0f}".replace(",", "\u00a0")
+    tv_str = f"{total_varde:,.0f}".replace(",", " ")
+    ti_str = f"{total_inv:,.0f}".replace(",", " ")
 
     html = f"""<!DOCTYPE html>
 <html lang="sv">
@@ -143,80 +146,80 @@ body::after{{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 table{{width:100%;border-collapse:collapse;font-size:0.82rem}}
 thead tr{{border-bottom:1px solid rgba(0,229,255,0.3)}}
 th{{padding:10px 10px 8px;text-align:right;font-size:0.65rem;color:rgba(0,229,255,0.5);text-transform:uppercase;letter-spacing:0.1em;white-space:nowrap}}
-th:first-child{{text-align:left}}
+th:first-child{text-align:left}
 td{{padding:11px 10px;text-align:right;border-bottom:1px solid rgba(0,229,255,0.07);vertical-align:middle;white-space:nowrap}}
-td:first-child{{text-align:left}}
+td:first-child{text-align:left}
 tbody tr:hover{{background:rgba(0,229,255,0.04)}}
 .ticker-name{{font-family:'Orbitron',sans-serif;font-size:0.85rem;font-weight:700;color:#00e5ff;display:flex;align-items:center;gap:8px}}
 .badge{{font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:2px 6px;border-radius:3px;letter-spacing:0.05em}}
 .badge-live{{background:rgba(0,255,136,0.15);color:#00ff88;border:1px solid rgba(0,255,136,0.4)}}
 .badge-fallback{{background:rgba(255,167,38,0.15);color:#ffa726;border:1px solid rgba(255,167,38,0.4)}}
 .stock-fullname{{font-size:0.68rem;color:rgba(0,229,255,0.4);margin-top:2px}}
-.bar-wrap{{display:flex;align-items:center;justify-content:flex-end}}
+.bar-wra{{display:flex;align-items:center;justify-content:flex-end}}
 .bar-bg{{width:80px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}}
 .bar-fill{{height:100%;border-radius:3px}}
 .total-row td{{border-top:1px solid rgba(0,229,255,0.3);border-bottom:none;color:#00e5ff;font-size:0.85rem;padding-top:14px}}
 .footer{{margin-top:24px;text-align:center;font-size:0.65rem;color:rgba(0,229,255,0.25);letter-spacing:0.1em;text-transform:uppercase}}
 </style>
 </head>
-<body>
-<div class="container">
-  <div class="header">
-    <div class="logo">J.A.R.V.I.S.</div>
-    <div class="subtitle">Bankterminalen · Live Portföljövervakning</div>
-  </div>
-  <div class="statusbar">
-    <div class="status-left">
-      <div class="status-dot"></div>
-      <span class="status-text">{status_text}</span>
+<bady>
+  <div class="container">
+    <div class="header">
+      <div class="logo">J.A.R.V.I.S.</div>
+      <div class="subtitle">Bankterminalen · Live Portföljövervakning</div>
     </div>
-    <div class="status-right">Senast uppdaterad: {update_date} {update_time} · Auto-refresh om 15 min</div>
-  </div>
-  <div class="cards">
-    <div class="card">
-      <div class="card-label">Investerat</div>
-      <div class="card-value">{ti_str} kr</div>
-      <div class="card-sub neutral">Nollpunkt 9 jun 10:30</div>
+    <div class="statusbar">
+      <div class="status-left">
+        <div class="status-dot"></div>
+        <span class="status-text">{status_text}</span>
+      </div>
+      <div class="status-right">Senast uppdaterad: {update_date} {update_time} · Auto-refresh om 15 min</div>
     </div>
-    <div class="card">
-      <div class="card-label">Portföljvärde</div>
-      <div class="card-value">{tv_str} kr</div>
-      <div class="card-sub neutral">&nbsp;</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Total P&amp;L</div>
-      <div class="card-value {pl_cls}">{pl_sign}{{fmt_sek(total_pl)}} kr</div>
-      <div class="card-sub {pl_cls}">{pl_sign}{{abs(total_pl_pct):.2f}}%</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Bäst / Sämst</div>
-      <div class="card-value" style="font-size:1rem;line-height:1.6">
-        <span class="pos">{{best["ticker"]}} {{fmt_pct(best["vs_noll_pct"])}}</span><br>
-        <span style="color:#a0c8d8;font-size:0.85rem">{{worst["ticker"]}} {{fmt_pct(worst["vs_noll_pct"])}}</span>
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Investerat</div>
+        <div class="card-value">{ti_str} kr</div>
+        <div class="card-sub neutral">Nollpunkt 9 jun 10:30</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Portföljvärde</div>
+        <div class="card-value">{tv_str} kr</div>
+        <div class="card-sub neutral">&nbsp;</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Total P&amp;L</div>
+        <div class="card-value {pl_cls}">{pl_sign}{fmt_sek(total_pl)} kr</div>
+        <div class="card-sub {pl_cls}">{pl_sign}{abs(total_pl_pct):.2f}%</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Bäst / Sämst</div>
+        <div class="card-value" style="font-size:1rem;line-height:1.6">
+          <span class="pos">{best["ticker"]} {fmt_pct(best["vs_noll_pct"])}</span><br>
+          <span style="color:#a0c8d8;font-size:0.85rem">{worst["ticker"]} {fmt_pct(worst["vs_noll_pct"])}</span>
+        </div>
       </div>
     </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag %</th><th>Vs noll %</th><th>P&amp;L (SEK)</th><th style="width:90px"></th>
+        </tr></thead>
+        <tbody>{rows}</tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td><div class="ticker-name">TOTALT</div></td>
+            <td style="color:#a0c8d8">{ti_str} kr</td>
+            <td style="color:#e0f4ff"><strong>{tv_str} kr</strong></td>
+            <td style="color:#a0c8d8">–</td>
+            <td class="{pl_cls}">{pl_sign}{abs(total_vs_noll):.2f}%</td>
+            <td class="{pl_cls}">{pl_sign}{fmt_sek(total_pl)}</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="footer">Källa: Avanza · Uppdateras var 15 min mån-fre 09:00-17:30</div>
   </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag %</th><th>Vs noll %</th><th>P&amp;L (SEK)</th><th style="width:90px"></th>
-      </tr></thead>
-      <tbody>{{rows}}</tbody>
-      <tfoot>
-        <tr class="total-row">
-          <td><div class="ticker-name">TOTALT</div></td>
-          <td style="color:#a0c8d8">{{ti_str}} kr</td>
-          <td style="color:#e0f4ff"><strong>{{tv_str}} kr</strong></td>
-          <td style="color:#a0c8d8">–</td>
-          <td class="{{pl_cls}}">{{pl_sign}}{{abs(total_pl_pct):.2f}}%</td>
-          <td class="{{pl_cls}}">{{pl_sign}}{{fmt_sek(total_pl)}}</td>
-          <td></td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-  <div class="footer">Källa: Avanza · Uppdateras var 15 min mån–fre 09:00–17:30</div>
-</div>
 </body>
 </html>"""
 
