@@ -1,0 +1,40 @@
+name: JARVIS Refresh
+
+on:
+  schedule:
+    # Var 15:e minut, måndag–fredag 07:00–15:45 UTC (= 09:00–17:45 Stockholm sommartid)
+    - cron: '*/15 7-15 * * 1-5'
+  workflow_dispatch: # Möjliggör manuell körning via GitHub-sajten
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Hämta koden
+        uses: actions/checkout@v4
+
+      - name: Installera Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Installera beroenden
+        run: |
+          pip install playwright==1.44.0
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Kör scrapern
+        run: python scrape.py
+
+      - name: Spara index.html till GitHub
+        run: |
+          git config user.name "JARVIS Bot"
+          git config user.email "jarvis@bot.local"
+          git add index.html
+          git diff --staged --quiet || git commit -m "JARVIS refresh $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push
