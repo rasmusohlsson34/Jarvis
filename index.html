@@ -1,179 +1,57 @@
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta http-equiv="refresh" content="900">
-<title>J.A.R.V.I.S. — Bankterminalen</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:#050c12;color:#a0c8d8;font-family:'Share Tech Mono',monospace;min-height:100vh;position:relative;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent 2px,rgba(0,229,255,0.015) 2px 4px);pointer-events:none;z-index:1000}
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,0.6) 100%);pointer-events:none;z-index:999}
-.container{max-width:1300px;margin:0 auto;padding:24px 20px 40px;position:relative;z-index:1}
-.header{text-align:center;margin-bottom:20px;border-bottom:1px solid rgba(0,229,255,0.2);padding-bottom:16px}
-.logo{font-family:'Orbitron',sans-serif;font-size:2.8rem;font-weight:900;color:#00e5ff;letter-spacing:0.3em;text-shadow:0 0 20px rgba(0,229,255,0.5)}
-.subtitle{font-size:0.85rem;color:rgba(0,229,255,0.6);letter-spacing:0.2em;margin-top:4px;text-transform:uppercase}
-.statusbar{display:flex;justify-content:space-between;align-items:center;background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.15);border-radius:4px;padding:8px 16px;margin-bottom:20px;font-size:0.78rem;letter-spacing:0.05em}
-.status-left{display:flex;align-items:center;gap:8px}
-.status-dot{width:8px;height:8px;border-radius:50%;background:#ff1744;box-shadow:0 0 6px #ff1744;flex-shrink:0}
-.status-text{color:#ff1744}
-.status-right{color:rgba(0,229,255,0.7)}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.card{background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.18);border-radius:6px;padding:14px 16px}
-.card-label{font-size:0.68rem;color:rgba(0,229,255,0.5);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px}
-.card-value{font-size:1.25rem;color:#00e5ff}
-.card-sub{font-size:0.75rem;margin-top:2px}
-.pos{color:#00ff88}.neg{color:#ff1744}.neutral{color:#a0c8d8}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:0.82rem}
-thead tr{border-bottom:1px solid rgba(0,229,255,0.3)}
-th{padding:10px 10px 8px;text-align:right;font-size:0.65rem;color:rgba(0,229,255,0.5);text-transform:uppercase;letter-spacing:0.1em;white-space:nowrap}
-th:first-child{text-align:left}
-td{padding:11px 10px;text-align:right;border-bottom:1px solid rgba(0,229,255,0.07);vertical-align:middle;white-space:nowrap}
-td:first-child{text-align:left}
-tbody tr:hover{background:rgba(0,229,255,0.04)}
-.ticker-name{font-family:'Orbitron',sans-serif;font-size:0.85rem;font-weight:700;color:#00e5ff;display:flex;align-items:center;gap:8px}
-.badge{font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:2px 6px;border-radius:3px;letter-spacing:0.05em}
-.badge-live{background:rgba(0,255,136,0.15);color:#00ff88;border:1px solid rgba(0,255,136,0.4)}
-.badge-fallback{background:rgba(255,167,38,0.15);color:#ffa726;border:1px solid rgba(255,167,38,0.4)}
-.stock-fullname{font-size:0.68rem;color:rgba(0,229,255,0.4);margin-top:2px}
-.bar-wrap{display:flex;align-items:center;justify-content:flex-end}
-.bar-bg{width:80px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
-.bar-fill{height:100%;border-radius:3px}
-.total-row td{border-top:1px solid rgba(0,229,255,0.3);border-bottom:none;color:#00e5ff;font-size:0.85rem;padding-top:14px}
-.footer{margin-top:24px;text-align:center;font-size:0.65rem;color:rgba(0,229,255,0.25);letter-spacing:0.1em;text-transform:uppercase}
-</style>
-</head>
-<body>
-<div class="container">
-  <div class="header">
-    <div class="logo">J.A.R.V.I.S.</div>
-    <div class="subtitle">Bankterminalen · Live Portföljövervakning</div>
-  </div>
-  <div class="statusbar">
-    <div class="status-left">
-      <div class="status-dot"></div>
-      <span class="status-text">0/7 live · FALLBACK · 13 Jun 2026</span>
-    </div>
-    <div class="status-right">Senast uppdaterad: 13 Jun 2026 10:25:47 · Auto-refresh om 15 min</div>
-  </div>
-  <div class="cards">
-    <div class="card">
-      <div class="card-label">Investerat</div>
-      <div class="card-value">699 474 kr</div>
-      <div class="card-sub neutral">Nollpunkt 9 jun 10:30</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Portföljvärde</div>
-      <div class="card-value">716 441 kr</div>
-      <div class="card-sub neutral">&nbsp;</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Total P&amp;L</div>
-      <div class="card-value pos">+16 966 kr</div>
-      <div class="card-sub pos">+2.43%</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Bäst / Sämst</div>
-      <div class="card-value" style="font-size:1rem;line-height:1.6">
-        <span class="pos">AZA +3.88%</span><br>
-        <span style="color:#a0c8d8;font-size:0.85rem">NDA-SE +1.03%</span>
-      </div>
-    </div>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr>
-        <th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag %</th><th>Vs noll %</th><th>P&amp;L (SEK)</th><th style="width:90px"></th>
-      </tr></thead>
-      <tbody>
-        <tr>
-          <td><div class="ticker-name">NDA-SE <span class="badge badge-fallback">FALLBACK</span></div>
-              <div class="stock-fullname">Nordea Bank</div></td>
-          <td>175,25</td>
-          <td><strong style="color:#e0f4ff;">177,05</strong></td>
-          <td class="pos">+1.58%</td>
-          <td class="pos">+1.03%</td>
-          <td class="pos">+1 026</td>
-          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:26.5%;background:#00ff88;"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><div class="ticker-name">SHB-A <span class="badge badge-fallback">FALLBACK</span></div>
-              <div class="stock-fullname">Handelsbanken A</div></td>
-          <td>135,15</td>
-          <td><strong style="color:#e0f4ff;">137,25</strong></td>
-          <td class="pos">+1.82%</td>
-          <td class="pos">+1.55%</td>
-          <td class="pos">+1 554</td>
-          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:40.0%;background:#00ff88;"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><div class="ticker-name">SHB-B <span class="badge badge-fallback">FALLBACK</span></div>
-              <div class="stock-fullname">Handelsbanken B</div></td>
-          <td>224,20</td>
-          <td><strong style="color:#e0f4ff;">229,00</strong></td>
-          <td class="pos">+1.60%</td>
-          <td class="pos">+2.14%</td>
-          <td class="pos">+2 141</td>
-          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:55.2%;background:#00ff88;"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><div class="ticker-name">SEB-A <span class="badge badge-fallback">FALLBACK</span></div>
-              <div class="stock-fullname">SEB A</div></td>
-          <td>184,00</td>
-          <td><strong style="color:#e0f4ff;">188,30</strong></td>
-          <td class="pos">+2.81%</td>
-          <td class="pos">+2.34%</td>
-          <td class="pos">+2 335</td>
-          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:60.2%;background:#00ff88;"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><div class="ticker-name">SEB-C <span class="badge badge-fallback">FALLBACK</span></div>
-              <div class="stock-fullname">SEB C</div></td>
-          <td>188,20</td>
-          <td><strong style="color:#e0f4ff;">193,80</strong></td>
-          <td class="pos">+2.32%</td>
-          <td class="pos">+2.98%</td>
-          <td class="pos">+2 974</td>
-          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:76.7%;background:#00ff88;"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><div class="ticker-name">SWED-A <span class="badge badge-fallback">FALLBACK</span></div>
-              <div class="stock-fullname">Swedbank A</div></td>
-          <td>336,10</td>
-          <td><strong style="color:#e0f4ff;">346,40</strong></td>
-          <td class="pos">+2.24%</td>
-          <td class="pos">+3.06%</td>
-          <td class="pos">+3 059</td>
-          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:79.0%;background:#00ff88;"></div></div></div></td>
-        </tr>
-        <tr>
-          <td><div class="ticker-name">AZA <span class="badge badge-fallback">FALLBACK</span></div>
-              <div class="stock-fullname">Avanza Bank Holding</div></td>
-          <td>358,10</td>
-          <td><strong style="color:#e0f4ff;">372,00</strong></td>
-          <td class="pos">+5.65%</td>
-          <td class="pos">+3.88%</td>
-          <td class="pos">+3 878</td>
-          <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:100.0%;background:#00ff88;"></div></div></div></td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr class="total-row">
-          <td><div class="ticker-name">TOTALT</div></td>
-          <td style="color:#a0c8d8">699 474 kr</td>
-          <td style="color:#e0f4ff"><strong>716 441 kr</strong></td>
-          <td style="color:#a0c8d8">–</td>
-          <td class="pos">+2.43%</td>
-          <td class="pos">+16 966</td>
-          <td></td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
-  <div class="footer">Källa: Avanza · Uppdateras var 15 min mån–fre 09:00–17:30</div>
-</div>
-</body>
-</html>
+<!DOCTYPE html><html><head><title>JARVIS</title></head><body><h1>JARVIS</h1><p>Total: 721 660 kr, P&L: +22 185 kr (+3.17%)</p><table>
+    <tr>
+      <td>NDA-SE LIVE<br>Nordea Bank</td>
+      <td>175,25</td>
+      <td>178,00</td>
+      <td>+2.12%</td>
+      <td>+1.57%</td>
+      <td>+1 568</td>
+    </tr>
+    <tr>
+      <td>SHB-A LIVE<br>Handelsbanken A</td>
+      <td>135,15</td>
+      <td>138,35</td>
+      <td>+2.63%</td>
+      <td>+2.37%</td>
+      <td>+2 368</td>
+    </tr>
+    <tr>
+      <td>SHB-B LIVE<br>Handelsbanken B</td>
+      <td>224,20</td>
+      <td>230,00</td>
+      <td>+2.04%</td>
+      <td>+2.59%</td>
+      <td>+2 587</td>
+    </tr>
+    <tr>
+      <td>SEB-A LIVE<br>SEB A</td>
+      <td>184,00</td>
+      <td>188,90</td>
+      <td>+3.14%</td>
+      <td>+2.66%</td>
+      <td>+2 661</td>
+    </tr>
+    <tr>
+      <td>SEB-C LIVE<br>SEB C</td>
+      <td>188,20</td>
+      <td>195,00</td>
+      <td>+2.96%</td>
+      <td>+3.61%</td>
+      <td>+3 611</td>
+    </tr>
+    <tr>
+      <td>SWED-A LIVE<br>Swedbank A</td>
+      <td>336,10</td>
+      <td>347,90</td>
+      <td>+2.69%</td>
+      <td>+3.51%</td>
+      <td>+3 505</td>
+    </tr>
+    <tr>
+      <td>AZA LIVE<br>Avanza Bank Holding</td>
+      <td>358,10</td>
+      <td>379,20</td>
+      <td>+7.70%</td>
+      <td>+5.89%</td>
+      <td>+5 887</td>
+    </tr></table></body></html>
