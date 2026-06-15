@@ -2,178 +2,476 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta http-equiv="refresh" content="900">
-<title>J.A.R.V.I.S. - Bankterminalen</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J.A.R.V.I.S. — Bankterminalen</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:#050c12;color:#a0c8d8;font-family:'Share Tech Mono',monospace;min-height:100vh;position:relative;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent 2px,rgba(0,229,255,0.015) 2px 4px);pointer-events:none;z-index:1000}
-body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,0.6) 100%);pointer-events:none;z-index:999}
-.container{max-width:1300px;margin:0 auto;padding:24px 20px 40px;position:relative;z-index:1}
-.header{text-align:center;margin-bottom:20px;border-bottom:1px solid rgba(0,229,255,0.2);padding-bottom:16px}
-.logo{font-family:'Orbitron',sans-serif;font-size:2.8rem;font-weight:900;color:#00e5ff;letter-spacing:0.3em;text-shadow:0 0 20px rgba(0,229,255,0.5)}
-.subtitle{font-size:0.85rem;color:rgba(0,229,255,0.6);letter-spacing:0.2em;margin-top:4px;text-transform:uppercase}
-.statusbar{display:flex;justify-content:space-between;align-items:center;background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.15);border-radius:4px;padding:8px 16px;margin-bottom:20px;font-size:0.78rem;letter-spacing:0.05em}
-.status-left{display:flex;align-items:center;gap:8px}
-.status-dot{width:8px;height:8px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;flex-shrink:0}
-.status-text{color:#00ff88}
-.status-right{color:rgba(0,229,255,0.7)}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.card{background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.18);border-radius:6px;padding:14px 16px}
-.card-label{font-size:0.68rem;color:rgba(0,229,255,0.5);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px}
-.card-value{font-size:1.25rem;color:#00e5ff}
-.card-sub{font-size:0.75rem;margin-top:2px}
-.pos{color:#00ff88}.neg{color:#ff1744}.neutral{color:#a0c8d8}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:0.82rem}
-thead tr{border-bottom:1px solid rgba(0,229,255,0.3)}
-th{padding:10px 10px 8px;text-align:right;font-size:0.65rem;color:rgba(0,229,255,0.5);text-transform:uppercase;letter-spacing:0.1em;white-space:nowrap}
-th:first-child{text-align:left}
-td{padding:11px 10px;text-align:right;border-bottom:1px solid rgba(0,229,255,0.07);vertical-align:middle;white-space:nowrap}
-td:first-child{text-align:left}
-tbody tr:hover{background:rgba(0,229,255,0.04)}
-.ticker-name{font-family:'Orbitron',sans-serif;font-size:0.85rem;font-weight:700;color:#00e5ff;display:flex;align-items:center;gap:8px}
-.badge{font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:2px 6px;border-radius:3px;letter-spacing:0.05em}
-.badge-live{background:rgba(0,255,136,0.15);color:#00ff88;border:1px solid rgba(0,255,136,0.4)}
-.badge-fallback{background:rgba(255,167,38,0.15);color:#ffa726;border:1px solid rgba(255,167,38,0.4)}
-.stock-fullname{font-size:0.68rem;color:rgba(0,229,255,0.4);margin-top:2px}
-.bar-wrap{display:flex;align-items:center;justify-content:flex-end}
-.bar-bg{width:80px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
-.bar-fill{height:100%;border-radius:3px}
-.total-row td{border-top:1px solid rgba(0,229,255,0.3);border-bottom:none;color:#00e5ff;font-size:0.85rem;padding-top:14px}
-.footer{margin-top:24px;text-align:center;font-size:0.65rem;color:rgba(0,229,255,0.25);letter-spacing:0.1em;text-transform:uppercase}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #050c12;
+    color: #a0d8ef;
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanlines overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* Vignette overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
+    pointer-events: none;
+    z-index: 998;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(0,229,255,0.2);
+    padding-bottom: 20px;
+  }
+
+  .logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #00e5ff;
+    letter-spacing: 0.3em;
+    text-shadow: 0 0 20px rgba(0,229,255,0.5);
+    line-height: 1;
+  }
+
+  .subtitle {
+    font-size: 0.75rem;
+    color: rgba(0,229,255,0.5);
+    letter-spacing: 0.25em;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  /* Status bar */
+  .statusbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0,229,255,0.04);
+    border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
+  }
+
+  .status-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #00ff88;
+    box-shadow: 0 0 6px #00ff88;
+    flex-shrink: 0;
+  }
+
+  .status-text { color: rgba(0,229,255,0.7); }
+  .status-right { color: rgba(0,229,255,0.5); }
+
+  /* Summary cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .card {
+    background: rgba(0,229,255,0.04);
+    border: 1px solid rgba(0,229,255,0.2);
+    border-radius: 6px;
+    padding: 16px;
+  }
+
+  .card-label {
+    font-size: 0.65rem;
+    color: rgba(0,229,255,0.45);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .card-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #00e5ff;
+    line-height: 1;
+  }
+
+  .card-sub {
+    font-size: 0.72rem;
+    margin-top: 6px;
+  }
+
+  .pos { color: #00ff88; }
+  .neg { color: #ff1744; }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+
+  thead th {
+    background: rgba(0,229,255,0.07);
+    color: rgba(0,229,255,0.6);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 12px;
+    text-align: right;
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(0,229,255,0.2);
+  }
+
+  thead th:first-child { text-align: left; }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(0,229,255,0.07);
+  }
+
+  tbody tr:hover {
+    background: rgba(0,229,255,0.04);
+  }
+
+  tbody td {
+    padding: 12px 12px;
+    text-align: right;
+    color: #a0d8ef;
+    vertical-align: middle;
+  }
+
+  tbody td:first-child { text-align: left; }
+
+  .ticker-cell .ticker-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #00e5ff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.1em;
+  }
+
+  .badge-live {
+    background: rgba(0,255,136,0.12);
+    color: #00ff88;
+    border: 1px solid rgba(0,255,136,0.3);
+  }
+
+  .badge-fallback {
+    background: rgba(255,165,0,0.12);
+    color: #ffaa00;
+    border: 1px solid rgba(255,165,0,0.3);
+  }
+
+  .ticker-cell .company-name {
+    font-size: 0.68rem;
+    color: rgba(0,229,255,0.35);
+    margin-top: 3px;
+  }
+
+  /* Bar */
+  .bar-wrap {
+    width: 80px;
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+  }
+
+  /* Total row */
+  .total-row td {
+    border-top: 1px solid rgba(0,229,255,0.25);
+    font-weight: bold;
+    color: #00e5ff;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    background: rgba(0,229,255,0.04);
+  }
+
+  .total-row td:first-child {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 0.62rem;
+    color: rgba(0,229,255,0.2);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0,229,255,0.08);
+  }
 </style>
 </head>
 <body>
 <div class="container">
+
+  <!-- Header -->
   <div class="header">
     <div class="logo">J.A.R.V.I.S.</div>
-    <div class="subtitle">Bankterminalen · Live Portföljövervakning</div>
+    <div class="subtitle">Bankterminalen &middot; Live Portföljövervakning</div>
   </div>
+
+  <!-- Status bar -->
   <div class="statusbar">
     <div class="status-left">
-      <div class="status-dot"></div>
-      <span class="status-text">7/7 live · Stockholmsbörsen · 13 Jun 2026</span>
+      <div class="status-dot" id="statusDot"></div>
+      <span class="status-text" id="statusText"></span>
     </div>
-    <div class="status-right">Senast uppdaterad: 13 Jun 2026 10:51:05 · Auto-refresh om 15 min</div>
+    <span class="status-right" id="statusRight"></span>
   </div>
+
+  <!-- Summary cards -->
   <div class="cards">
     <div class="card">
       <div class="card-label">Investerat</div>
-      <div class="card-value">699 474 kr</div>
-      <div class="card-sub neutral">Nollpunkt 9 jun 10:30</div>
+      <div class="card-value">699&nbsp;475 kr</div>
+      <div class="card-sub" style="color:rgba(0,229,255,0.4)">Nollpunkt 9 jun 2026</div>
     </div>
     <div class="card">
       <div class="card-label">Portföljvärde</div>
-      <div class="card-value">721 660 kr</div>
-      <div class="card-sub neutral">&nbsp;</div>
+      <div class="card-value" id="cardVarde">—</div>
+      <div class="card-sub" style="color:rgba(0,229,255,0.4)">Live kurs</div>
     </div>
     <div class="card">
       <div class="card-label">Total P&amp;L</div>
-      <div class="card-value pos">+22 185 kr</div>
-      <div class="card-sub pos">+3.17%</div>
+      <div class="card-value" id="cardPL" style="color:#00ff88">—</div>
+      <div class="card-sub" id="cardPLPct">—</div>
     </div>
     <div class="card">
       <div class="card-label">Bäst / Sämst</div>
-      <div class="card-value" style="font-size:1rem;line-height:1.6">
-        <span class="pos">AZA +5.89%</span><br>
-        <span style="color:#a0c8d8;font-size:0.85rem">NDA-SE +1.57%</span>
-      </div>
+      <div class="card-value" id="cardBest" style="font-size:0.95rem">—</div>
+      <div class="card-sub" id="cardWorst">—</div>
     </div>
   </div>
+
+  <!-- Table -->
   <div class="table-wrap">
     <table>
-      <thead><tr>
-        <th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag %</th><th>Vs noll %</th><th>P&amp;L (SEK)</th><th style="width:90px"></th>
-      </tr></thead>
-      <tbody>
-    <tr>
-      <td><div class="ticker-name">NDA-SE <span class="badge badge-live">LIVE</span></div>
-      <div class="stock-fullname">Nordea Bank</div></td>
-      <td>175,25</td>
-      <td><strong style="color:#e0f4ff;">178,00</strong></td>
-      <td class="pos">+2.12%</td>
-      <td class="pos">+1.57%</td>
-      <td class="pos">+1 568</td>
-      <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:26.6%;background:#00ff88;"></div></div></div></td>
-    </tr>
-    <tr>
-      <td><div class="ticker-name">SHB-A <span class="badge badge-live">LIVE</span></div>
-      <div class="stock-fullname">Handelsbanken A</div></td>
-      <td>135,15</td>
-      <td><strong style="color:#e0f4ff;">138,35</strong></td>
-      <td class="pos">+2.63%</td>
-      <td class="pos">+2.37%</td>
-      <td class="pos">+2 368</td>
-      <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:40.2%;background:#00ff88;"></div></div></div></td>
-    </tr>
-    <tr>
-      <td><div class="ticker-name">SHB-B <span class="badge badge-live">LIVE</span></div>
-      <div class="stock-fullname">Handelsbanken B</div></td>
-      <td>224,20</td>
-      <td><strong style="color:#e0f4ff;">230,00</strong></td>
-      <td class="pos">+2.04%</td>
-      <td class="pos">+2.59%</td>
-      <td class="pos">+2 587</td>
-      <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:43.9%;background:#00ff88;"></div></div></div></td>
-    </tr>
-    <tr>
-      <td><div class="ticker-name">SEB-A <span class="badge badge-live">LIVE</span></div>
-      <div class="stock-fullname">SEB A</div></td>
-      <td>184,00</td>
-      <td><strong style="color:#e0f4ff;">188,90</strong></td>
-      <td class="pos">+3.14%</td>
-      <td class="pos">+2.66%</td>
-      <td class="pos">+2 661</td>
-      <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:45.2%;background:#00ff88;"></div></div></div></td>
-    </tr>
-    <tr>
-      <td><div class="ticker-name">SEB-C <span class="badge badge-live">LIVE</span></div>
-      <div class="stock-fullname">SEB C</div></td>
-      <td>188,20</td>
-      <td><strong style="color:#e0f4ff;">195,00</strong></td>
-      <td class="pos">+2.96%</td>
-      <td class="pos">+3.61%</td>
-      <td class="pos">+3 611</td>
-      <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:61.3%;background:#00ff88;"></div></div></div></td>
-    </tr>
-    <tr>
-      <td><div class="ticker-name">SWED-A <span class="badge badge-live">LIVE</span></div>
-      <div class="stock-fullname">Swedbank A</div></td>
-      <td>336,10</td>
-      <td><strong style="color:#e0f4ff;">347,90</strong></td>
-      <td class="pos">+2.69%</td>
-      <td class="pos">+3.51%</td>
-      <td class="pos">+3 505</td>
-      <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:59.6%;background:#00ff88;"></div></div></div></td>
-    </tr>
-    <tr>
-      <td><div class="ticker-name">AZA <span class="badge badge-live">LIVE</span></div>
-      <div class="stock-fullname">Avanza Bank Holding</div></td>
-      <td>358,10</td>
-      <td><strong style="color:#e0f4ff;">379,20</strong></td>
-      <td class="pos">+7.70%</td>
-      <td class="pos">+5.89%</td>
-      <td class="pos">+5 887</td>
-      <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:100.0%;background:#00ff88;"></div></div></div></td>
-    </tr>
-      </tbody>
-      <tfoot>
-        <tr class="total-row">
-          <td><div class="ticker-name">TOTALT</div></td>
-          <td style="color:#a0c8d8">699 474 kr</td>
-          <td style="color:#e0f4ff"><strong>721 660 kr</strong></td>
-          <td style="color:#a0c8d8">-</td>
-          <td class="pos">+3.17%</td>
-          <td class="pos">+22 185</td>
-          <td></td>
+      <thead>
+        <tr>
+          <th>Aktie</th>
+          <th>Nollkurs</th>
+          <th>Kurs</th>
+          <th>Dag %</th>
+          <th>Vs Noll %</th>
+          <th>P&amp;L (SEK)</th>
+          <th></th>
         </tr>
-      </tfoot>
+      </thead>
+      <tbody id="tableBody"></tbody>
     </table>
   </div>
-  <div class="footer">Källa: Yahoo Finance · Uppdateras var 15 min man-fre 09:00-17:30</div>
+
+  <!-- Footer -->
+  <div class="footer">KÄLLA: Avanza &middot; UPPDATERAS VAR 15 MIN MÅN–FRE 09:00–17:30</div>
+
 </div>
+
+<script>
+const STOCKS = [
+  { ticker:'NDA-SE', name:'Nordea Bank',          nollkurs:175.25, antal:570,  investerat:99892.50,  price:179.15, dayPct:0.65,  status:'LIVE' },
+  { ticker:'SHB-A',  name:'Handelsbanken A',       nollkurs:135.15, antal:740,  investerat:100011.00, price:139.20, dayPct:0.61,  status:'LIVE' },
+  { ticker:'SHB-B',  name:'Handelsbanken B',       nollkurs:224.20, antal:446,  investerat:99993.20,  price:232.80, dayPct:1.22,  status:'LIVE' },
+  { ticker:'SEB-A',  name:'SEB A',                 nollkurs:184.00, antal:543,  investerat:99912.00,  price:191.65, dayPct:1.46,  status:'LIVE' },
+  { ticker:'SEB-C',  name:'SEB C',                 nollkurs:188.20, antal:531,  investerat:99934.20,  price:197.60, dayPct:1.33,  status:'LIVE' },
+  { ticker:'SWED-A', name:'Swedbank A',             nollkurs:336.10, antal:297,  investerat:99821.70,  price:348.60, dayPct:0.20,  status:'LIVE' },
+  { ticker:'AZA',    name:'Avanza Bank Holding',   nollkurs:358.10, antal:279,  investerat:99909.90,  price:383.50, dayPct:1.13,  status:'LIVE' },
+];
+
+const TOTAL_INVESTERAT = 699474.50;
+
+// Calculate
+STOCKS.forEach(s => {
+  s.varde    = s.price * s.antal;
+  s.pl       = s.varde - s.investerat;
+  s.plPct    = (s.pl / s.investerat) * 100;
+  s.vsNoll   = ((s.price - s.nollkurs) / s.nollkurs) * 100;
+});
+
+const totalVarde = STOCKS.reduce((a,s) => a + s.varde, 0);
+const totalPL    = totalVarde - TOTAL_INVESTERAT;
+const totalPLPct = (totalPL / TOTAL_INVESTERAT) * 100;
+const totalVsNoll= totalPLPct;
+const liveCount  = STOCKS.filter(s => s.status === 'LIVE').length;
+
+const sorted = [...STOCKS].sort((a,b) => b.vsNoll - a.vsNoll);
+const best  = sorted[0];
+const worst = sorted[sorted.length-1];
+
+// Max |plPct| for bar scaling
+const maxPlPct = Math.max(...STOCKS.map(s => Math.abs(s.plPct)));
+
+function fmt(n, dec=2) {
+  const sign = n > 0 ? '+' : '';
+  return sign + n.toFixed(dec).replace('.', ',');
+}
+
+function fmtSEK(n) {
+  return Math.round(n).toLocaleString('sv-SE') + ' kr';
+}
+
+function fmtSEKsigned(n) {
+  const sign = n >= 0 ? '+' : '';
+  return sign + Math.round(n).toLocaleString('sv-SE') + ' kr';
+}
+
+// Status bar
+const statusDot  = document.getElementById('statusDot');
+const statusText = document.getElementById('statusText');
+const statusRight= document.getElementById('statusRight');
+
+if (liveCount === 7) {
+  statusDot.style.background = '#00ff88';
+  statusDot.style.boxShadow  = '0 0 6px #00ff88';
+} else if (liveCount > 0) {
+  statusDot.style.background = '#ffaa00';
+  statusDot.style.boxShadow  = '0 0 6px #ffaa00';
+} else {
+  statusDot.style.background = '#ff1744';
+  statusDot.style.boxShadow  = '0 0 6px #ff1744';
+}
+
+const today = new Date().toLocaleDateString('sv-SE');
+statusText.textContent = liveCount === 7
+  ? `${liveCount}/7 live · Stockholmsbörsen`
+  : `${liveCount}/7 live · ${today}`;
+
+// Clock
+function updateClock() {
+  const now = new Date();
+  const t = now.toLocaleTimeString('sv-SE');
+  statusRight.textContent = `Uppdaterad: ${t}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// Cards
+const plColor = totalPL >= 0 ? '#00ff88' : '#ff1744';
+document.getElementById('cardVarde').textContent = fmtSEK(totalVarde);
+const cardPL = document.getElementById('cardPL');
+cardPL.textContent = fmtSEKsigned(totalPL);
+cardPL.style.color = plColor;
+const cardPLPct = document.getElementById('cardPLPct');
+cardPLPct.textContent = fmt(totalPLPct) + '%';
+cardPLPct.className = 'card-sub ' + (totalPL >= 0 ? 'pos' : 'neg');
+
+const cardBest  = document.getElementById('cardBest');
+const cardWorst = document.getElementById('cardWorst');
+cardBest.innerHTML  = `<span style="color:#00ff88">${best.ticker} ${fmt(best.vsNoll)}%</span>`;
+cardWorst.innerHTML = `<span style="color:rgba(0,229,255,0.5)">Sämst: ${worst.ticker} ${fmt(worst.vsNoll)}%</span>`;
+
+// Table rows
+const tbody = document.getElementById('tableBody');
+
+STOCKS.forEach(s => {
+  const tr = document.createElement('tr');
+  const vsNollColor = s.vsNoll >= 0 ? '#00ff88' : '#ff1744';
+  const plColor2    = s.pl >= 0     ? '#00ff88' : '#ff1744';
+  const dayColor    = s.dayPct >= 0 ? '#00ff88' : '#ff1744';
+  const barPct      = maxPlPct > 0 ? Math.abs(s.plPct) / maxPlPct * 100 : 0;
+  const barColor    = s.pl >= 0 ? '#00ff88' : '#ff1744';
+
+  const badgeHtml = s.status === 'LIVE'
+    ? `<span class="badge badge-live">LIVE</span>`
+    : `<span class="badge badge-fallback">FALLBACK</span>`;
+
+  tr.innerHTML = `
+    <td class="ticker-cell">
+      <div class="ticker-name">${s.ticker} ${badgeHtml}</div>
+      <div class="company-name">${s.name}</div>
+    </td>
+    <td>${s.nollkurs.toFixed(2).replace('.', ',')}</td>
+    <td style="color:#00e5ff;font-weight:bold">${s.price.toFixed(2).replace('.', ',')}</td>
+    <td style="color:${dayColor}">${s.dayPct != null ? fmt(s.dayPct) + '%' : '–'}</td>
+    <td style="color:${vsNollColor}">${fmt(s.vsNoll)}%</td>
+    <td style="color:${plColor2}">${fmtSEKsigned(s.pl)}</td>
+    <td>
+      <div class="bar-wrap">
+        <div class="bar-fill" style="width:${barPct.toFixed(1)}%;background:${barColor}"></div>
+      </div>
+    </td>
+  `;
+  tbody.appendChild(tr);
+});
+
+// Total row
+const totalVsNollColor = totalVsNoll >= 0 ? '#00ff88' : '#ff1744';
+const totalPLColor     = totalPL >= 0    ? '#00ff88' : '#ff1744';
+const trTotal = document.createElement('tr');
+trTotal.className = 'total-row';
+trTotal.innerHTML = `
+  <td>TOTALT</td>
+  <td style="color:rgba(0,229,255,0.6)">${fmtSEK(TOTAL_INVESTERAT)}</td>
+  <td style="color:#00e5ff;font-weight:bold">${fmtSEK(totalVarde)}</td>
+  <td>–</td>
+  <td style="color:${totalVsNollColor}">${fmt(totalVsNoll)}%</td>
+  <td style="color:${totalPLColor}">${fmtSEKsigned(totalPL)}</td>
+  <td></td>
+`;
+tbody.appendChild(trTotal);
+</script>
 </body>
 </html>
