@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>J.A.R.V.I.S. — Bankterminalen</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     background: #050c12;
-    color: #b0d4e0;
+    color: #b0d8e8;
     font-family: 'Share Tech Mono', monospace;
     min-height: 100vh;
     position: relative;
@@ -24,7 +24,7 @@
     inset: 0;
     background: repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
     pointer-events: none;
-    z-index: 1000;
+    z-index: 9998;
   }
 
   /* Vignette overlay */
@@ -34,21 +34,19 @@
     inset: 0;
     background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
     pointer-events: none;
-    z-index: 1001;
+    z-index: 9999;
   }
 
   .container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 24px 20px;
-    position: relative;
-    z-index: 1;
+    padding: 24px 20px 40px;
   }
 
   /* Header */
   .header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     border-bottom: 1px solid rgba(0,229,255,0.2);
     padding-bottom: 20px;
   }
@@ -58,13 +56,15 @@
     font-size: 42px;
     font-weight: 900;
     color: #00e5ff;
-    letter-spacing: 12px;
+    letter-spacing: 8px;
     text-shadow: 0 0 20px rgba(0,229,255,0.5);
+    line-height: 1;
   }
 
   .subtitle {
-    font-size: 12px;
-    color: rgba(0,229,255,0.5);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: rgba(0,229,255,0.6);
     letter-spacing: 4px;
     margin-top: 6px;
     text-transform: uppercase;
@@ -75,70 +75,71 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0,229,255,0.04);
+    background: rgba(0,229,255,0.05);
     border: 1px solid rgba(0,229,255,0.15);
     border-radius: 4px;
     padding: 8px 16px;
     margin-bottom: 20px;
     font-size: 12px;
+    letter-spacing: 1px;
   }
 
   .status-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
 
   .status-dot {
-    width: 8px;
-    height: 8px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
     background: #00ff88;
-    box-shadow: 0 0 6px rgba(0,255,136,0.8);
-    flex-shrink: 0;
+    box-shadow: 0 0 8px #00ff88;
   }
 
   .status-text { color: #00ff88; }
-
-  .status-right { color: rgba(0,229,255,0.5); }
+  .status-right { color: rgba(0,229,255,0.6); }
 
   /* Summary cards */
   .cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
   .card {
     background: rgba(0,229,255,0.04);
-    border: 1px solid rgba(0,229,255,0.2);
+    border: 1px solid rgba(0,229,255,0.15);
     border-radius: 6px;
-    padding: 16px;
+    padding: 14px 16px;
   }
 
   .card-label {
     font-size: 10px;
     color: rgba(0,229,255,0.5);
-    text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 8px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
   }
 
   .card-value {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 22px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
     color: #00e5ff;
+    line-height: 1.2;
   }
 
   .card-sub {
-    font-size: 12px;
+    font-size: 11px;
     margin-top: 4px;
     color: rgba(0,229,255,0.5);
   }
 
-  .positive { color: #00ff88; }
-  .negative { color: #ff1744; }
+  .pos { color: #00ff88; }
+  .neg { color: #ff1744; }
 
   /* Table */
   .table-wrap {
@@ -151,94 +152,109 @@
     font-size: 13px;
   }
 
-  th {
-    font-family: 'Share Tech Mono', monospace;
+  thead th {
     font-size: 10px;
-    text-transform: uppercase;
     letter-spacing: 2px;
     color: rgba(0,229,255,0.5);
-    padding: 10px 12px;
-    text-align: left;
+    text-transform: uppercase;
+    padding: 8px 12px;
     border-bottom: 1px solid rgba(0,229,255,0.2);
+    text-align: right;
     white-space: nowrap;
   }
 
-  td {
-    padding: 12px 12px;
-    border-bottom: 1px solid rgba(0,229,255,0.08);
+  thead th:first-child { text-align: left; }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(0,229,255,0.07);
+  }
+
+  tbody tr:hover {
+    background: rgba(0,229,255,0.04);
+  }
+
+  tbody td {
+    padding: 10px 12px;
+    text-align: right;
     vertical-align: middle;
   }
 
-  tr:hover td { background: rgba(0,229,255,0.03); }
+  tbody td:first-child { text-align: left; }
 
-  .ticker {
+  .ticker-cell .ticker-name {
     font-family: 'Orbitron', sans-serif;
     font-size: 13px;
     font-weight: 700;
     color: #00e5ff;
   }
 
-  .badge {
+  .ticker-cell .ticker-badge {
     display: inline-block;
     font-size: 9px;
+    letter-spacing: 1px;
     padding: 2px 5px;
     border-radius: 3px;
     margin-left: 6px;
-    letter-spacing: 1px;
-    font-weight: 700;
     vertical-align: middle;
   }
 
   .badge-live {
     background: rgba(0,255,136,0.15);
-    border: 1px solid rgba(0,255,136,0.4);
     color: #00ff88;
+    border: 1px solid rgba(0,255,136,0.4);
   }
 
-  .stock-name {
-    font-size: 11px;
+  .badge-fallback {
+    background: rgba(255,165,0,0.15);
+    color: #ffa500;
+    border: 1px solid rgba(255,165,0,0.4);
+  }
+
+  .ticker-cell .company-name {
+    font-size: 10px;
     color: rgba(0,229,255,0.4);
-    margin-top: 3px;
+    margin-top: 2px;
   }
 
+  /* Progress bar */
   .bar-cell { width: 100px; }
 
-  .bar-bg {
-    background: rgba(255,255,255,0.05);
-    border-radius: 2px;
+  .bar-track {
     height: 6px;
-    width: 100px;
+    background: rgba(0,229,255,0.08);
+    border-radius: 3px;
     overflow: hidden;
+    width: 90px;
+    display: inline-block;
+    vertical-align: middle;
   }
 
   .bar-fill {
     height: 100%;
-    border-radius: 2px;
+    border-radius: 3px;
   }
 
+  /* Total row */
   .total-row td {
-    border-top: 1px solid rgba(0,229,255,0.3);
-    border-bottom: none;
-    background: rgba(0,229,255,0.05);
-    font-weight: bold;
+    border-top: 1px solid rgba(0,229,255,0.25);
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-weight: 600;
+    color: #00e5ff;
   }
 
-  .total-label {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 11px;
-    color: rgba(0,229,255,0.7);
-    letter-spacing: 2px;
+  .total-row .ticker-cell .ticker-name {
+    font-size: 12px;
+    letter-spacing: 3px;
   }
 
   /* Footer */
   .footer {
+    margin-top: 24px;
     text-align: center;
     font-size: 10px;
     color: rgba(0,229,255,0.25);
     letter-spacing: 2px;
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(0,229,255,0.1);
   }
 </style>
 </head>
@@ -254,33 +270,36 @@
   <!-- Status bar -->
   <div class="status-bar">
     <div class="status-left">
-      <div class="status-dot"></div>
-      <span class="status-text">7/7 live &middot; Stockholmsbörsen &middot; 15 jun 2026</span>
+      <span class="status-dot"></span>
+      <span class="status-text">7/7 live &nbsp;&middot;&nbsp; Stockholmsbörsen</span>
     </div>
-    <div class="status-right" id="updated-time">Uppdaterad: 15:07:52</div>
+    <div class="status-right">Uppdaterad: <span id="clock">--:--:--</span></div>
   </div>
 
   <!-- Summary cards -->
   <div class="cards">
     <div class="card">
       <div class="card-label">Investerat</div>
-      <div class="card-value">699&nbsp;475 kr</div>
-      <div class="card-sub">Nollpunkt 9 jun 2026</div>
+      <div class="card-value">699&nbsp;475&nbsp;kr</div>
+      <div class="card-sub">Nollpunkt: 9 jun 2026</div>
     </div>
     <div class="card">
       <div class="card-label">Portföljvärde</div>
-      <div class="card-value">729&nbsp;904 kr</div>
-      <div class="card-sub">Live · Avanza</div>
+      <div class="card-value">729&nbsp;570&nbsp;kr</div>
+      <div class="card-sub">Live Avanza</div>
     </div>
     <div class="card">
       <div class="card-label">Total P&amp;L</div>
-      <div class="card-value positive">+30&nbsp;430 kr</div>
-      <div class="card-sub positive">+4,35 %</div>
+      <div class="card-value pos">+30&nbsp;096&nbsp;kr</div>
+      <div class="card-sub pos">+4,30 % vs nollkurs</div>
     </div>
     <div class="card">
       <div class="card-label">Bäst / Sämst</div>
-      <div class="card-value positive" style="font-size:16px">AZA +7,65%</div>
-      <div class="card-sub negative">NDA-SE +2,80%</div>
+      <div class="card-value" style="font-size:16px;">
+        <span class="pos">AZA +7,65%</span><br>
+        <span class="pos" style="font-size:14px;">NDA +2,80%</span>
+      </div>
+      <div class="card-sub">vs nollkurs</div>
     </div>
   </div>
 
@@ -292,148 +311,150 @@
           <th>Aktie</th>
           <th>Nollkurs</th>
           <th>Kurs</th>
-          <th>Dag %</th>
-          <th>Vs noll %</th>
+          <th>Dag%</th>
+          <th>Vs noll%</th>
           <th>P&amp;L (SEK)</th>
-          <th class="bar-cell">Bar</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
 
         <!-- NDA-SE -->
         <tr>
-          <td>
-            <div><span class="ticker">NDA-SE</span><span class="badge badge-live">LIVE</span></div>
-            <div class="stock-name">Nordea Bank</div>
+          <td class="ticker-cell">
+            <div><span class="ticker-name">NDA-SE</span><span class="ticker-badge badge-live">LIVE</span></div>
+            <div class="company-name">Nordea Bank</div>
           </td>
           <td>175,25</td>
           <td>180,15</td>
-          <td class="positive">+1,21%</td>
-          <td class="positive">+2,80%</td>
-          <td class="positive">+2&nbsp;793</td>
-          <td>
-            <div class="bar-bg">
-              <div class="bar-fill" style="width:36.6%;background:#00ff88;"></div>
+          <td class="pos">+1,21%</td>
+          <td class="pos">+2,80%</td>
+          <td class="pos">+2&nbsp;793</td>
+          <td class="bar-cell">
+            <div class="bar-track">
+              <div class="bar-fill" style="width:36.6%; background:#00ff88;"></div>
             </div>
           </td>
         </tr>
 
         <!-- SHB-A -->
         <tr>
-          <td>
-            <div><span class="ticker">SHB-A</span><span class="badge badge-live">LIVE</span></div>
-            <div class="stock-name">Handelsbanken A</div>
+          <td class="ticker-cell">
+            <div><span class="ticker-name">SHB-A</span><span class="ticker-badge badge-live">LIVE</span></div>
+            <div class="company-name">Handelsbanken A</div>
           </td>
           <td>135,15</td>
-          <td>139,25</td>
-          <td class="positive">+0,65%</td>
-          <td class="positive">+3,03%</td>
-          <td class="positive">+3&nbsp;034</td>
-          <td>
-            <div class="bar-bg">
-              <div class="bar-fill" style="width:39.6%;background:#00ff88;"></div>
+          <td>139,30</td>
+          <td class="pos">+0,69%</td>
+          <td class="pos">+3,07%</td>
+          <td class="pos">+3&nbsp;071</td>
+          <td class="bar-cell">
+            <div class="bar-track">
+              <div class="bar-fill" style="width:40.1%; background:#00ff88;"></div>
             </div>
           </td>
         </tr>
 
         <!-- SHB-B -->
         <tr>
-          <td>
-            <div><span class="ticker">SHB-B</span><span class="badge badge-live">LIVE</span></div>
-            <div class="stock-name">Handelsbanken B</div>
+          <td class="ticker-cell">
+            <div><span class="ticker-name">SHB-B</span><span class="ticker-badge badge-live">LIVE</span></div>
+            <div class="company-name">Handelsbanken B</div>
           </td>
           <td>224,20</td>
-          <td>232,60</td>
-          <td class="positive">+1,13%</td>
-          <td class="positive">+3,75%</td>
-          <td class="positive">+3&nbsp;746</td>
-          <td>
-            <div class="bar-bg">
-              <div class="bar-fill" style="width:49.0%;background:#00ff88;"></div>
+          <td>232,00</td>
+          <td class="pos">+0,87%</td>
+          <td class="pos">+3,48%</td>
+          <td class="pos">+3&nbsp;479</td>
+          <td class="bar-cell">
+            <div class="bar-track">
+              <div class="bar-fill" style="width:45.5%; background:#00ff88;"></div>
             </div>
           </td>
         </tr>
 
         <!-- SEB-A -->
         <tr>
-          <td>
-            <div><span class="ticker">SEB-A</span><span class="badge badge-live">LIVE</span></div>
-            <div class="stock-name">SEB A</div>
+          <td class="ticker-cell">
+            <div><span class="ticker-name">SEB-A</span><span class="ticker-badge badge-live">LIVE</span></div>
+            <div class="company-name">SEB A</div>
           </td>
           <td>184,00</td>
-          <td>192,95</td>
-          <td class="positive">+2,14%</td>
-          <td class="positive">+4,86%</td>
-          <td class="positive">+4&nbsp;860</td>
-          <td>
-            <div class="bar-bg">
-              <div class="bar-fill" style="width:63.6%;background:#00ff88;"></div>
+          <td>192,90</td>
+          <td class="pos">+2,12%</td>
+          <td class="pos">+4,84%</td>
+          <td class="pos">+4&nbsp;833</td>
+          <td class="bar-cell">
+            <div class="bar-track">
+              <div class="bar-fill" style="width:63.2%; background:#00ff88;"></div>
             </div>
           </td>
         </tr>
 
         <!-- SEB-C -->
         <tr>
-          <td>
-            <div><span class="ticker">SEB-C</span><span class="badge badge-live">LIVE</span></div>
-            <div class="stock-name">SEB C</div>
+          <td class="ticker-cell">
+            <div><span class="ticker-name">SEB-C</span><span class="ticker-badge badge-live">LIVE</span></div>
+            <div class="company-name">SEB C</div>
           </td>
           <td>188,20</td>
-          <td>198,00</td>
-          <td class="positive">+1,54%</td>
-          <td class="positive">+5,21%</td>
-          <td class="positive">+5&nbsp;204</td>
-          <td>
-            <div class="bar-bg">
-              <div class="bar-fill" style="width:68.1%;background:#00ff88;"></div>
+          <td>197,80</td>
+          <td class="pos">+1,44%</td>
+          <td class="pos">+5,10%</td>
+          <td class="pos">+5&nbsp;098</td>
+          <td class="bar-cell">
+            <div class="bar-track">
+              <div class="bar-fill" style="width:66.7%; background:#00ff88;"></div>
             </div>
           </td>
         </tr>
 
         <!-- SWED-A -->
         <tr>
-          <td>
-            <div><span class="ticker">SWED-A</span><span class="badge badge-live">LIVE</span></div>
-            <div class="stock-name">Swedbank A</div>
+          <td class="ticker-cell">
+            <div><span class="ticker-name">SWED-A</span><span class="ticker-badge badge-live">LIVE</span></div>
+            <div class="company-name">Swedbank A</div>
           </td>
           <td>336,10</td>
-          <td>346,70</td>
-          <td class="negative">−0,34%</td>
-          <td class="positive">+3,15%</td>
-          <td class="positive">+3&nbsp;148</td>
-          <td>
-            <div class="bar-bg">
-              <div class="bar-fill" style="width:41.2%;background:#00ff88;"></div>
+          <td>346,80</td>
+          <td class="neg">−0,32%</td>
+          <td class="pos">+3,18%</td>
+          <td class="pos">+3&nbsp;178</td>
+          <td class="bar-cell">
+            <div class="bar-track">
+              <div class="bar-fill" style="width:41.6%; background:#00ff88;"></div>
             </div>
           </td>
         </tr>
 
         <!-- AZA -->
         <tr>
-          <td>
-            <div><span class="ticker">AZA</span><span class="badge badge-live">LIVE</span></div>
-            <div class="stock-name">Avanza Bank Holding</div>
+          <td class="ticker-cell">
+            <div><span class="ticker-name">AZA</span><span class="ticker-badge badge-live">LIVE</span></div>
+            <div class="company-name">Avanza Bank Holding</div>
           </td>
           <td>358,10</td>
           <td>385,50</td>
-          <td class="positive">+1,66%</td>
-          <td class="positive">+7,65%</td>
-          <td class="positive">+7&nbsp;645</td>
-          <td>
-            <div class="bar-bg">
-              <div class="bar-fill" style="width:100%;background:#00ff88;"></div>
+          <td class="pos">+1,66%</td>
+          <td class="pos">+7,65%</td>
+          <td class="pos">+7&nbsp;645</td>
+          <td class="bar-cell">
+            <div class="bar-track">
+              <div class="bar-fill" style="width:100%; background:#00ff88;"></div>
             </div>
           </td>
         </tr>
 
-        <!-- TOTALT -->
+        <!-- Total row -->
         <tr class="total-row">
-          <td><span class="total-label">TOTALT</span></td>
-          <td>699&nbsp;475</td>
-          <td>729&nbsp;904</td>
-          <td>–</td>
-          <td class="positive">+4,35%</td>
-          <td class="positive">+30&nbsp;430</td>
+          <td class="ticker-cell">
+            <div class="ticker-name" style="letter-spacing:3px;">TOTALT</div>
+          </td>
+          <td style="color:rgba(0,229,255,0.5);">699&nbsp;475</td>
+          <td style="color:#00e5ff;">729&nbsp;570</td>
+          <td>—</td>
+          <td class="pos">+4,30%</td>
+          <td class="pos">+30&nbsp;096</td>
           <td></td>
         </tr>
 
@@ -441,19 +462,20 @@
     </table>
   </div>
 
-  <div class="footer">KÄLLA: AVANZA &middot; UPPDATERAS VAR 15 MIN MÅN–FRE 09:00–17:30</div>
+  <!-- Footer -->
+  <div class="footer">
+    KÄLLA: Avanza &nbsp;&middot;&nbsp; UPPDATERAS VAR 15 MIN MÅN–FRE 09:00–17:30
+  </div>
 
 </div>
 
 <script>
-  // Live clock
   function updateClock() {
     const now = new Date();
-    const t = now.toLocaleTimeString('sv-SE');
-    document.getElementById('updated-time').textContent = 'Uppdaterad: ' + t;
+    document.getElementById('clock').textContent = now.toLocaleTimeString('sv-SE');
   }
-  setInterval(updateClock, 1000);
   updateClock();
+  setInterval(updateClock, 1000);
 </script>
 </body>
 </html>
