@@ -281,7 +281,7 @@
       <span>7/7 live &nbsp;·&nbsp; Stockholmsbörsen &nbsp;·&nbsp; 15 jun 2026</span>
     </div>
     <div class="status-right">
-      Uppdaterad: <span id="updateTime">14:22:51</span>
+      Kurser hämtade: <strong style="color:#00e5ff">14:22</strong> &nbsp;·&nbsp; Nu: <span id="liveClock"></span>
     </div>
   </div>
 
@@ -414,10 +414,10 @@ tbody.insertAdjacentHTML('beforeend', `
   </tr>
 `);
 
-// Live clock
+// Live clock (current time only — fetch time is static above)
 function updateClock() {
   const now = new Date();
-  document.getElementById('updateTime').textContent = now.toLocaleTimeString('sv-SE');
+  document.getElementById('liveClock').textContent = now.toLocaleTimeString('sv-SE');
 }
 updateClock();
 setInterval(updateClock, 1000);
