@@ -7,130 +7,387 @@
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: #050c12; color: #a0c4cc; font-family: 'Share Tech Mono', monospace; min-height: 100vh; position: relative; overflow-x: hidden; }
-  body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px); pointer-events: none; z-index: 1000; }
-  body::after { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%); pointer-events: none; z-index: 999; }
-  .container { max-width: 1400px; margin: 0 auto; padding: 24px; position: relative; z-index: 1; }
-  header { text-align: center; margin-bottom: 28px; border-bottom: 1px solid rgba(0,229,255,0.2); padding-bottom: 20px; }
-  .logo { font-family: 'Orbitron', sans-serif; font-size: 2.8rem; font-weight: 900; color: #00e5ff; letter-spacing: 0.2em; text-shadow: 0 0 20px rgba(0,229,255,0.5); }
-  .subtitle { font-family: 'Share Tech Mono', monospace; color: rgba(0,229,255,0.5); font-size: 0.85rem; letter-spacing: 0.15em; margin-top: 6px; }
-  .status-bar { display: flex; justify-content: space-between; align-items: center; background: rgba(0,229,255,0.05); border: 1px solid rgba(0,229,255,0.15); border-radius: 4px; padding: 8px 16px; margin-bottom: 24px; font-size: 0.8rem; letter-spacing: 0.08em; }
-  .status-left { display: flex; align-items: center; gap: 10px; }
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #00ff88; box-shadow: 0 0 6px rgba(0,255,136,0.8); }
-  .status-text { color: #00e5ff; }
-  .status-right { color: rgba(0,229,255,0.6); }
-  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
-  .card { background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.2); border-radius: 6px; padding: 16px; position: relative; overflow: hidden; }
-  .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #00e5ff, transparent); }
-  .card-label { font-size: 0.7rem; color: rgba(0,229,255,0.5); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
-  .card-value { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: 700; color: #00e5ff; }
-  .card-sub { font-size: 0.75rem; margin-top: 4px; }
-  .positive { color: #00ff88; }
-  .negative { color: #ff1744; }
-  .neutral { color: #00e5ff; }
-  .table-wrap { background: rgba(0,0,0,0.3); border: 1px solid rgba(0,229,255,0.15); border-radius: 6px; overflow: hidden; }
-  table { width: 100%; border-collapse: collapse; }
-  thead tr { background: rgba(0,229,255,0.08); border-bottom: 1px solid rgba(0,229,255,0.2); }
-  th { padding: 10px 14px; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(0,229,255,0.6); text-align: right; white-space: nowrap; }
-  th:first-child { text-align: left; }
-  tbody tr { border-bottom: 1px solid rgba(0,229,255,0.06); }
-  tbody tr:hover { background: rgba(0,229,255,0.04); }
-  tbody tr:last-child { border-bottom: none; background: rgba(0,229,255,0.06); border-top: 1px solid rgba(0,229,255,0.2); }
-  td { padding: 12px 14px; font-size: 0.82rem; text-align: right; vertical-align: middle; }
-  td:first-child { text-align: left; }
-  .ticker-cell .ticker { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 700; color: #00e5ff; display: block; }
-  .ticker-cell .name { font-size: 0.7rem; color: rgba(0,229,255,0.4); margin-top: 2px; display: block; }
-  .badge { display: inline-block; font-size: 0.6rem; padding: 1px 5px; border-radius: 2px; letter-spacing: 0.08em; vertical-align: middle; margin-left: 6px; }
-  .badge-live { background: rgba(0,255,136,0.15); color: #00ff88; border: 1px solid rgba(0,255,136,0.3); }
-  .badge-fallback { background: rgba(255,193,7,0.15); color: #ffc107; border: 1px solid rgba(255,193,7,0.3); }
-  .bar-cell { min-width: 120px; }
-  .bar-track { background: rgba(255,255,255,0.04); border-radius: 2px; height: 8px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 2px; }
-  .bar-pos { background: #00ff88; box-shadow: 0 0 4px rgba(0,255,136,0.5); }
-  .bar-neg { background: #ff1744; box-shadow: 0 0 4px rgba(255,23,68,0.5); }
-  footer { text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(0,229,255,0.1); font-size: 0.7rem; color: rgba(0,229,255,0.3); letter-spacing: 0.1em; }
-  .total-row td { color: #00e5ff; font-weight: bold; }
-  @media (max-width: 900px) { .cards { grid-template-columns: repeat(2, 1fr); } .logo { font-size: 1.8rem; } }
+
+  body {
+    background: #050c12;
+    color: #c8e6ea;
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
+    pointer-events: none;
+    z-index: 9998;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 28px 24px 40px;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(0,229,255,0.2);
+    padding-bottom: 20px;
+  }
+
+  .logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: #00e5ff;
+    letter-spacing: 0.25em;
+    text-shadow: 0 0 20px rgba(0,229,255,0.5);
+  }
+
+  .subtitle {
+    font-size: 0.78rem;
+    color: rgba(0,229,255,0.5);
+    letter-spacing: 0.18em;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  /* STATUS BAR */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0,229,255,0.04);
+    border: 1px solid rgba(0,229,255,0.12);
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin-bottom: 22px;
+    font-size: 0.75rem;
+  }
+
+  .status-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #00ff88;
+    box-shadow: 0 0 6px #00ff88;
+    flex-shrink: 0;
+  }
+
+  .status-text { color: rgba(0,229,255,0.7); }
+  .status-right { color: rgba(0,229,255,0.5); }
+
+  /* SUMMARY CARDS */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .card {
+    background: rgba(0,229,255,0.04);
+    border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 6px;
+    padding: 16px 18px;
+  }
+
+  .card-label {
+    font-size: 0.65rem;
+    color: rgba(0,229,255,0.45);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .card-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #00e5ff;
+    letter-spacing: 0.05em;
+  }
+
+  .card-sub {
+    font-size: 0.7rem;
+    margin-top: 4px;
+    color: rgba(0,229,255,0.5);
+  }
+
+  .pos { color: #00ff88; }
+  .neg { color: #ff1744; }
+  .pos-shadow { text-shadow: 0 0 8px rgba(0,255,136,0.4); }
+  .neg-shadow { text-shadow: 0 0 8px rgba(255,23,68,0.4); }
+
+  /* TABLE */
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+  }
+
+  thead th {
+    font-size: 0.62rem;
+    color: rgba(0,229,255,0.45);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    text-align: right;
+    border-bottom: 1px solid rgba(0,229,255,0.15);
+    white-space: nowrap;
+  }
+
+  thead th:first-child { text-align: left; }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(0,229,255,0.06);
+  }
+
+  tbody tr:hover {
+    background: rgba(0,229,255,0.04);
+  }
+
+  tbody td {
+    padding: 11px 12px;
+    text-align: right;
+    vertical-align: middle;
+  }
+
+  tbody td:first-child { text-align: left; }
+
+  .ticker-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #00e5ff;
+    letter-spacing: 0.06em;
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+  .badge-live {
+    display: inline-block;
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: #00ff88;
+    border: 1px solid #00ff88;
+    border-radius: 3px;
+    padding: 1px 4px;
+    letter-spacing: 0.08em;
+    vertical-align: middle;
+  }
+
+  .badge-fallback {
+    display: inline-block;
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: #ffb300;
+    border: 1px solid #ffb300;
+    border-radius: 3px;
+    padding: 1px 4px;
+    letter-spacing: 0.08em;
+    vertical-align: middle;
+  }
+
+  .stock-full-name {
+    display: block;
+    font-size: 0.65rem;
+    color: rgba(0,229,255,0.4);
+    margin-top: 2px;
+  }
+
+  /* BAR */
+  .bar-cell { width: 90px; padding-right: 8px; }
+
+  .bar-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
+    height: 6px;
+    width: 80px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+
+  /* TOTALS ROW */
+  .totals-row td {
+    border-top: 1px solid rgba(0,229,255,0.25);
+    color: #00e5ff;
+    font-weight: 700;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  .totals-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: rgba(0,229,255,0.7);
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 0.62rem;
+    color: rgba(0,229,255,0.25);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-top: 1px solid rgba(0,229,255,0.08);
+    padding-top: 16px;
+  }
 </style>
 </head>
 <body>
 <div class="container">
+
   <header>
     <div class="logo">J.A.R.V.I.S.</div>
-    <div class="subtitle">Bankterminalen &middot; Live PortfÃ¶ljÃ¶vervakning</div>
+    <div class="subtitle">Bankterminalen Â· Live PortfÃ¶ljÃ¶vervakning</div>
   </header>
+
   <div class="status-bar">
     <div class="status-left">
-      <div class="status-dot" id="statusDot"></div>
-      <span class="status-text" id="statusText">7/7 live &middot; StockholmsbÃ¶rsen &middot; 16 jun 2026</span>
+      <div class="status-dot"></div>
+      <span class="status-text">7/7 live Â· StockholmsbÃ¶rsen</span>
     </div>
     <div class="status-right">Uppdaterad: <span id="clock">--:--:--</span></div>
   </div>
+
   <div class="cards">
-    <div class="card"><div class="card-label">Investerat</div><div class="card-value neutral">699 475 kr</div><div class="card-sub" style="color:rgba(0,229,255,0.4)">Nollpunkt 9 jun 2026</div></div>
-    <div class="card"><div class="card-label">PortfÃ¶ljvÃ¤rde</div><div class="card-value positive" id="cardVarde">732 128 kr</div><div class="card-sub" style="color:rgba(0,229,255,0.4)">7 positioner</div></div>
-    <div class="card"><div class="card-label">Total P&amp;L</div><div class="card-value positive" id="cardPl">+32 654 kr</div><div class="card-sub positive" id="cardPlPct">+4,67%</div></div>
-    <div class="card"><div class="card-label">BÃ¤st / SÃ¤mst</div><div class="card-value positive" id="cardBest">AZA +8,46%</div><div class="card-sub positive" id="cardWorst">NDA-SE +2,91%</div></div>
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag%</th><th>Vs noll%</th><th>P&amp;L (SEK)</th><th>Bar</th></tr></thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-  <footer>KÃ„LLA: Avanza &nbsp;&middot;&nbsp; UPPDATERAS VAR 15 MIN MÃ…Nâ€“FRE 09:00â€“17:30</footer>
-</div>
-<script>
-function updateClock() { document.getElementById('clock').textContent = new Date().toLocaleTimeString('sv-SE'); }
-updateClock(); setInterval(updateClock, 1000);
-const stocks = [
-  { ticker:'NDA-SE', name:'Nordea Bank',         zero:175.25, price:180.35, dayPct:0.36, antal:570, invested:99892.50,  status:'LIVE' },
-  { ticker:'SHB-A',  name:'Handelsbanken A',     zero:135.15, price:139.45, dayPct:0.65, antal:740, invested:100011.00, status:'LIVE' },
-  { ticker:'SHB-B',  name:'Handelsbanken B',     zero:224.20, price:231.80, dayPct:0.17, antal:446, invested:99993.20,  status:'LIVE' },
-  { ticker:'SEB-A',  name:'SEB A',               zero:184.00, price:193.40, dayPct:0.34, antal:543, invested:99912.00,  status:'LIVE' },
-  { ticker:'SEB-C',  name:'SEB C',               zero:188.20, price:199.60, dayPct:0.81, antal:531, invested:99934.20,  status:'LIVE' },
-  { ticker:'SWED-A', name:'Swedbank A',           zero:336.10, price:348.10, dayPct:0.67, antal:297, invested:99821.70,  status:'LIVE' },
-  { ticker:'AZA',    name:'Avanza Bank Holding', zero:358.10, price:388.40, dayPct:1.22, antal:279, invested:99909.90,  status:'LIVE' }
-];
-const totalInvested = 699474.50;
-const liveCount = stocks.filter(s => s.status === 'LIVE').length;
-const rows = stocks.map(s => { const varde = s.price*s.antal; const pl = varde-s.invested; const plPct = (pl/s.invested)*100; const vsNollPct = (s.price-s.zero)/s.zero*100; return {...s, varde, pl, plPct, vsNollPct}; });
-const totalVarde = rows.reduce((a,r) => a+r.varde, 0);
-const totalPl = totalVarde - totalInvested;
-const totalPlPct = (totalPl/totalInvested)*100;
-const maxAbsPlPct = Math.max(...rows.map(r => Math.abs(r.plPct)));
-const bestRow = rows.reduce((a,b) => b.vsNollPct > a.vsNollPct ? b : a);
-const worstRow = rows.reduce((a,b) => b.vsNollPct < a.vsNollPct ? b : a);
-function fmt(n, d=2) { return n.toLocaleString('sv-SE', {minimumFractionDigits:d, maximumFractionDigits:d}); }
-function fmtInt(n) { return Math.round(n).toLocaleString('sv-SE'); }
-function sign(n) { return n >= 0 ? '+' : ''; }
-function cls(n) { return n >= 0 ? 'positive' : 'negative'; }
-const tbody = document.getElementById('tableBody');
-rows.forEach(r => {
-  const bw = maxAbsPlPct > 0 ? (Math.abs(r.plPct)/maxAbsPlPct)*100 : 0;
-  const bc = r.plPct >= 0 ? 'bar-pos' : 'bar-neg';
-  const bdg = r.status === 'LIVE' ? 'badge-live' : 'badge-fallback';
-  const bt = r.status === 'LIVE' ? 'LIVE' : '16 jun';
-  const tr = document.createElement('tr');
-  tr.innerHTML = '<td class="ticker-cell"><span class="ticker">'+r.ticker+'<span class="badge '+bdg+'">'+bt+'</span></span><span class="name">'+r.name+'</span></td><td>'+fmt(r.zero)+' kr</td><td><strong style="color:#00e5ff">'+fmt(r.price)+' kr</strong></td><td class="'+cls(r.dayPct)+'">'+sign(r.dayPct)+fmt(r.dayPct)+'%</td><td class="'+cls(r.vsNollPct)+'">'+sign(r.vsNollPct)+fmt(r.vsNollPct)+'%</td><td class="'+cls(r.pl)+'">'+sign(r.pl)+fmtInt(r.pl)+' kr</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill '+bc+'" style="width:'+bw.toFixed(1)+'%"></div></div></td>';
-  tbody.appendChild(tr);
-});
-const tr2 = document.createElement('tr'); tr2.className = 'total-row';
-tr2.innerHTML = '<td><span style="font-family:'Orbitron',sans-serif;font-size:0.85rem;color:#00e5ff">TOTALT</span></td><td>699 475 kr</td><td><strong style="color:#00e5ff">'+fmtInt(totalVarde)+' kr</strong></td><td>â€“</td><td class="'+cls(totalPlPct)+'">'+sign(totalPlPct)+fmt(totalPlPct)+'%</td><td class="'+cls(totalPl)+'">'+sign(totalPl)+fmtInt(totalPl)+' kr</td><td></td>';
-tbody.appendChild(tr2);
-document.getElementById('cardVarde').textContent = fmtInt(totalVarde)+' kr';
-document.getElementById('cardPl').textContent = sign(totalPl)+fmtInt(totalPl)+' kr';
-document.getElementById('cardPl').className = 'card-value '+cls(totalPl);
-document.getElementById('cardPlPct').textContent = sign(totalPlPct)+fmt(totalPlPct)+'%';
-document.getElementById('cardPlPct').className = 'card-sub '+cls(totalPlPct);
-document.getElementById('cardBest').textContent = bestRow.ticker+' '+sign(bestRow.vsNollPct)+fmt(bestRow.vsNollPct)+'%';
-document.getElementById('cardWorst').textContent = worstRow.ticker+' '+sign(worstRow.vsNollPct)+fmt(worstRow.vsNollPct)+'%';
-document.getElementById('cardWorst').className = 'card-sub '+cls(worstRow.vsNollPct);
-const dot = document.getElementById('statusDot');
-if (liveCount===7) { dot.style.background='#00ff88'; dot.style.boxShadow='0 0 6px rgba(0,255,136,0.8)'; }
-else if (liveCount===0) { dot.style.background='#ff1744'; dot.style.boxShadow='0 0 6px rgba(255,23,68,0.8)'; }
-else { dot.style.background='#ffc107'; dot.style.boxShadow='0 0 6px rgba(255,193,7,0.8)'; }
-document.getElementById('statusText').textContent = liveCount+'/7 live Â· StockholmsbÃ¶rsen Â· 16 jun 2026';
-</script>
-</body>
-</html>
+    <div class="card">
+      <div class="card-label">Investerat</div>
+      <div class="card-value">699 475 kr</div>
+      <div class="card-sub">Nollpunkt 9 jun 2026</div>
+    </div>
+    <div class="card">
+      <div class="card-label">PortfÃ¶lj{\™OÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™]˜[YHˆYHİ[]˜\™H¸ $ÏÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™\İXˆ“]™H]˜[˜OÙ]‚ˆÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™‚ˆ]ˆÛ\ÜÏH˜Ø\™[X™[•İ[	˜[\ÓÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™]˜[YHÜÈÜË\ÚYİÈˆYHİ[\¸ $ÏÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™\İXˆˆYHİ[\\İ¸ $ÏÙ]‚ˆÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™‚ˆ]ˆÛ\ÜÏH˜Ø\™[X™[°éİÈğé\İÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™]˜[YHˆYH˜™\İ]ÛÜœİ¸ $ÏÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™\İXˆ•œÈ›Ûİ\œÏÙ]‚ˆÙ]‚ˆÙ]‚‚ˆ]ˆÛ\ÜÏHX›K]Ü˜\‚ˆX›O‚ˆXY‚ˆ‚ˆZİYOİ‚ˆ“›Ûİ\œÏİ‚ˆ’İ\œÏİ‚ˆ‘YÉOİ‚ˆ•œÈ›Û	Oİ‚ˆ”	˜[\Ó
+ÑRÊOİ‚ˆÛ\ÜÏH˜˜\‹XÙ[İ‚ˆİ‚ˆİXY‚ˆ›ÙHYH›ÙH‚ˆİ›ÙO‚ˆİX›O‚ˆÙ]‚‚ˆ›Ûİ\’ğáNˆ]˜[˜H0­ÈTUTTÈTˆMHRSˆpáS¸ $Ñ”‘HNŒ8 $ÌMÎŒÌÙ›Ûİ\‚‚Ù]‚‚ØÜš\‚˜ÛÛœİS•‘TÕQHNMÍLÂ‚˜ÛÛœİİØÚÜÈHÂˆÈXÚÙ\ˆ	Ó‘KTÑIË˜[YNˆ	Ó›Ü™XH˜[šÉË™\›ÎˆMÍKŒKÚ\™\ÎˆMÌ[™\İYˆNNL‹LšXÙNˆNË^TİˆM‹İ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ÔÒ‹PIË˜[YNˆ	Ò[™[Ø˜[šÙ[ˆIË™\›ÎˆLÍKŒMKÚ\™\ÎˆÍ[™\İYˆLLKŒšXÙNˆLÎK‹^TİˆÍ‹İ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ÔÒ‹P‰Ë˜[YNˆ	Ò[™[Ø˜[šÙ[ˆ‰Ë™\›ÎˆŒŒŒÚ\™\Îˆ‹[™\İYˆNNNLËŒŒšXÙNˆŒÌ‹Œ‹^TİˆŒÍKİ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ÔÑP‹PIË˜[YNˆ	ÔÑPˆIË™\›ÎˆNŒÚ\™\ÎˆMË[™\İYˆNNLL‹ŒšXÙNˆNLËÍK^TİˆL‹İ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ÔÑP‹PÉË˜[YNˆ	ÔÑPˆÉË™\›ÎˆNŒŒÚ\™\ÎˆLÌK[™\İYˆNNLÍŒŒšXÙNˆŒŒ^TİˆKŒKİ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ÔÕÑQPIË˜[YNˆ	ÔİÙY˜[šÈIË™\›ÎˆÌÍ‹ŒLÚ\™\ÎˆMË[™\İYˆNNŒKÌšXÙNˆÍK^TİˆÎİ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ĞVIË˜[YNˆ	Ğ]˜[˜H˜[šÈÛ[™ÉË™\›ÎˆÍNŒLÚ\™\ÎˆÎK[™\İYˆNNLKLšXÙNˆÎK^TİˆKŒÍ‹İ]\Îˆ	ÓU‘IÈK—NÂ‚™[˜İ[Ûˆ›]
+‹XÚ[X[ÈHŠHÂˆ™]\›ˆ‹ÓØØ[Tİš[™Ê	Üİ‹TÑIËÈZ[š[][Qœ˜Xİ[Û‘YÚ]ÎˆXÚ[X[ËX^[][Qœ˜Xİ[Û‘YÚ]ÎˆXÚ[X[ÈJNÂŸB™[˜İ[Ûˆ›][
+ŠHÂˆ™]\›ˆ‹ÓØØ[Tİš[™Ê	Üİ‹TÑIËÈZ[š[][Qœ˜Xİ[Û‘YÚ]ÎˆX^[][Qœ˜Xİ[Û‘YÚ]ÎˆJNÂŸB™[˜İ[ÛˆÚYÛŠŠHÈ™]\›ˆˆHÈ	ÊÉÈˆ	ÉÎÈB™[˜İ[ÛˆÛÛÜÛ\ÜÊŠHÈ™]\›ˆˆHÈ	ÜÜÉÈˆ	Û™YÉÎÈB‚‹ËÈÛÛ\]B›]İ[˜\™HHÂ›]İ[HÂ‚œİØÚÜË™›Ü‘XXÚ
+ÈOˆÂˆË˜\™HHËœšXÙH
+ˆËœÚ\™\ÎÂˆËœHË˜\™HHËš[™\İYÂˆËœİH
+ËœÈËš[™\İY
+H
+ˆLÂˆËœÓ[İH
+ËœšXÙHHË™\›ÊHÈË™\›È
+ˆLÂˆİ[˜\™H
+ÏHË˜\™NÂˆİ[
+ÏHËœÂŸJNÂ‚˜ÛÛœİİ[İH
+İ[ÈS•‘TÕQ
+H
+ˆLÂ˜ÛÛœİİ[œÓ[İH
+İ[˜\™HHS•‘TÕQ
+HÈS•‘TÕQ
+ˆLÂ‚‹ËÈš[™X^İ›Üˆ˜\ˆØØ[[™Â˜ÛÛœİX^XœÔİHX]›X^
+‹‹œİØÚÜË›X\
+ÈOˆX]˜XœÊËœİ
+JJNÂ‚‹ËÈ™\İÈÛÜœİœÈ[˜ÛÛœİÛÜYHË‹‹œİØÚÜ×KœÛÜ
+
+KŠHOˆ‹œÓ[İHKœÓ[İ
+NÂ˜ÛÛœİ™\İHÛÜYÌNÂ˜ÛÛœİÛÜœİHÛÜYÜÛÜY›[™İHWNÂ‚‹ËÈ™[™\ˆØ\™Â™Øİ[Y[™Ù][[Y[RY
+	İİ[]˜\™IÊK^ÛÛ[H›][
+İ[˜\™JH
+È	ÈÜ‰ÎÂ˜ÛÛœİ[HØİ[Y[™Ù][[Y[RY
+	İİ[\	ÊNÂœ[^ÛÛ[HÚYÛŠİ[
+H
+È›][
+İ[
+H
+È	ÈÜ‰ÎÂœ[˜Û\ÜÓ˜[YHH	ØØ\™]˜[YH	È
+ÈÛÛÜÛ\ÜÊİ[
+H
+È	È	È
+È
+İ[HÈ	ÜÜË\ÚYİÉÈˆ	Û™YË\ÚYİÉÊNÂ‚˜ÛÛœİİ[HØİ[Y[™Ù][[Y[RY
+	İİ[\\İ	ÊNÂœİ[^ÛÛ[HÚYÛŠİ[İ
+H
+È›]
+İ[İ
+H
+È	ÉIÎÂœİ[˜Û\ÜÓ˜[YHH	ØØ\™\İXˆ	È
+ÈÛÛÜÛ\ÜÊİ[İ
+NÂ‚˜ÛÛœİÑ[HØİ[Y[™Ù][[Y[RY
+	Ø™\İ]ÛÜœİ	ÊNÂ˜Ñ[š[›™\’SBˆÜ[ˆÛ\ÜÏHœÜÈ‰Ø™\İXÚÙ\ŸH	ÜÚYÛŠ™\İœÓ[İ
+_IÙ›]
+™\İœÓ[İ
+_IOÜÜ[˜
+ÂˆÜ[ˆİ[OH˜ÛÛÜœ™Ø˜JŒKMKŒÊH‹ÏÜÜ[ˆ
+ÂˆÜ[ˆÛ\ÜÏH›™YÈ‰İÛÜœİXÚÙ\ŸH	ÜÚYÛŠÛÜœİœÓ[İ
+_IÙ›]
+ÛÜœİœÓ[İ
+_IOÜÜ[˜Â˜Ñ[˜Û\ÜÓ˜[YHH	ØØ\™]˜[YIÎÂ˜Ñ[œİ[K™›ÛÚ^™HH	Ì\™[IÎÂ‚‹ËÈ™[™\ˆX›B˜ÛÛœİ›ÙHHØİ[Y[™Ù][[Y[RY
+	İ›ÙIÊNÂœİØÚÜË™›Ü‘XXÚ
+ÈOˆÂˆÛÛœİ˜\•ÚYHX]œ›İ[™
+
+X]˜XœÊËœİ
+HÈX^XœÔİ
+H
+ˆÎ
+NÂˆÛÛœİ˜\ÛÛÜˆHËœHÈ	ÈÌ™	Èˆ	ÈÙ™ŒMÍ	ÎÂˆÛÛœİ˜YÙHHËœİ]\ÈOOH	ÓU‘IÂˆÈ	ÏÜ[ˆÛ\ÜÏH˜˜YÙK[]™H“U‘OÜÜ[‰Âˆˆ	ÏÜ[ˆÛ\ÜÏH˜˜YÙKY˜[˜XÚÈ‘SPÒÏÜÜ[‰ÎÂ‚ˆÛÛœİˆHØİ[Y[˜Ü™X]Q[[Y[
+	İ‰ÊNÂˆ‹š[›™\’SHˆ‚ˆÜ[ˆÛ\ÜÏHXÚÙ\‹[˜[YH‰ÜËXÚÙ\ŸOÜÜ[‰Ø˜YÙ_BˆÜ[ˆÛ\ÜÏHœİØÚËY[[˜[YH‰ÜË›˜[Y_OÜÜ[‚ˆİ‚ˆ‰Ù›]
+Ë™\›Ê_HÜİ‚ˆİ›Û™Ï‰Ù›]
+ËœšXÙJ_HÜÜİ›Û™Ïİ‚ˆÛ\ÜÏH‰ØÛÛÜÛ\ÜÊË™^Tİ
+_H‰ÜÚYÛŠË™^Tİ
+_IÙ›]
+Ë™^Tİ
+_IOİ‚ˆÛ\ÜÏH‰ØÛÛÜÛ\ÜÊËœÓ[İ
+_H‰ÜÚYÛŠËœÓ[İ
+_IÙ›]
+ËœÓ[İ
+_IOİ‚ˆÛ\ÜÏH‰ØÛÛÜÛ\ÜÊËœ
+_H‰ÜÚYÛŠËœ
+_IÙ›][
+Ëœ
+_HÜİ‚ˆÛ\ÜÏH˜˜\‹XÙ[‚ˆ]ˆÛ\ÜÏH˜˜\‹]˜XÚÈ‚ˆ]ˆÛ\ÜÏH˜˜\‹Yš[ˆİ[OHÚY‰Ø˜\•ÚY\Ø˜XÚÙÜ›İ[™‰Ø˜\ÛÛÜŸNÈÙ]‚ˆÙ]‚ˆİ‚ˆÂˆ›ÙK˜\[™Ú[
+ŠNÂŸJNÂ‚‹ËÈİ[È›İÂ˜ÛÛœİİ[Ô›İÈHØİ[Y[˜Ü™X]Q[[Y[
+	İ‰ÊNÂİ[Ô›İË˜Û\ÜÓ˜[YHH	İİ[Ë\›İÉÎÂİ[Ô›İËš[›™\’SHˆÜ[ˆÛ\ÜÏHİ[Ë[X™[•ÕSÜÜ[İ‚ˆ‰Ù›][
+S•‘TÕQ
+_HÜİ‚ˆİ›Û™Ï‰Ù›][
+İ[˜\™J_HÜÜİ›Û™Ïİ‚ˆ¸ $Ïİ‚ˆÛ\ÜÏH‰ØÛÛÜÛ\ÜÊİ[œÓ[İ
+_H‰ÜÚYÛŠİ[œÓ[İ
+_IÙ›]
+İ[œÓ[İ
+_IOİ‚ˆÛ\ÜÏH‰ØÛÛÜÛ\ÜÊİ[
+_H‰ÜÚYÛŠİ[
+_IÙ›][
+İ[
+_HÜİ‚ˆİ‚˜Â›ÙK˜\[™Ú[
+İ[Ô›İÊNÂ‚‹ËÈ]™HÛØÚÂ™[˜İ[Ûˆ\]PÛØÚÊ
+HÂˆØİ[Y[™Ù][[Y[RY
+	ØÛØÚÉÊK^ÛÛ[H™]È]J
+KÓØØ[U[YTİš[™Ê	Üİ‹TÑIÊNÂŸB\]PÛØÚÊ
+NÂœÙ][\˜[
+\]PÛØÚËL
+NÂÜØÜš\‚Ø›ÙO‚Ú[‚
