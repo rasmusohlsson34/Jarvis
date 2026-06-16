@@ -10,11 +10,11 @@
 
   body {
     background: #050c12;
-    color: #c8e6ea;
+    color: #b0c8d4;
     font-family: 'Share Tech Mono', monospace;
     min-height: 100vh;
-    position: relative;
     overflow-x: hidden;
+    position: relative;
   }
 
   body::before {
@@ -23,7 +23,7 @@
     inset: 0;
     background: repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
     pointer-events: none;
-    z-index: 9998;
+    z-index: 1000;
   }
 
   body::after {
@@ -32,21 +32,23 @@
     inset: 0;
     background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
     pointer-events: none;
-    z-index: 9999;
+    z-index: 1001;
   }
 
   .container {
-    max-width: 1280px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 28px 24px 40px;
+    padding: 24px 20px 40px;
+    position: relative;
+    z-index: 1;
   }
 
   /* HEADER */
-  header {
+  .header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     border-bottom: 1px solid rgba(0,229,255,0.2);
-    padding-bottom: 20px;
+    padding-bottom: 16px;
   }
 
   .logo {
@@ -54,15 +56,16 @@
     font-size: 2.8rem;
     font-weight: 900;
     color: #00e5ff;
-    letter-spacing: 0.25em;
-    text-shadow: 0 0 20px rgba(0,229,255,0.5);
+    letter-spacing: 0.3em;
+    text-shadow: 0 0 20px rgba(0,229,255,0.5), 0 0 40px rgba(0,229,255,0.2);
   }
 
   .subtitle {
-    font-size: 0.78rem;
-    color: rgba(0,229,255,0.5);
-    letter-spacing: 0.18em;
-    margin-top: 6px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: rgba(0,229,255,0.6);
+    letter-spacing: 0.2em;
+    margin-top: 4px;
     text-transform: uppercase;
   }
 
@@ -72,11 +75,11 @@
     justify-content: space-between;
     align-items: center;
     background: rgba(0,229,255,0.04);
-    border: 1px solid rgba(0,229,255,0.12);
-    border-radius: 4px;
+    border: 1px solid rgba(0,229,255,0.15);
     padding: 8px 16px;
-    margin-bottom: 22px;
-    font-size: 0.75rem;
+    margin-bottom: 20px;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
   }
 
   .status-left {
@@ -86,23 +89,27 @@
   }
 
   .status-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: #00ff88;
-    box-shadow: 0 0 6px #00ff88;
+    box-shadow: 0 0 8px rgba(0,255,136,0.8);
     flex-shrink: 0;
   }
 
-  .status-text { color: rgba(0,229,255,0.7); }
-  .status-right { color: rgba(0,229,255,0.5); }
+  .status-dot.amber { background: #ffab00; box-shadow: 0 0 8px rgba(255,171,0,0.8); }
+  .status-dot.red { background: #ff1744; box-shadow: 0 0 8px rgba(255,23,68,0.8); }
+
+  .status-right {
+    color: rgba(0,229,255,0.7);
+  }
 
   /* SUMMARY CARDS */
   .cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-bottom: 24px;
+    gap: 12px;
+    margin-bottom: 20px;
   }
 
   @media (max-width: 900px) {
@@ -110,284 +117,350 @@
   }
 
   .card {
-    background: rgba(0,229,255,0.04);
-    border: 1px solid rgba(0,229,255,0.15);
-    border-radius: 6px;
-    padding: 16px 18px;
+    background: rgba(0,229,255,0.03);
+    border: 1px solid rgba(0,229,255,0.18);
+    padding: 14px 16px;
   }
 
   .card-label {
     font-size: 0.65rem;
-    color: rgba(0,229,255,0.45);
-    letter-spacing: 0.12em;
+    color: rgba(0,229,255,0.5);
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .card-value {
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Share Tech Mono', monospace;
     font-size: 1.35rem;
-    font-weight: 700;
     color: #00e5ff;
-    letter-spacing: 0.05em;
   }
 
   .card-sub {
-    font-size: 0.7rem;
-    margin-top: 4px;
-    color: rgba(0,229,255,0.5);
+    font-size: 0.75rem;
+    margin-top: 3px;
   }
 
   .pos { color: #00ff88; }
   .neg { color: #ff1744; }
-  .pos-shadow { text-shadow: 0 0 8px rgba(0,255,136,0.4); }
-  .neg-shadow { text-shadow: 0 0 8px rgba(255,23,68,0.4); }
+  .neu { color: #00e5ff; }
 
   /* TABLE */
   .table-wrap {
     overflow-x: auto;
+    border: 1px solid rgba(0,229,255,0.15);
   }
 
   table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
   }
 
-  thead th {
-    font-size: 0.62rem;
-    color: rgba(0,229,255,0.45);
+  thead tr {
+    background: rgba(0,229,255,0.06);
+    border-bottom: 1px solid rgba(0,229,255,0.2);
+  }
+
+  th {
+    padding: 10px 14px;
+    text-align: right;
+    color: rgba(0,229,255,0.6);
+    font-size: 0.65rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 8px 12px;
-    text-align: right;
-    border-bottom: 1px solid rgba(0,229,255,0.15);
+    font-weight: normal;
     white-space: nowrap;
   }
 
-  thead th:first-child { text-align: left; }
+  th:first-child { text-align: left; }
 
   tbody tr {
-    border-bottom: 1px solid rgba(0,229,255,0.06);
+    border-bottom: 1px solid rgba(0,229,255,0.07);
   }
 
   tbody tr:hover {
     background: rgba(0,229,255,0.04);
   }
 
-  tbody td {
-    padding: 11px 12px;
-    text-align: right;
-    vertical-align: middle;
+  tbody tr.total-row {
+    background: rgba(0,229,255,0.06);
+    border-top: 1px solid rgba(0,229,255,0.25);
+    border-bottom: none;
+    font-weight: bold;
   }
 
-  tbody td:first-child { text-align: left; }
+  td {
+    padding: 10px 14px;
+    text-align: right;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  td:first-child { text-align: left; }
+
+  .ticker-cell { }
 
   .ticker-name {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: #00e5ff;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
+  }
+
+  .badge {
     display: inline-block;
-    margin-right: 6px;
+    font-size: 0.55rem;
+    padding: 1px 5px;
+    border-radius: 2px;
+    letter-spacing: 0.08em;
+    margin-left: 6px;
+    vertical-align: middle;
+    font-weight: bold;
   }
 
   .badge-live {
-    display: inline-block;
-    font-size: 0.55rem;
-    font-weight: 700;
+    background: rgba(0,255,136,0.15);
     color: #00ff88;
-    border: 1px solid #00ff88;
-    border-radius: 3px;
-    padding: 1px 4px;
-    letter-spacing: 0.08em;
-    vertical-align: middle;
+    border: 1px solid rgba(0,255,136,0.4);
   }
 
   .badge-fallback {
-    display: inline-block;
-    font-size: 0.55rem;
-    font-weight: 700;
-    color: #ffb300;
-    border: 1px solid #ffb300;
-    border-radius: 3px;
-    padding: 1px 4px;
-    letter-spacing: 0.08em;
-    vertical-align: middle;
+    background: rgba(255,171,0,0.15);
+    color: #ffab00;
+    border: 1px solid rgba(255,171,0,0.4);
   }
 
-  .stock-full-name {
-    display: block;
+  .company-name {
     font-size: 0.65rem;
-    color: rgba(0,229,255,0.4);
+    color: rgba(176,200,212,0.5);
     margin-top: 2px;
+    letter-spacing: 0.05em;
   }
 
-  /* BAR */
-  .bar-cell { width: 90px; padding-right: 8px; }
+  .bar-cell { width: 100px; }
 
-  .bar-track {
+  .bar-bg {
     background: rgba(255,255,255,0.05);
-    border-radius: 2px;
     height: 6px;
-    width: 80px;
+    border-radius: 3px;
     overflow: hidden;
+    width: 80px;
+    display: inline-block;
+    vertical-align: middle;
   }
 
   .bar-fill {
     height: 100%;
-    border-radius: 2px;
-  }
-
-  /* TOTALS ROW */
-  .totals-row td {
-    border-top: 1px solid rgba(0,229,255,0.25);
-    color: #00e5ff;
-    font-weight: 700;
-    padding-top: 14px;
-    padding-bottom: 14px;
-  }
-
-  .totals-label {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    color: rgba(0,229,255,0.7);
+    border-radius: 3px;
   }
 
   /* FOOTER */
-  footer {
-    margin-top: 32px;
+  .footer {
+    margin-top: 20px;
     text-align: center;
-    font-size: 0.62rem;
-    color: rgba(0,229,255,0.25);
-    letter-spacing: 0.1em;
+    font-size: 0.65rem;
+    color: rgba(0,229,255,0.3);
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    border-top: 1px solid rgba(0,229,255,0.08);
-    padding-top: 16px;
+    border-top: 1px solid rgba(0,229,255,0.1);
+    padding-top: 12px;
   }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <header>
+  <!-- HEADER -->
+  <div class="header">
     <div class="logo">J.A.R.V.I.S.</div>
     <div class="subtitle">Bankterminalen Â· Live PortfÃ¶ljÃ¶vervakning</div>
-  </header>
-
-  <div class="status-bar">
-    <div class="status-left">
-      <div class="status-dot"></div>
-      <span class="status-text">7/7 live Â· StockholmsbÃ¶rsen</span>
-    </div>
-    <div class="status-right">Uppdaterad: <span id="clock">--:--:--</span></div>
   </div>
 
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="status-left">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText"></span>
+    </div>
+    <div class="status-right">Uppdaterad: <span id="updateTime"></span></div>
+  </div>
+
+  <!-- SUMMARY CARDS -->
   <div class="cards">
     <div class="card">
       <div class="card-label">Investerat</div>
-      <div class="card-value">699 475 kr</div>
-      <div class="card-sub">Nollpunkt 9 jun 2026</div>
+      <div class="card-value neu">699 475 kr</div>
     </div>
     <div class="card">
-      <div class="card-label">PortfÃ¶lj{\™OÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™]˜[YHˆYHİ[]˜\™H¸ $ÏÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™\İXˆ“]™H]˜[˜OÙ]‚ˆÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™‚ˆ]ˆÛ\ÜÏH˜Ø\™[X™[•İ[	˜[\ÓÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™]˜[YHÜÈÜË\ÚYİÈˆYHİ[\¸ $ÏÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™\İXˆˆYHİ[\\İ¸ $ÏÙ]‚ˆÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™‚ˆ]ˆÛ\ÜÏH˜Ø\™[X™[°éİÈğé\İÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™]˜[YHˆYH˜™\İ]ÛÜœİ¸ $ÏÙ]‚ˆ]ˆÛ\ÜÏH˜Ø\™\İXˆ•œÈ›Ûİ\œÏÙ]‚ˆÙ]‚ˆÙ]‚‚ˆ]ˆÛ\ÜÏHX›K]Ü˜\‚ˆX›O‚ˆXY‚ˆ‚ˆZİYOİ‚ˆ“›Ûİ\œÏİ‚ˆ’İ\œÏİ‚ˆ‘YÉOİ‚ˆ•œÈ›Û	Oİ‚ˆ”	˜[\Ó
-ÑRÊOİ‚ˆÛ\ÜÏH˜˜\‹XÙ[İ‚ˆİ‚ˆİXY‚ˆ›ÙHYH›ÙH‚ˆİ›ÙO‚ˆİX›O‚ˆÙ]‚‚ˆ›Ûİ\’ğáNˆ]˜[˜H0­ÈTUTTÈTˆMHRSˆpáS¸ $Ñ”‘HNŒ8 $ÌMÎŒÌÙ›Ûİ\‚‚Ù]‚‚ØÜš\‚˜ÛÛœİS•‘TÕQHNMÍLÂ‚˜ÛÛœİİØÚÜÈHÂˆÈXÚÙ\ˆ	Ó‘KTÑIË˜[YNˆ	Ó›Ü™XH˜[šÉË™\›ÎˆMÍKŒKÚ\™\ÎˆMÌ[™\İYˆNNL‹LšXÙNˆNË^TİˆM‹İ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ÔÒ‹PIË˜[YNˆ	Ò[™[Ø˜[šÙ[ˆIË™\›ÎˆLÍKŒMKÚ\™\ÎˆÍ[™\İYˆLLKŒšXÙNˆLÎK‹^TİˆÍ‹İ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ÔÒ‹P‰Ë˜[YNˆ	Ò[™[Ø˜[šÙ[ˆ‰Ë™\›ÎˆŒŒŒÚ\™\Îˆ‹[™\İYˆNNNLËŒŒšXÙNˆŒÌ‹Œ‹^TİˆŒÍKİ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ÔÑP‹PIË˜[YNˆ	ÔÑPˆIË™\›ÎˆNŒÚ\™\ÎˆMË[™\İYˆNNLL‹ŒšXÙNˆNLËÍK^TİˆL‹İ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ÔÑP‹PÉË˜[YNˆ	ÔÑPˆÉË™\›ÎˆNŒŒÚ\™\ÎˆLÌK[™\İYˆNNLÍŒŒšXÙNˆŒŒ^TİˆKŒKİ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ÔÕÑQPIË˜[YNˆ	ÔİÙY˜[šÈIË™\›ÎˆÌÍ‹ŒLÚ\™\ÎˆMË[™\İYˆNNŒKÌšXÙNˆÍK^TİˆÎİ]\Îˆ	ÓU‘IÈKˆÈXÚÙ\ˆ	ĞVIË˜[YNˆ	Ğ]˜[˜H˜[šÈÛ[™ÉË™\›ÎˆÍNŒLÚ\™\ÎˆÎK[™\İYˆNNLKLšXÙNˆÎK^TİˆKŒÍ‹İ]\Îˆ	ÓU‘IÈK—NÂ‚™[˜İ[Ûˆ›]
-‹XÚ[X[ÈHŠHÂˆ™]\›ˆ‹ÓØØ[Tİš[™Ê	Üİ‹TÑIËÈZ[š[][Qœ˜Xİ[Û‘YÚ]ÎˆXÚ[X[ËX^[][Qœ˜Xİ[Û‘YÚ]ÎˆXÚ[X[ÈJNÂŸB™[˜İ[Ûˆ›][
-ŠHÂˆ™]\›ˆ‹ÓØØ[Tİš[™Ê	Üİ‹TÑIËÈZ[š[][Qœ˜Xİ[Û‘YÚ]ÎˆX^[][Qœ˜Xİ[Û‘YÚ]ÎˆJNÂŸB™[˜İ[ÛˆÚYÛŠŠHÈ™]\›ˆˆHÈ	ÊÉÈˆ	ÉÎÈB™[˜İ[ÛˆÛÛÜÛ\ÜÊŠHÈ™]\›ˆˆHÈ	ÜÜÉÈˆ	Û™YÉÎÈB‚‹ËÈÛÛ\]B›]İ[˜\™HHÂ›]İ[HÂ‚œİØÚÜË™›Ü‘XXÚ
-ÈOˆÂˆË˜\™HHËœšXÙH
-ˆËœÚ\™\ÎÂˆËœHË˜\™HHËš[™\İYÂˆËœİH
-ËœÈËš[™\İY
-H
-ˆLÂˆËœÓ[İH
-ËœšXÙHHË™\›ÊHÈË™\›È
-ˆLÂˆİ[˜\™H
-ÏHË˜\™NÂˆİ[
-ÏHËœÂŸJNÂ‚˜ÛÛœİİ[İH
-İ[ÈS•‘TÕQ
-H
-ˆLÂ˜ÛÛœİİ[œÓ[İH
-İ[˜\™HHS•‘TÕQ
-HÈS•‘TÕQ
-ˆLÂ‚‹ËÈš[™X^İ›Üˆ˜\ˆØØ[[™Â˜ÛÛœİX^XœÔİHX]›X^
-‹‹œİØÚÜË›X\
-ÈOˆX]˜XœÊËœİ
-JJNÂ‚‹ËÈ™\İÈÛÜœİœÈ[˜ÛÛœİÛÜYHË‹‹œİØÚÜ×KœÛÜ
+      <div class="card-label">PortfÃ¶ljvÃ¤rde</div>
+      <div class="card-value neu" id="cardValue"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Total P&amp;L</div>
+      <div class="card-value" id="cardPl"></div>
+      <div class="card-sub" id="cardPlPct"></div>
+    </div>
+    <div class="card">
+      <div class="card-label">BÃ¤st / SÃ¤mst</div>
+      <div class="card-value" id="cardBest" style="font-size:1rem"></div>
+    </div>
+  </div>
 
-KŠHOˆ‹œÓ[İHKœÓ[İ
-NÂ˜ÛÛœİ™\İHÛÜYÌNÂ˜ÛÛœİÛÜœİHÛÜYÜÛÜY›[™İHWNÂ‚‹ËÈ™[™\ˆØ\™Â™Øİ[Y[™Ù][[Y[RY
-	İİ[]˜\™IÊK^ÛÛ[H›][
-İ[˜\™JH
-È	ÈÜ‰ÎÂ˜ÛÛœİ[HØİ[Y[™Ù][[Y[RY
-	İİ[\	ÊNÂœ[^ÛÛ[HÚYÛŠİ[
-H
-È›][
-İ[
-H
-È	ÈÜ‰ÎÂœ[˜Û\ÜÓ˜[YHH	ØØ\™]˜[YH	È
-ÈÛÛÜÛ\ÜÊİ[
-H
-È	È	È
-È
-İ[HÈ	ÜÜË\ÚYİÉÈˆ	Û™YË\ÚYİÉÊNÂ‚˜ÛÛœİİ[HØİ[Y[™Ù][[Y[RY
-	İİ[\\İ	ÊNÂœİ[^ÛÛ[HÚYÛŠİ[İ
-H
-È›]
-İ[İ
-H
-È	ÉIÎÂœİ[˜Û\ÜÓ˜[YHH	ØØ\™\İXˆ	È
-ÈÛÛÜÛ\ÜÊİ[İ
-NÂ‚˜ÛÛœİÑ[HØİ[Y[™Ù][[Y[RY
-	Ø™\İ]ÛÜœİ	ÊNÂ˜Ñ[š[›™\’SBˆÜ[ˆÛ\ÜÏHœÜÈ‰Ø™\İXÚÙ\ŸH	ÜÚYÛŠ™\İœÓ[İ
-_IÙ›]
-™\İœÓ[İ
-_IOÜÜ[˜
-ÂˆÜ[ˆİ[OH˜ÛÛÜœ™Ø˜JŒKMKŒÊH‹ÏÜÜ[ˆ
-ÂˆÜ[ˆÛ\ÜÏH›™YÈ‰İÛÜœİXÚÙ\ŸH	ÜÚYÛŠÛÜœİœÓ[İ
-_IÙ›]
-ÛÜœİœÓ[İ
-_IOÜÜ[˜Â˜Ñ[˜Û\ÜÓ˜[YHH	ØØ\™]˜[YIÎÂ˜Ñ[œİ[K™›ÛÚ^™HH	Ì\™[IÎÂ‚‹ËÈ™[™\ˆX›B˜ÛÛœİ›ÙHHØİ[Y[™Ù][[Y[RY
-	İ›ÙIÊNÂœİØÚÜË™›Ü‘XXÚ
-ÈOˆÂˆÛÛœİ˜\•ÚYHX]œ›İ[™
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Aktie</th>
+          <th>Nollkurs</th>
+          <th>Kurs</th>
+          <th>Dag%</th>
+          <th>Vs noll%</th>
+          <th>P&amp;L (SEK)</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+      </tbody>
+    </table>
+  </div>
 
-X]˜XœÊËœİ
-HÈX^XœÔİ
-H
-ˆÎ
-NÂˆÛÛœİ˜\ÛÛÜˆHËœHÈ	ÈÌ™	Èˆ	ÈÙ™ŒMÍ	ÎÂˆÛÛœİ˜YÙHHËœİ]\ÈOOH	ÓU‘IÂˆÈ	ÏÜ[ˆÛ\ÜÏH˜˜YÙK[]™H“U‘OÜÜ[‰Âˆˆ	ÏÜ[ˆÛ\ÜÏH˜˜YÙKY˜[˜XÚÈ‘SPÒÏÜÜ[‰ÎÂ‚ˆÛÛœİˆHØİ[Y[˜Ü™X]Q[[Y[
-	İ‰ÊNÂˆ‹š[›™\’SHˆ‚ˆÜ[ˆÛ\ÜÏHXÚÙ\‹[˜[YH‰ÜËXÚÙ\ŸOÜÜ[‰Ø˜YÙ_BˆÜ[ˆÛ\ÜÏHœİØÚËY[[˜[YH‰ÜË›˜[Y_OÜÜ[‚ˆİ‚ˆ‰Ù›]
-Ë™\›Ê_HÜİ‚ˆİ›Û™Ï‰Ù›]
-ËœšXÙJ_HÜÜİ›Û™Ïİ‚ˆÛ\ÜÏH‰ØÛÛÜÛ\ÜÊË™^Tİ
-_H‰ÜÚYÛŠË™^Tİ
-_IÙ›]
-Ë™^Tİ
-_IOİ‚ˆÛ\ÜÏH‰ØÛÛÜÛ\ÜÊËœÓ[İ
-_H‰ÜÚYÛŠËœÓ[İ
-_IÙ›]
-ËœÓ[İ
-_IOİ‚ˆÛ\ÜÏH‰ØÛÛÜÛ\ÜÊËœ
-_H‰ÜÚYÛŠËœ
-_IÙ›][
-Ëœ
-_HÜİ‚ˆÛ\ÜÏH˜˜\‹XÙ[‚ˆ]ˆÛ\ÜÏH˜˜\‹]˜XÚÈ‚ˆ]ˆÛ\ÜÏH˜˜\‹Yš[ˆİ[OHÚY‰Ø˜\•ÚY\Ø˜XÚÙÜ›İ[™‰Ø˜\ÛÛÜŸNÈÙ]‚ˆÙ]‚ˆİ‚ˆÂˆ›ÙK˜\[™Ú[
-ŠNÂŸJNÂ‚‹ËÈİ[È›İÂ˜ÛÛœİİ[Ô›İÈHØİ[Y[˜Ü™X]Q[[Y[
-	İ‰ÊNÂİ[Ô›İË˜Û\ÜÓ˜[YHH	İİ[Ë\›İÉÎÂİ[Ô›İËš[›™\’SHˆÜ[ˆÛ\ÜÏHİ[Ë[X™[•ÕSÜÜ[İ‚ˆ‰Ù›][
-S•‘TÕQ
-_HÜİ‚ˆİ›Û™Ï‰Ù›][
-İ[˜\™J_HÜÜİ›Û™Ïİ‚ˆ¸ $Ïİ‚ˆÛ\ÜÏH‰ØÛÛÜÛ\ÜÊİ[œÓ[İ
-_H‰ÜÚYÛŠİ[œÓ[İ
-_IÙ›]
-İ[œÓ[İ
-_IOİ‚ˆÛ\ÜÏH‰ØÛÛÜÛ\ÜÊİ[
-_H‰ÜÚYÛŠİ[
-_IÙ›][
-İ[
-_HÜİ‚ˆİ‚˜Â›ÙK˜\[™Ú[
-İ[Ô›İÊNÂ‚‹ËÈ]™HÛØÚÂ™[˜İ[Ûˆ\]PÛØÚÊ
-HÂˆØİ[Y[™Ù][[Y[RY
-	ØÛØÚÉÊK^ÛÛ[H™]È]J
-KÓØØ[U[YTİš[™Ê	Üİ‹TÑIÊNÂŸB\]PÛØÚÊ
-NÂœÙ][\˜[
-\]PÛØÚËL
-NÂÜØÜš\‚Ø›ÙO‚Ú[‚
+  <!-- FOOTER -->
+  <div class="footer">KÃ„LLA: Avanza Â· UPPDATERAS VAR 15 MIN MÃ…Nâ€“FRE 09:00â€“17:30</div>
+
+</div>
+
+<script>
+const STOCKS = [
+  { ticker: 'NDA-SE', name: 'Nordea Bank',           noll: 175.25, antal: 570,  invested: 99892.50,  price: 180.6,  dayPct: 0.50,  status: 'LIVE' },
+  { ticker: 'SHB-A',  name: 'Handelsbanken A',       noll: 135.15, antal: 740,  invested: 100011.00, price: 139.75, dayPct: 0.87,  status: 'LIVE' },
+  { ticker: 'SHB-B',  name: 'Handelsbanken B',       noll: 224.20, antal: 446,  invested: 99993.20,  price: 232.6,  dayPct: 0.52,  status: 'LIVE' },
+  { ticker: 'SEB-A',  name: 'SEB A',                 noll: 184.00, antal: 543,  invested: 99912.00,  price: 194.05, dayPct: 0.67,  status: 'LIVE' },
+  { ticker: 'SEB-C',  name: 'SEB C',                 noll: 188.20, antal: 531,  invested: 99934.20,  price: 199.8,  dayPct: 0.91,  status: 'LIVE' },
+  { ticker: 'SWED-A', name: 'Swedbank A',            noll: 336.10, antal: 297,  invested: 99821.70,  price: 349.0,  dayPct: 0.93,  status: 'LIVE' },
+  { ticker: 'AZA',    name: 'Avanza Bank Holding',   noll: 358.10, antal: 279,  invested: 99909.90,  price: 389.0,  dayPct: 1.38,  status: 'LIVE' },
+];
+
+const TOTAL_INVESTED = 699474.50;
+
+function fmt(n, decimals = 0) {
+  return n.toLocaleString('sv-SE', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+function sign(n) { return n >= 0 ? '+' : ''; }
+
+function colorClass(n) { return n >= 0 ? 'pos' : 'neg'; }
+
+// Compute per-stock P&L
+const computed = STOCKS.map(s => {
+  const varde  = s.price * s.antal;
+  const pl     = varde - s.invested;
+  const plPct  = (pl / s.invested) * 100;
+  const vsNoll = ((s.price - s.noll) / s.noll) * 100;
+  return { ...s, varde, pl, plPct, vsNoll };
+});
+
+// Totals
+const totalVarde = computed.reduce((a, s) => a + s.varde, 0);
+const totalPl    = totalVarde - TOTAL_INVESTED;
+const totalPlPct = (totalPl / TOTAL_INVESTED) * 100;
+const totalVsNoll = ((totalVarde - TOTAL_INVESTED) / TOTAL_INVESTED) * 100;
+
+// Best / worst by vsNoll
+const sorted = [...computed].sort((a, b) => b.vsNoll - a.vsNoll);
+const best  = sorted[0];
+const worst = sorted[sorted.length - 1];
+
+// Max |plPct| for bar scaling
+const maxAbsPlPct = Math.max(...computed.map(s => Math.abs(s.plPct)));
+
+// Status
+const liveCount = computed.filter(s => s.status === 'LIVE').length;
+const allLive   = liveCount === 7;
+const noneLive  = liveCount === 0;
+
+// Populate cards
+document.getElementById('cardValue').textContent = fmt(totalVarde) + ' kr';
+
+const plEl = document.getElementById('cardPl');
+plEl.textContent = sign(totalPl) + fmt(totalPl) + ' kr';
+plEl.className = 'card-value ' + colorClass(totalPl);
+
+const plPctEl = document.getElementById('cardPlPct');
+plPctEl.textContent = sign(totalPlPct) + fmt(totalPlPct, 2) + '%';
+plPctEl.className = 'card-sub ' + colorClass(totalPlPct);
+
+const bestEl = document.getElementById('cardBest');
+bestEl.innerHTML =
+  '<span class="' + colorClass(best.vsNoll) + '">' + best.ticker + ' ' + sign(best.vsNoll) + fmt(best.vsNoll, 2) + '%</span>' +
+  '<br><span style="font-size:0.7rem;color:rgba(176,200,212,0.5)">/ ' + worst.ticker + ' ' + sign(worst.vsNoll) + fmt(worst.vsNoll, 2) + '%</span>';
+
+// Status bar
+const dot = document.getElementById('statusDot');
+const statusText = document.getElementById('statusText');
+if (allLive) {
+  dot.className = 'status-dot';
+  statusText.textContent = '7/7 LIVE Â· StockholmsbÃ¶rsen Â· 16 jun 2026';
+} else if (noneLive) {
+  dot.className = 'status-dot red';
+  statusText.textContent = '0/7 live Â· FALLBACK-DATA Â· 16 jun 2026';
+} else {
+  dot.className = 'status-dot amber';
+  statusText.textContent = liveCount + '/7 live Â· StockholmsbÃ¶rsen Â· 16 jun 2026';
+}
+
+// Update time
+document.getElementById('updateTime').textContent = new Date().toLocaleTimeString('sv-SE');
+
+// Build table rows
+const tbody = document.getElementById('tableBody');
+computed.forEach(s => {
+  const barWidth = Math.round((Math.abs(s.plPct) / maxAbsPlPct) * 100);
+  const barColor = s.pl >= 0 ? '#00ff88' : '#ff1744';
+  const badge = s.status === 'LIVE'
+    ? '<span class="badge badge-live">LIVE</span>'
+    : '<span class="badge badge-fallback">FALLBACK</span>';
+
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>
+      <div class="ticker-name">${s.ticker}${badge}</div>
+      <div class="company-name">${s.name}</div>
+    </td>
+    <td>${fmt(s.noll, 2)}</td>
+    <td class="neu">${fmt(s.price, 2)}</td>
+    <td class="${colorClass(s.dayPct)}">${s.dayPct !== null ? sign(s.dayPct) + fmt(s.dayPct, 2) + '%' : 'â€“'}</td>
+    <td class="${colorClass(s.vsNoll)}">${sign(s.vsNoll)}${fmt(s.vsNoll, 2)}%</td>
+    <td class="${colorClass(s.pl)}">${sign(s.pl)}${fmt(Math.round(s.pl))}</td>
+    <td class="bar-cell">
+      <div class="bar-bg">
+        <div class="bar-fill" style="width:${barWidth}%;background:${barColor}"></div>
+      </div>
+    </td>
+  `;
+  tbody.appendChild(tr);
+});
+
+// Total row
+const totalTr = document.createElement('tr');
+totalTr.className = 'total-row';
+totalTr.innerHTML = `
+  <td><div class="ticker-name">TOTALT</div></td>
+  <td class="neu">${fmt(TOTAL_INVESTED)} kr</td>
+  <td class="neu">${fmt(totalVarde)} kr</td>
+  <td>â€“</td>
+  <td class="${colorClass(totalVsNoll)}">${sign(totalVsNoll)}${fmt(totalVsNoll, 2)}%</td>
+  <td class="${colorClass(totalPl)}">${sign(totalPl)}${fmt(Math.round(totalPl))}</td>
+  <td></td>
+`;
+tbody.appendChild(totalTr);
+
+// Live clock
+setInterval(() => {
+  document.getElementById('updateTime').textContent = new Date().toLocaleTimeString('sv-SE');
+}, 1000);
+</script>
+</body>
+</html>
