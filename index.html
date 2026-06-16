@@ -3,525 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>J.A.R.V.I.S. — Bankterminalen</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<title>J.A.R.V.I.S. - Bankterminal</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: #050c12;
-    color: #c0d8e0;
-    font-family: 'Share Tech Mono', monospace;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  /* Scanlines overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
-    pointer-events: none;
-    z-index: 100;
-  }
-
-  /* Vignette overlay */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
-    pointer-events: none;
-    z-index: 101;
-  }
-
-  .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 24px 20px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Header */
-  .header {
-    text-align: center;
-    margin-bottom: 20px;
-    border-bottom: 1px solid rgba(0,229,255,0.2);
-    padding-bottom: 16px;
-  }
-
-  .logo {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2.8rem;
-    font-weight: 900;
-    color: #00e5ff;
-    letter-spacing: 0.3em;
-    text-shadow: 0 0 20px rgba(0,229,255,0.5);
-  }
-
-  .subtitle {
-    font-size: 0.75rem;
-    color: rgba(0,229,255,0.6);
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
-
-  /* Status bar */
-  .statusbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(0,229,255,0.04);
-    border: 1px solid rgba(0,229,255,0.15);
-    padding: 8px 16px;
-    margin-bottom: 20px;
-    font-size: 0.75rem;
-  }
-
-  .status-left { display: flex; align-items: center; gap: 8px; }
-
-  .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #00ff88;
-    box-shadow: 0 0 6px #00ff88;
-    flex-shrink: 0;
-  }
-
-  .status-right { color: rgba(0,229,255,0.7); }
-
-  /* Summary cards */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
-  .card {
-    background: rgba(0,229,255,0.04);
-    border: 1px solid rgba(0,229,255,0.15);
-    padding: 14px 16px;
-  }
-
-  .card-label {
-    font-size: 0.65rem;
-    color: rgba(0,229,255,0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin-bottom: 6px;
-  }
-
-  .card-value {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #00e5ff;
-  }
-
-  .card-sub {
-    font-size: 0.7rem;
-    margin-top: 3px;
-  }
-
-  .pos { color: #00ff88; }
-  .neg { color: #ff1744; }
-  .neu { color: #00e5ff; }
-
-  /* Table */
-  .table-wrap {
-    overflow-x: auto;
-    border: 1px solid rgba(0,229,255,0.15);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.8rem;
-  }
-
-  thead tr {
-    background: rgba(0,229,255,0.08);
-    border-bottom: 1px solid rgba(0,229,255,0.25);
-  }
-
-  th {
-    padding: 10px 12px;
-    text-align: right;
-    font-size: 0.65rem;
-    color: rgba(0,229,255,0.6);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  th:first-child { text-align: left; }
-
-  tbody tr {
-    border-bottom: 1px solid rgba(0,229,255,0.07);
-  }
-
-  tbody tr:hover { background: rgba(0,229,255,0.04); }
-
-  td {
-    padding: 10px 12px;
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  td:first-child { text-align: left; }
-
-  .ticker-cell {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .ticker-top {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .ticker-name {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #00e5ff;
-  }
-
-  .badge-live {
-    font-size: 0.55rem;
-    padding: 1px 5px;
-    background: rgba(0,255,136,0.15);
-    color: #00ff88;
-    border: 1px solid rgba(0,255,136,0.4);
-    letter-spacing: 0.1em;
-  }
-
-  .badge-fallback {
-    font-size: 0.55rem;
-    padding: 1px 5px;
-    background: rgba(255,170,0,0.15);
-    color: #ffaa00;
-    border: 1px solid rgba(255,170,0,0.4);
-    letter-spacing: 0.1em;
-  }
-
-  .ticker-fullname {
-    font-size: 0.65rem;
-    color: rgba(192,216,224,0.45);
-  }
-
-  /* Bar column */
-  .bar-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 6px;
-    min-width: 100px;
-  }
-
-  .bar-bg {
-    width: 80px;
-    height: 6px;
-    background: rgba(255,255,255,0.06);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .bar-fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-  }
-
-  /* Totals row */
-  .totals-row {
-    background: rgba(0,229,255,0.06) !important;
-    border-top: 1px solid rgba(0,229,255,0.3) !important;
-    font-weight: bold;
-  }
-
-  .totals-row td { color: #00e5ff; }
-
-  /* Footer */
-  .footer {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 0.6rem;
-    color: rgba(0,229,255,0.3);
-    letter-spacing: 0.15em;
-    padding-top: 12px;
-    border-top: 1px solid rgba(0,229,255,0.1);
-  }
-
-  #clock { color: rgba(0,229,255,0.85); font-variant-numeric: tabular-nums; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#050c12;--cyan:#00e5ff;--cyan-glow:rgba(0,229,255,0.5);--pos:#00ff88;--neg:#ff1744;--card-bg:rgba(0,229,255,0.04);--border:rgba(0,229,255,0.18);--text:rgba(0,229,255,0.85);--text-dim:rgba(0,229,255,0.45)}
+html,body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent 2px,rgba(0,229,255,0.015) 2px 4px);pointer-events:none;z-index:100}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,0.6) 100%);pointer-events:none;z-index:101}
+.container{max-width:1280px;margin:0 auto;padding:24px 20px 40px;position:relative;z-index:1}
+.header{text-align:center;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.logo{font-family:'Orbitron',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:0.18em;color:var(--cyan);text-shadow:0 0 20px var(--cyan-glow),0 0 40px rgba(0,229,255,0.3)}
+.subtitle{font-size:12px;color:var(--text-dim);letter-spacing:0.22em;text-transform:uppercase;margin-top:6px}
+.statusbar{display:flex;justify-content:space-between;align-items:center;background:var(--card-bg);border:1px solid var(--border);padding:8px 16px;margin-bottom:24px;font-size:12px;letter-spacing:0.08em}
+.status-left{display:flex;align-items:center;gap:10px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--pos);box-shadow:0 0 8px var(--pos);flex-shrink:0}
+.status-right{color:var(--text-dim);font-size:11px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+@media(max-width:800px){.cards{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--card-bg);border:1px solid var(--border);padding:16px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0.4}
+.card-label{font-size:10px;color:var(--text-dim);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:8px}
+.card-value{font-size:clamp(16px,2.5vw,22px);font-family:'Orbitron',sans-serif;font-weight:700;color:var(--cyan);line-height:1.2}
+.card-value.pos{color:var(--pos)}.card-value.neg{color:var(--neg)}
+.card-sub{font-size:11px;color:var(--text-dim);margin-top:4px}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);background:var(--card-bg)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
+thead tr{border-bottom:1px solid var(--border);background:rgba(0,229,255,0.06)}
+th{padding:10px 14px;text-align:right;font-size:10px;letter-spacing:0.14em;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;font-weight:400}
+th:first-child{text-align:left}
+tbody tr{border-bottom:1px solid rgba(0,229,255,0.06)}
+tbody tr:hover{background:rgba(0,229,255,0.04)}
+tbody tr.total-row{border-top:1px solid var(--border);background:rgba(0,229,255,0.06);font-weight:600}
+td{padding:11px 14px;text-align:right;white-space:nowrap}
+td:first-child{text-align:left}
+.ticker-name{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--cyan);letter-spacing:0.06em}
+.badge{display:inline-block;font-size:8px;padding:2px 5px;border-radius:2px;letter-spacing:0.1em;margin-left:6px;vertical-align:middle;font-family:'Share Tech Mono',monospace}
+.badge-live{background:rgba(0,255,136,0.12);color:var(--pos);border:1px solid rgba(0,255,136,0.3)}
+.ticker-sub{font-size:10px;color:var(--text-dim);margin-top:2px}
+.pos{color:var(--pos)}.neg{color:var(--neg)}.dim{color:var(--text-dim)}
+.bar-cell{width:120px}
+.bar-track{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px}
+.footer{text-align:center;margin-top:28px;font-size:10px;color:var(--text-dim);letter-spacing:0.14em;text-transform:uppercase}
 </style>
 </head>
 <body>
 <div class="container">
-
-  <!-- Header -->
-  <div class="header">
-    <div class="logo">J.A.R.V.I.S.</div>
-    <div class="subtitle">Bankterminalen · Live Portföljövervakning</div>
-  </div>
-
-  <!-- Status bar -->
-  <div class="statusbar">
-    <div class="status-left">
-      <div class="dot"></div>
-      <span>7/7 live · Stockholmsbörsen · 2026-06-16</span>
-    </div>
-    <div class="status-right">Uppdaterad: <span id="clock">--:--:--</span></div>
-  </div>
-
-  <!-- Summary cards -->
-  <div class="cards">
-    <div class="card">
-      <div class="card-label">Investerat</div>
-      <div class="card-value">699&nbsp;475&nbsp;kr</div>
-      <div class="card-sub neu">Nollpunkt 9 jun 2026</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Portföljvärde</div>
-      <div class="card-value">731&nbsp;489&nbsp;kr</div>
-      <div class="card-sub pos">+32&nbsp;014 kr vs noll</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Total P&amp;L</div>
-      <div class="card-value pos">+32&nbsp;014&nbsp;kr</div>
-      <div class="card-sub pos">+4,58 % vs nollkurs</div>
-    </div>
-    <div class="card">
-      <div class="card-label">Bäst / Sämst</div>
-      <div class="card-value" style="font-size:0.95rem;">
-        <span class="pos">AZA +8,49%</span>
-      </div>
-      <div class="card-sub neg">NDA-SE +2,94% (sämst)</div>
-    </div>
-  </div>
-
-  <!-- Table -->
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Aktie</th>
-          <th>Nollkurs</th>
-          <th>Kurs</th>
-          <th>Dag %</th>
-          <th>Vs noll %</th>
-          <th>P&amp;L (SEK)</th>
-          <th>Bar</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        <!-- NDA-SE -->
-        <tr>
-          <td>
-            <div class="ticker-cell">
-              <div class="ticker-top">
-                <span class="ticker-name">NDA-SE</span>
-                <span class="badge-live">LIVE</span>
-              </div>
-              <span class="ticker-fullname">Nordea Bank</span>
-            </div>
-          </td>
-          <td>175,25</td>
-          <td class="neu">180,40</td>
-          <td class="pos">+0,39%</td>
-          <td class="pos">+2,94%</td>
-          <td class="pos">+2&nbsp;936</td>
-          <td>
-            <div class="bar-wrap">
-              <div class="bar-bg"><div class="bar-fill" style="width:34.7%;background:#00ff88;"></div></div>
-            </div>
-          </td>
-        </tr>
-
-        <!-- SHB-A -->
-        <tr>
-          <td>
-            <div class="ticker-cell">
-              <div class="ticker-top">
-                <span class="ticker-name">SHB-A</span>
-                <span class="badge-live">LIVE</span>
-              </div>
-              <span class="ticker-fullname">Handelsbanken A</span>
-            </div>
-          </td>
-          <td>135,15</td>
-          <td class="neu">139,20</td>
-          <td class="pos">+0,47%</td>
-          <td class="pos">+3,00%</td>
-          <td class="pos">+2&nbsp;997</td>
-          <td>
-            <div class="bar-wrap">
-              <div class="bar-bg"><div class="bar-fill" style="width:35.4%;background:#00ff88;"></div></div>
-            </div>
-          </td>
-        </tr>
-
-        <!-- SHB-B -->
-        <tr>
-          <td>
-            <div class="ticker-cell">
-              <div class="ticker-top">
-                <span class="ticker-name">SHB-B</span>
-                <span class="badge-live">LIVE</span>
-              </div>
-              <span class="ticker-fullname">Handelsbanken B</span>
-            </div>
-          </td>
-          <td>224,20</td>
-          <td class="neu">232,00</td>
-          <td class="pos">+0,26%</td>
-          <td class="pos">+3,48%</td>
-          <td class="pos">+3&nbsp;479</td>
-          <td>
-            <div class="bar-wrap">
-              <div class="bar-bg"><div class="bar-fill" style="width:41.0%;background:#00ff88;"></div></div>
-            </div>
-          </td>
-        </tr>
-
-        <!-- SEB-A -->
-        <tr>
-          <td>
-            <div class="ticker-cell">
-              <div class="ticker-top">
-                <span class="ticker-name">SEB-A</span>
-                <span class="badge-live">LIVE</span>
-              </div>
-              <span class="ticker-fullname">SEB A</span>
-            </div>
-          </td>
-          <td>184,00</td>
-          <td class="neu">193,10</td>
-          <td class="pos">+0,18%</td>
-          <td class="pos">+4,95%</td>
-          <td class="pos">+4&nbsp;941</td>
-          <td>
-            <div class="bar-wrap">
-              <div class="bar-bg"><div class="bar-fill" style="width:58.3%;background:#00ff88;"></div></div>
-            </div>
-          </td>
-        </tr>
-
-        <!-- SEB-C -->
-        <tr>
-          <td>
-            <div class="ticker-cell">
-              <div class="ticker-top">
-                <span class="ticker-name">SEB-C</span>
-                <span class="badge-live">LIVE</span>
-              </div>
-              <span class="ticker-fullname">SEB C</span>
-            </div>
-          </td>
-          <td>188,20</td>
-          <td class="neu">199,00</td>
-          <td class="pos">+0,51%</td>
-          <td class="pos">+5,74%</td>
-          <td class="pos">+5&nbsp;735</td>
-          <td>
-            <div class="bar-wrap">
-              <div class="bar-bg"><div class="bar-fill" style="width:67.6%;background:#00ff88;"></div></div>
-            </div>
-          </td>
-        </tr>
-
-        <!-- SWED-A -->
-        <tr>
-          <td>
-            <div class="ticker-cell">
-              <div class="ticker-top">
-                <span class="ticker-name">SWED-A</span>
-                <span class="badge-live">LIVE</span>
-              </div>
-              <span class="ticker-fullname">Swedbank A</span>
-            </div>
-          </td>
-          <td>336,10</td>
-          <td class="neu">347,70</td>
-          <td class="pos">+0,55%</td>
-          <td class="pos">+3,45%</td>
-          <td class="pos">+3&nbsp;445</td>
-          <td>
-            <div class="bar-wrap">
-              <div class="bar-bg"><div class="bar-fill" style="width:40.6%;background:#00ff88;"></div></div>
-            </div>
-          </td>
-        </tr>
-
-        <!-- AZA -->
-        <tr>
-          <td>
-            <div class="ticker-cell">
-              <div class="ticker-top">
-                <span class="ticker-name">AZA</span>
-                <span class="badge-live">LIVE</span>
-              </div>
-              <span class="ticker-fullname">Avanza Bank Holding</span>
-            </div>
-          </td>
-          <td>358,10</td>
-          <td class="neu">388,50</td>
-          <td class="pos">+1,25%</td>
-          <td class="pos">+8,49%</td>
-          <td class="pos">+8&nbsp;482</td>
-          <td>
-            <div class="bar-wrap">
-              <div class="bar-bg"><div class="bar-fill" style="width:100%;background:#00ff88;"></div></div>
-            </div>
-          </td>
-        </tr>
-
-        <!-- Totals row -->
-        <tr class="totals-row">
-          <td><strong>TOTALT</strong></td>
-          <td>699&nbsp;475 kr</td>
-          <td>731&nbsp;489 kr</td>
-          <td>–</td>
-          <td class="pos">+4,58%</td>
-          <td class="pos">+32&nbsp;014</td>
-          <td></td>
-        </tr>
-
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Footer -->
-  <div class="footer">
-    KÄLLA: Avanza · UPPDATERAS VAR 15 MIN MÅN–FRE 09:00–17:30
-  </div>
-
+<header class="header">
+<div class="logo">J.A.R.V.I.S.</div>
+<div class="subtitle">Bankterminal &middot; Live Portf&ouml;lj&ouml;vervakning</div>
+</header>
+<div class="statusbar">
+<div class="status-left"><div class="dot"></div><span>7/7 live &middot; Stockholmsb&ouml;rsen &middot; 16 jun 2026</span></div>
+<div class="status-right">Uppdaterad: <span id="clk">09:52:44</span></div>
 </div>
-
-<script>
-  // Live clock (Stockholm time)
-  function updateClock() {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('sv-SE', {
-      timeZone: 'Europe/Stockholm',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-    document.getElementById('clock').textContent = timeStr;
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
-</script>
+<div class="cards">
+<div class="card"><div class="card-label">Investerat</div><div class="card-value">699&thinsp;475 kr</div><div class="card-sub">Nollpunkt 9 jun 2026</div></div>
+<div class="card"><div class="card-label">Portf&ouml;ljv&auml;rde</div><div class="card-value">730&thinsp;416 kr</div><div class="card-sub">Aktuellt marknadv&auml;rde</div></div>
+<div class="card"><div class="card-label">Total P&amp;L</div><div class="card-value pos">+30&thinsp;942 kr</div><div class="card-sub pos">+4,42%</div></div>
+<div class="card"><div class="card-label">B&auml;st / S&auml;mst</div><div class="card-value" style="font-size:16px;line-height:1.5"><span class="pos">AZA +7,90%</span><br><span style="color:var(--cyan-glow);font-size:13px">NDA-SE +2,88%</span></div></div>
+</div>
+<div class="table-wrap"><table>
+<thead><tr><th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag%</th><th>Vs noll%</th><th>P&amp;L (SEK)</th><th></th></tr></thead>
+<tbody>
+<tr><td><div><span class="ticker-name">NDA-SE</span><span class="badge badge-live">LIVE</span></div><div class="ticker-sub">Nordea Bank</div></td><td>175,25</td><td>180,30</td><td class="pos">+0,33%</td><td class="pos">+2,88%</td><td class="pos">+2&thinsp;879</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:36.5%;background:var(--pos)"></div></div></td></tr>
+<tr><td><div><span class="ticker-name">SHB-A</span><span class="badge badge-live">LIVE</span></div><div class="ticker-sub">Handelsbanken A</div></td><td>135,15</td><td>139,05</td><td class="pos">+0,36%</td><td class="pos">+2,89%</td><td class="pos">+2&thinsp;886</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:36.5%;background:var(--pos)"></div></div></td></tr>
+<tr><td><div><span class="ticker-name">SHB-B</span><span class="badge badge-live">LIVE</span></div><div class="ticker-sub">Handelsbanken B</div></td><td>224,20</td><td>232,00</td><td class="pos">+0,26%</td><td class="pos">+3,48%</td><td class="pos">+3&thinsp;479</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:44%;background:var(--pos)"></div></div></td></tr>
+<tr><td><div><span class="ticker-name">SEB-A</span><span class="badge badge-live">LIVE</span></div><div class="ticker-sub">SEB A</div></td><td>184,00</td><td>192,85</td><td class="pos">+0,05%</td><td class="pos">+4,81%</td><td class="pos">+4&thinsp;806</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:60.9%;background:var(--pos)"></div></div></td></tr>
+<tr><td><div><span class="ticker-name">SEB-C</span><span class="badge badge-live">LIVE</span></div><div class="ticker-sub">SEB C</div></td><td>188,20</td><td>198,60</td><td class="pos">+0,30%</td><td class="pos">+5,53%</td><td class="pos">+5&thinsp;522</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:69.9%;background:var(--pos)"></div></div></td></tr>
+<tr><td><div><span class="ticker-name">SWED-A</span><span class="badge badge-live">LIVE</span></div><div class="ticker-sub">Swedbank A</div></td><td>336,10</td><td>347,80</td><td class="pos">+0,58%</td><td class="pos">+3,48%</td><td class="pos">+3&thinsp;475</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:44%;background:var(--pos)"></div></div></td></tr>
+<tr><td><div><span class="ticker-name">AZA</span><span class="badge badge-live">LIVE</span></div><div class="ticker-sub">Avanza Bank Holding</div></td><td>358,10</td><td>386,40</td><td class="pos">+0,70%</td><td class="pos">+7,90%</td><td class="pos">+7&thinsp;896</td><td class="bar-cell"><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--pos)"></div></div></td></tr>
+<tr class="total-row"><td><span style="font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:0.08em;color:var(--text-dim)">TOTALT</span></td><td class="dim">699&thinsp;475 kr</td><td>730&thinsp;416 kr</td><td class="dim">-</td><td class="pos">+4,42%</td><td class="pos">+30&thinsp;942</td><td></td></tr>
+</tbody>
+</table></div>
+<div class="footer">K&auml;lla: Avanza &middot; Uppdateras var 15 min m&aring;n-fre 09:00-17:30</div>
+</div>
+<script>function tick(){document.getElementById('clk').textContent=new Date().toLocaleTimeString('sv-SE')}tick();setInterval(tick,1000)</script>
 </body>
 </html>
