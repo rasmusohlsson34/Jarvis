@@ -3,87 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>J.A.R.V.I.S. Bankterminal</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>J.A.R.V.I.S. Bankterminalen</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     background: #050c12;
-    color: #00e5ff;
+    color: #b0d8e8;
     font-family: 'Share Tech Mono', monospace;
     min-height: 100vh;
     overflow-x: hidden;
-    position: relative;
   }
 
-  /* Scanlines */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     background: repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
     pointer-events: none;
-    z-index: 9998;
+    z-index: 1000;
   }
 
-  /* Vignette */
   body::after {
     content: '';
     position: fixed;
     inset: 0;
     background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
     pointer-events: none;
-    z-index: 9999;
+    z-index: 1001;
   }
 
   .container {
-    max-width: 1400px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 24px 20px;
+    padding: 20px 24px 40px;
   }
 
-  /* Header */
+  /* HEADER */
   .header {
     text-align: center;
-    margin-bottom: 24px;
-    border-bottom: 1px solid rgba(0,229,255,0.2);
-    padding-bottom: 20px;
+    padding: 32px 0 24px;
+    border-bottom: 1px solid rgba(0,229,255,0.15);
+    margin-bottom: 28px;
   }
 
   .logo {
     font-family: 'Orbitron', sans-serif;
     font-size: 2.8rem;
     font-weight: 900;
-    letter-spacing: 0.3em;
     color: #00e5ff;
+    letter-spacing: 0.2em;
     text-shadow: 0 0 20px rgba(0,229,255,0.5);
   }
 
   .subtitle {
     font-size: 0.85rem;
-    color: rgba(0,229,255,0.6);
-    letter-spacing: 0.2em;
+    color: rgba(0,229,255,0.5);
+    letter-spacing: 0.15em;
     margin-top: 6px;
+    text-transform: uppercase;
   }
 
-  /* Status bar */
+  /* STATUS BAR */
   .statusbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px 16px;
     background: rgba(0,229,255,0.04);
-    border: 1px solid rgba(0,229,255,0.15);
-    padding: 8px 16px;
-    margin-bottom: 20px;
-    font-size: 0.78rem;
-    letter-spacing: 0.05em;
+    border: 1px solid rgba(0,229,255,0.12);
+    border-radius: 4px;
+    margin-bottom: 28px;
+    font-size: 0.8rem;
   }
 
   .status-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
 
   .status-dot {
@@ -91,53 +89,55 @@
     height: 8px;
     border-radius: 50%;
     background: #00ff88;
+    box-shadow: 0 0 6px #00ff88;
   }
 
   .status-right {
-    color: rgba(0,229,255,0.7);
+    color: rgba(0,229,255,0.5);
   }
 
-  /* Summary cards */
+  /* SUMMARY CARDS */
   .cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
+    gap: 16px;
+    margin-bottom: 32px;
   }
 
   .card {
-    background: rgba(0,229,255,0.03);
-    border: 1px solid rgba(0,229,255,0.2);
-    padding: 16px;
+    background: rgba(0,229,255,0.04);
+    border: 1px solid rgba(0,229,255,0.12);
+    border-radius: 6px;
+    padding: 18px 20px;
   }
 
   .card-label {
-    font-size: 0.68rem;
-    color: rgba(0,229,255,0.5);
-    letter-spacing: 0.15em;
+    font-size: 0.7rem;
+    color: rgba(0,229,255,0.45);
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     margin-bottom: 8px;
   }
 
   .card-value {
-    font-size: 1.4rem;
-    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
     color: #00e5ff;
   }
 
   .card-sub {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     margin-top: 4px;
+    color: rgba(0,229,255,0.4);
   }
 
-  .pos { color: #00ff88; }
-  .neg { color: #ff1744; }
-  .neu { color: #00e5ff; }
+  .positive { color: #00ff88; }
+  .negative { color: #ff1744; }
 
-  /* Table */
+  /* TABLE */
   .table-wrap {
     overflow-x: auto;
-    border: 1px solid rgba(0,229,255,0.15);
   }
 
   table {
@@ -146,40 +146,36 @@
     font-size: 0.82rem;
   }
 
-  thead tr {
-    background: rgba(0,229,255,0.06);
-    border-bottom: 1px solid rgba(0,229,255,0.25);
-  }
-
-  th {
+  thead th {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: rgba(0,229,255,0.5);
+    text-transform: uppercase;
     padding: 10px 14px;
     text-align: right;
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    color: rgba(0,229,255,0.6);
-    text-transform: uppercase;
-    white-space: nowrap;
+    border-bottom: 1px solid rgba(0,229,255,0.12);
   }
 
-  th:first-child { text-align: left; }
+  thead th:first-child { text-align: left; }
 
   tbody tr {
     border-bottom: 1px solid rgba(0,229,255,0.06);
   }
 
   tbody tr:hover {
-    background: rgba(0,229,255,0.04);
+    background: rgba(0,229,255,0.03);
   }
 
-  td {
-    padding: 12px 14px;
+  tbody td {
+    padding: 14px 14px;
     text-align: right;
-    white-space: nowrap;
+    vertical-align: middle;
   }
 
-  td:first-child { text-align: left; }
+  tbody td:first-child { text-align: left; }
 
-  .ticker-cell .ticker-name {
+  .ticker-name {
     font-family: 'Orbitron', sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
@@ -187,116 +183,117 @@
     display: block;
   }
 
-  .ticker-cell .full-name {
+  .stock-fullname {
     font-size: 0.7rem;
-    color: rgba(0,229,255,0.4);
+    color: rgba(0,229,255,0.35);
     margin-top: 2px;
     display: block;
   }
 
-  .badge {
+  .badge-live {
     display: inline-block;
     font-size: 0.6rem;
-    padding: 1px 5px;
+    padding: 1px 6px;
     border-radius: 2px;
-    letter-spacing: 0.1em;
+    background: rgba(0,255,136,0.12);
+    color: #00ff88;
+    border: 1px solid rgba(0,255,136,0.3);
+    letter-spacing: 0.08em;
     margin-left: 6px;
     vertical-align: middle;
   }
 
-  .badge-live {
-    background: rgba(0,255,136,0.15);
-    color: #00ff88;
-    border: 1px solid rgba(0,255,136,0.4);
-  }
-
-  /* Bar column */
+  /* BAR */
   .bar-cell {
-    width: 100px;
+    width: 120px;
+    padding-left: 8px !important;
   }
 
-  .bar-track {
-    background: rgba(0,229,255,0.08);
+  .bar-bg {
+    background: rgba(255,255,255,0.05);
+    border-radius: 2px;
     height: 6px;
-    border-radius: 3px;
     overflow: hidden;
-    width: 80px;
-    display: inline-block;
-    vertical-align: middle;
   }
 
   .bar-fill {
     height: 100%;
-    border-radius: 3px;
+    border-radius: 2px;
   }
 
-  .bar-pos { background: #00ff88; }
-  .bar-neg { background: #ff1744; }
-
-  /* Total row */
-  .total-row {
-    background: rgba(0,229,255,0.05);
-    border-top: 1px solid rgba(0,229,255,0.25);
-    font-weight: bold;
-  }
-
+  /* TOTAL ROW */
   .total-row td {
+    border-top: 1px solid rgba(0,229,255,0.2);
+    font-weight: 700;
     color: #00e5ff;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 
-  /* Footer */
+  .total-ticker {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: #00e5ff;
+    letter-spacing: 0.1em;
+  }
+
+  /* FOOTER */
   .footer {
-    margin-top: 20px;
+    margin-top: 36px;
     text-align: center;
-    font-size: 0.65rem;
-    color: rgba(0,229,255,0.3);
-    letter-spacing: 0.15em;
-    padding: 12px 0;
-    border-top: 1px solid rgba(0,229,255,0.1);
+    font-size: 0.7rem;
+    color: rgba(0,229,255,0.2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 </style>
 </head>
 <body>
 <div class="container">
 
+  <!-- HEADER -->
   <div class="header">
     <div class="logo">J.A.R.V.I.S.</div>
     <div class="subtitle">Bankterminalen &middot; Live Portföljövervakning</div>
   </div>
 
+  <!-- STATUS BAR -->
   <div class="statusbar">
     <div class="status-left">
       <div class="status-dot"></div>
       <span>7/7 live &middot; Stockholmsbörsen &middot; 22 juni 2026</span>
     </div>
-    <div class="status-right">Uppdaterad: <span id="clock">--:--:--</span></div>
+    <div class="status-right">Uppdaterad: <span id="clock">07:19:03</span></div>
   </div>
 
+  <!-- SUMMARY CARDS -->
   <div class="cards">
     <div class="card">
       <div class="card-label">Investerat</div>
-      <div class="card-value neu">699&nbsp;475&nbsp;kr</div>
-      <div class="card-sub" style="color:rgba(0,229,255,0.4);">Nollpunkt 9 jun 2026</div>
+      <div class="card-value" style="font-size:1.1rem;">699&nbsp;475 kr</div>
+      <div class="card-sub">Nollpunkt 9 jun 2026</div>
     </div>
     <div class="card">
       <div class="card-label">Portföljvärde</div>
-      <div class="card-value neu">732&nbsp;481&nbsp;kr</div>
-      <div class="card-sub" style="color:rgba(0,229,255,0.4);">7 innehav</div>
+      <div class="card-value" style="font-size:1.1rem;">734&nbsp;955 kr</div>
+      <div class="card-sub">Aktuellt marknadsvärde</div>
     </div>
     <div class="card">
       <div class="card-label">Total P&amp;L</div>
-      <div class="card-value pos">+33&nbsp;007&nbsp;kr</div>
-      <div class="card-sub pos">+4,72 %</div>
+      <div class="card-value positive" style="font-size:1.1rem;">+35&nbsp;480 kr</div>
+      <div class="card-sub positive">+5,07 %</div>
     </div>
     <div class="card">
       <div class="card-label">Bäst / Sämst</div>
-      <div class="card-value" style="font-size:1.1rem;">
-        <span class="pos">AZA +6,09%</span>
+      <div class="card-value" style="font-size:0.95rem;">
+        <span class="positive">AZA +6,39%</span><br>
+        <span class="negative" style="font-size:0.85rem;">NDA-SE +4,05%</span>
       </div>
-      <div class="card-sub neg">NDA-SE +3,08%</div>
+      <div class="card-sub">vs nollkurs</div>
     </div>
   </div>
 
+  <!-- TABLE -->
   <div class="table-wrap">
     <table>
       <thead>
@@ -307,129 +304,153 @@
           <th>Dag %</th>
           <th>Vs noll %</th>
           <th>P&amp;L (SEK)</th>
-          <th>Bar</th>
+          <th class="bar-cell"></th>
         </tr>
       </thead>
       <tbody>
+
         <!-- NDA-SE -->
         <tr>
-          <td class="ticker-cell">
-            <span class="ticker-name">NDA-SE <span class="badge badge-live">LIVE</span></span>
-            <span class="full-name">Nordea Bank</span>
+          <td>
+            <span class="ticker-name">NDA-SE <span class="badge-live">LIVE</span></span>
+            <span class="stock-fullname">Nordea Bank</span>
           </td>
           <td>175,25</td>
-          <td>180,65</td>
-          <td class="neu">0,00 %</td>
-          <td class="pos">+3,08 %</td>
-          <td class="pos">+3 078</td>
-          <td class="bar-cell"><div class="bar-track"><div class="bar-fill bar-pos" style="width:50.6%"></div></div></td>
+          <td>182,35</td>
+          <td class="positive">+0,94 %</td>
+          <td class="positive">+4,05 %</td>
+          <td class="positive">+4 047</td>
+          <td class="bar-cell">
+            <div class="bar-bg"><div class="bar-fill" style="width:63%; background:#00ff88;"></div></div>
+          </td>
         </tr>
+
         <!-- SHB-A -->
         <tr>
-          <td class="ticker-cell">
-            <span class="ticker-name">SHB-A <span class="badge badge-live">LIVE</span></span>
-            <span class="full-name">Handelsbanken A</span>
+          <td>
+            <span class="ticker-name">SHB-A <span class="badge-live">LIVE</span></span>
+            <span class="stock-fullname">Handelsbanken A</span>
           </td>
           <td>135,15</td>
-          <td>141,05</td>
-          <td class="neu">0,00 %</td>
-          <td class="pos">+4,37 %</td>
-          <td class="pos">+4 366</td>
-          <td class="bar-cell"><div class="bar-track"><div class="bar-fill bar-pos" style="width:71.8%"></div></div></td>
+          <td>141,20</td>
+          <td class="positive">+0,11 %</td>
+          <td class="positive">+4,48 %</td>
+          <td class="positive">+4 477</td>
+          <td class="bar-cell">
+            <div class="bar-bg"><div class="bar-fill" style="width:70%; background:#00ff88;"></div></div>
+          </td>
         </tr>
+
         <!-- SHB-B -->
         <tr>
-          <td class="ticker-cell">
-            <span class="ticker-name">SHB-B <span class="badge badge-live">LIVE</span></span>
-            <span class="full-name">Handelsbanken B</span>
+          <td>
+            <span class="ticker-name">SHB-B <span class="badge-live">LIVE</span></span>
+            <span class="stock-fullname">Handelsbanken B</span>
           </td>
           <td>224,20</td>
-          <td>233,00</td>
-          <td class="neu">0,00 %</td>
-          <td class="pos">+3,92 %</td>
-          <td class="pos">+3 925</td>
-          <td class="bar-cell"><div class="bar-track"><div class="bar-fill bar-pos" style="width:64.4%"></div></div></td>
+          <td>234,00</td>
+          <td class="positive">+0,43 %</td>
+          <td class="positive">+4,37 %</td>
+          <td class="positive">+4 371</td>
+          <td class="bar-cell">
+            <div class="bar-bg"><div class="bar-fill" style="width:68%; background:#00ff88;"></div></div>
+          </td>
         </tr>
+
         <!-- SEB-A -->
         <tr>
-          <td class="ticker-cell">
-            <span class="ticker-name">SEB-A <span class="badge badge-live">LIVE</span></span>
-            <span class="full-name">SEB A</span>
+          <td>
+            <span class="ticker-name">SEB-A <span class="badge-live">LIVE</span></span>
+            <span class="stock-fullname">SEB A</span>
           </td>
           <td>184,00</td>
-          <td>194,55</td>
-          <td class="neu">0,00 %</td>
-          <td class="pos">+5,73 %</td>
-          <td class="pos">+5 729</td>
-          <td class="bar-cell"><div class="bar-track"><div class="bar-fill bar-pos" style="width:94.1%"></div></div></td>
+          <td>194,15</td>
+          <td class="negative">−0,21 %</td>
+          <td class="positive">+5,52 %</td>
+          <td class="positive">+5 511</td>
+          <td class="bar-cell">
+            <div class="bar-bg"><div class="bar-fill" style="width:86%; background:#00ff88;"></div></div>
+          </td>
         </tr>
+
         <!-- SEB-C -->
         <tr>
-          <td class="ticker-cell">
-            <span class="ticker-name">SEB-C <span class="badge badge-live">LIVE</span></span>
-            <span class="full-name">SEB C</span>
+          <td>
+            <span class="ticker-name">SEB-C <span class="badge-live">LIVE</span></span>
+            <span class="stock-fullname">SEB C</span>
           </td>
           <td>188,20</td>
-          <td>195,80</td>
-          <td class="neu">0,00 %</td>
-          <td class="pos">+4,04 %</td>
-          <td class="pos">+4 036</td>
-          <td class="bar-cell"><div class="bar-track"><div class="bar-fill bar-pos" style="width:66.3%"></div></div></td>
+          <td>196,80</td>
+          <td class="positive">+0,51 %</td>
+          <td class="positive">+4,57 %</td>
+          <td class="positive">+4 567</td>
+          <td class="bar-cell">
+            <div class="bar-bg"><div class="bar-fill" style="width:71%; background:#00ff88;"></div></div>
+          </td>
         </tr>
+
         <!-- SWED-A -->
         <tr>
-          <td class="ticker-cell">
-            <span class="ticker-name">SWED-A <span class="badge badge-live">LIVE</span></span>
-            <span class="full-name">Swedbank A</span>
+          <td>
+            <span class="ticker-name">SWED-A <span class="badge-live">LIVE</span></span>
+            <span class="stock-fullname">Swedbank A</span>
           </td>
           <td>336,10</td>
-          <td>355,60</td>
-          <td class="neu">0,00 %</td>
-          <td class="pos">+5,80 %</td>
-          <td class="pos">+5 792</td>
-          <td class="bar-cell"><div class="bar-track"><div class="bar-fill bar-pos" style="width:95.2%"></div></div></td>
+          <td>356,70</td>
+          <td class="positive">+0,31 %</td>
+          <td class="positive">+6,13 %</td>
+          <td class="positive">+6 118</td>
+          <td class="bar-cell">
+            <div class="bar-bg"><div class="bar-fill" style="width:96%; background:#00ff88;"></div></div>
+          </td>
         </tr>
+
         <!-- AZA -->
         <tr>
-          <td class="ticker-cell">
-            <span class="ticker-name">AZA <span class="badge badge-live">LIVE</span></span>
-            <span class="full-name">Avanza Bank Holding</span>
+          <td>
+            <span class="ticker-name">AZA <span class="badge-live">LIVE</span></span>
+            <span class="stock-fullname">Avanza Bank Holding</span>
           </td>
           <td>358,10</td>
-          <td>379,90</td>
-          <td class="neu">0,00 %</td>
-          <td class="pos">+6,09 %</td>
-          <td class="pos">+6 082</td>
-          <td class="bar-cell"><div class="bar-track"><div class="bar-fill bar-pos" style="width:100%"></div></div></td>
+          <td>381,00</td>
+          <td class="positive">+0,29 %</td>
+          <td class="positive">+6,39 %</td>
+          <td class="positive">+6 389</td>
+          <td class="bar-cell">
+            <div class="bar-bg"><div class="bar-fill" style="width:100%; background:#00ff88;"></div></div>
+          </td>
         </tr>
+
       </tbody>
       <tfoot>
         <tr class="total-row">
-          <td><strong>TOTALT</strong></td>
+          <td><span class="total-ticker">TOTALT</span></td>
           <td>699&nbsp;475 kr</td>
-          <td>732&nbsp;481 kr</td>
-          <td class="neu">–</td>
-          <td class="pos">+4,72 %</td>
-          <td class="pos">+33&nbsp;007</td>
+          <td>734&nbsp;955 kr</td>
+          <td>—</td>
+          <td class="positive">+5,07 %</td>
+          <td class="positive">+35&nbsp;480</td>
           <td></td>
         </tr>
       </tfoot>
     </table>
   </div>
 
+  <!-- FOOTER -->
   <div class="footer">
-    KÄLLA: Avanza &middot; UPPDATERAS VAR 15 MIN MÅN–FRE 09:00–17:30
+    Källa: Avanza &middot; Uppdateras var 15 min mån–fre 09:00–17:30
   </div>
 
 </div>
 
 <script>
-function updateClock() {
-  document.getElementById('clock').textContent =
-    new Date().toLocaleTimeString('sv-SE');
-}
-updateClock();
-setInterval(updateClock, 1000);
+  // Live clock
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent = now.toLocaleTimeString('sv-SE');
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
 </script>
 </body>
 </html>
