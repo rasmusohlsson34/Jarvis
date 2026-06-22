@@ -3,14 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>J.A.R.V.I.S. — Bankterminalen</title>
+<title>J.A.R.V.I.S. — Bankterminal</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  :root {
+    --bg: #050c12;
+    --accent: #00e5ff;
+    --pos: #00ff88;
+    --neg: #ff1744;
+    --dim: rgba(0,229,255,0.15);
+    --border: rgba(0,229,255,0.25);
+  }
+
   body {
-    background: #050c12;
-    color: #c8e6f0;
+    background: var(--bg);
+    color: var(--accent);
     font-family: 'Share Tech Mono', monospace;
     min-height: 100vh;
     position: relative;
@@ -22,9 +31,13 @@
     content: '';
     position: fixed;
     inset: 0;
-    background: repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 2px,
+      rgba(0,229,255,0.015) 2px 4px
+    );
     pointer-events: none;
-    z-index: 1000;
+    z-index: 9998;
   }
 
   /* Vignette overlay */
@@ -34,40 +47,37 @@
     inset: 0;
     background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
     pointer-events: none;
-    z-index: 999;
+    z-index: 9997;
   }
 
   .container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 24px 20px;
-    position: relative;
-    z-index: 1;
   }
 
   /* Header */
   .header {
     text-align: center;
     margin-bottom: 24px;
-    border-bottom: 1px solid rgba(0,229,255,0.2);
+    border-bottom: 1px solid var(--border);
     padding-bottom: 20px;
   }
 
   .logo {
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Orbitron', monospace;
     font-size: 2.8rem;
     font-weight: 900;
-    color: #00e5ff;
     letter-spacing: 0.3em;
+    color: var(--accent);
     text-shadow: 0 0 20px rgba(0,229,255,0.5);
   }
 
   .subtitle {
     font-size: 0.85rem;
     color: rgba(0,229,255,0.6);
-    letter-spacing: 0.2em;
-    margin-top: 6px;
-    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-top: 4px;
   }
 
   /* Status bar */
@@ -76,71 +86,66 @@
     justify-content: space-between;
     align-items: center;
     background: rgba(0,229,255,0.04);
-    border: 1px solid rgba(0,229,255,0.15);
+    border: 1px solid var(--border);
     border-radius: 4px;
     padding: 8px 16px;
     margin-bottom: 20px;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
   }
 
-  .status-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .status-left { display: flex; align-items: center; gap: 8px; }
 
-  .status-dot {
-    width: 8px;
-    height: 8px;
+  .dot {
+    width: 8px; height: 8px;
     border-radius: 50%;
-    background: #00ff88;
-    box-shadow: 0 0 8px #00ff88;
-    flex-shrink: 0;
+    background: var(--pos);
+    box-shadow: 0 0 6px var(--pos);
   }
 
-  .status-right {
-    color: rgba(0,229,255,0.6);
-  }
+  .status-right { color: rgba(0,229,255,0.6); }
 
   /* Summary cards */
   .cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-bottom: 24px;
+    gap: 12px;
+    margin-bottom: 20px;
   }
 
   .card {
     background: rgba(0,229,255,0.04);
-    border: 1px solid rgba(0,229,255,0.18);
+    border: 1px solid var(--border);
     border-radius: 6px;
-    padding: 16px;
+    padding: 14px 16px;
   }
 
   .card-label {
     font-size: 0.7rem;
     color: rgba(0,229,255,0.5);
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .card-value {
     font-size: 1.4rem;
-    color: #00e5ff;
     font-weight: 700;
-    line-height: 1.2;
   }
 
   .card-sub {
-    font-size: 0.8rem;
-    margin-top: 4px;
+    font-size: 0.75rem;
+    margin-top: 2px;
+    color: rgba(0,229,255,0.5);
   }
+
+  .pos { color: var(--pos); }
+  .neg { color: var(--neg); }
+  .neutral { color: var(--accent); }
 
   /* Table */
   .table-wrap {
     overflow-x: auto;
-    border: 1px solid rgba(0,229,255,0.15);
+    border: 1px solid var(--border);
     border-radius: 6px;
   }
 
@@ -150,54 +155,48 @@
     font-size: 0.85rem;
   }
 
-  thead th {
+  thead tr {
     background: rgba(0,229,255,0.08);
-    color: rgba(0,229,255,0.7);
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
     padding: 10px 14px;
-    text-align: right;
-    border-bottom: 1px solid rgba(0,229,255,0.2);
+    text-align: left;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: rgba(0,229,255,0.6);
     white-space: nowrap;
   }
 
-  thead th:first-child { text-align: left; }
+  th:not(:first-child) { text-align: right; }
 
   tbody tr {
     border-bottom: 1px solid rgba(0,229,255,0.07);
   }
 
-  tbody tr:last-child {
-    border-bottom: none;
-    background: rgba(0,229,255,0.05);
-    font-weight: 700;
-  }
-
-  tbody tr:hover:not(:last-child) {
+  tbody tr:hover {
     background: rgba(0,229,255,0.04);
   }
 
-  td {
-    padding: 11px 14px;
-    text-align: right;
-    vertical-align: middle;
-    white-space: nowrap;
+  tbody tr.total-row {
+    background: rgba(0,229,255,0.06);
+    border-top: 1px solid var(--border);
+    border-bottom: none;
   }
 
-  td:first-child { text-align: left; }
+  td {
+    padding: 10px 14px;
+    vertical-align: middle;
+  }
+
+  td:not(:first-child) { text-align: right; }
 
   .ticker {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.8rem;
-    color: #00e5ff;
-    display: block;
-  }
-
-  .stock-name {
-    font-size: 0.7rem;
-    color: rgba(0,229,255,0.45);
-    margin-top: 2px;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
   }
 
   .badge {
@@ -205,29 +204,45 @@
     font-size: 0.6rem;
     padding: 1px 5px;
     border-radius: 2px;
-    letter-spacing: 0.08em;
     margin-left: 6px;
     vertical-align: middle;
+    letter-spacing: 0.05em;
   }
 
   .badge-live {
     background: rgba(0,255,136,0.15);
-    color: #00ff88;
+    color: var(--pos);
     border: 1px solid rgba(0,255,136,0.4);
   }
 
-  .pos { color: #00ff88; }
-  .neg { color: #ff1744; }
-  .neu { color: rgba(0,229,255,0.5); }
+  .badge-fallback {
+    background: rgba(255,193,7,0.15);
+    color: #ffc107;
+    border: 1px solid rgba(255,193,7,0.4);
+  }
 
-  /* P&L bar */
-  .bar-cell { min-width: 100px; }
-  .bar-bg {
+  .stock-name {
+    font-size: 0.7rem;
+    color: rgba(0,229,255,0.4);
+    margin-top: 2px;
+  }
+
+  /* Bar */
+  .bar-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  .bar-track {
+    width: 80px;
     height: 6px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(0,229,255,0.08);
     border-radius: 3px;
     overflow: hidden;
   }
+
   .bar-fill {
     height: 100%;
     border-radius: 3px;
@@ -240,22 +255,21 @@
     font-size: 0.7rem;
     color: rgba(0,229,255,0.3);
     letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding-bottom: 12px;
   }
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="header">
+
+  <header class="header">
     <div class="logo">J.A.R.V.I.S.</div>
     <div class="subtitle">Bankterminalen &middot; Live Portföljövervakning</div>
-  </div>
+  </header>
 
   <div class="statusbar">
     <div class="status-left">
-      <div class="status-dot"></div>
-      <span>7/7 live &middot; Stockholmsbörsen &middot; 22 jun 2026</span>
+      <div class="dot"></div>
+      <span>7/7 live &middot; Stockholmsbörsen &middot; 2026-06-22</span>
     </div>
     <div class="status-right">Uppdaterad: <span id="clock">--:--:--</span></div>
   </div>
@@ -263,25 +277,25 @@
   <div class="cards">
     <div class="card">
       <div class="card-label">Investerat</div>
-      <div class="card-value">699&nbsp;475 kr</div>
-      <div class="card-sub neu">Nollpunkt 9 jun 2026</div>
+      <div class="card-value neutral">699&nbsp;475 kr</div>
+      <div class="card-sub">Nollpunkt 9 jun 2026</div>
     </div>
     <div class="card">
       <div class="card-label">Portföljvärde</div>
-      <div class="card-value">841&nbsp;378 kr</div>
-      <div class="card-sub neu">7 positioner</div>
+      <div class="card-value neutral">740&nbsp;852 kr</div>
+      <div class="card-sub">Live kurs × antal</div>
     </div>
     <div class="card">
-      <div class="card-label">Total P&L</div>
-      <div class="card-value pos">+141&nbsp;903 kr</div>
-      <div class="card-sub pos">+20,29 %</div>
+      <div class="card-label">Total P&amp;L</div>
+      <div class="card-value pos">+41&nbsp;378 kr</div>
+      <div class="card-sub pos">+5,91%</div>
     </div>
     <div class="card">
       <div class="card-label">Bäst / Sämst</div>
       <div class="card-value" style="font-size:1.1rem;">
-        <span class="pos">AZA +8,13%</span>
+        <span class="pos">AZA +8,13%</span><br>
+        <span style="color:rgba(0,255,136,0.6); font-size:0.9rem;">SHB-A +4,70%</span>
       </div>
-      <div class="card-sub neg">SHB-A +4,81% (lägst)</div>
     </div>
   </div>
 
@@ -292,125 +306,165 @@
           <th>Aktie</th>
           <th>Nollkurs</th>
           <th>Kurs</th>
-          <th>Dag %</th>
-          <th>Vs noll %</th>
-          <th>P&L (SEK)</th>
-          <th class="bar-cell">Bar</th>
+          <th>Dag%</th>
+          <th>Vs noll%</th>
+          <th>P&amp;L (SEK)</th>
+          <th>Bar</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
-            <span class="ticker">NDA-SE<span class="badge badge-live">LIVE</span></span>
-            <span class="stock-name">Nordea Bank</span>
+            <div class="ticker">NDA-SE<span class="badge badge-live">LIVE</span></div>
+            <div class="stock-name">Nordea Bank</div>
           </td>
           <td>175,25</td>
-          <td>184,20</td>
-          <td class="pos">+1,97%</td>
-          <td class="pos">+5,11%</td>
-          <td class="pos">+5&nbsp;102</td>
-          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:63%;background:#00ff88;"></div></div></td>
+          <td>183,95</td>
+          <td class="pos">+1,83%</td>
+          <td class="pos">+4,96%</td>
+          <td class="pos">+4&nbsp;959</td>
+          <td>
+            <div class="bar-wrap">
+              <div class="bar-track">
+                <div class="bar-fill" style="width:61%; background:var(--pos);"></div>
+              </div>
+            </div>
+          </td>
         </tr>
         <tr>
           <td>
-            <span class="ticker">SHB-A<span class="badge badge-live">LIVE</span></span>
-            <span class="stock-name">Handelsbanken A</span>
+            <div class="ticker">SHB-A<span class="badge badge-live">LIVE</span></div>
+            <div class="stock-name">Handelsbanken A</div>
           </td>
           <td>135,15</td>
-          <td>141,65</td>
-          <td class="pos">+0,43%</td>
-          <td class="pos">+4,81%</td>
-          <td class="pos">+4&nbsp;810</td>
-          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:59%;background:#00ff88;"></div></div></td>
+          <td>141,50</td>
+          <td class="pos">+0,32%</td>
+          <td class="pos">+4,70%</td>
+          <td class="pos">+4&nbsp;699</td>
+          <td>
+            <div class="bar-wrap">
+              <div class="bar-track">
+                <div class="bar-fill" style="width:58%; background:var(--pos);"></div>
+              </div>
+            </div>
+          </td>
         </tr>
         <tr>
           <td>
-            <span class="ticker">SHB-B<span class="badge badge-live">LIVE</span></span>
-            <span class="stock-name">Handelsbanken B</span>
+            <div class="ticker">SHB-B<span class="badge badge-live">LIVE</span></div>
+            <div class="stock-name">Handelsbanken B</div>
           </td>
           <td>224,20</td>
-          <td>235,80</td>
-          <td class="pos">+1,20%</td>
-          <td class="pos">+5,17%</td>
-          <td class="pos">+5&nbsp;174</td>
-          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:64%;background:#00ff88;"></div></div></td>
+          <td>235,60</td>
+          <td class="pos">+1,12%</td>
+          <td class="pos">+5,08%</td>
+          <td class="pos">+5&nbsp;084</td>
+          <td>
+            <div class="bar-wrap">
+              <div class="bar-track">
+                <div class="bar-fill" style="width:63%; background:var(--pos);"></div>
+              </div>
+            </div>
+          </td>
         </tr>
         <tr>
           <td>
-            <span class="ticker">SEB-A<span class="badge badge-live">LIVE</span></span>
-            <span class="stock-name">SEB A</span>
+            <div class="ticker">SEB-A<span class="badge badge-live">LIVE</span></div>
+            <div class="stock-name">SEB A</div>
           </td>
           <td>184,00</td>
           <td>195,10</td>
           <td class="pos">+0,28%</td>
           <td class="pos">+6,03%</td>
           <td class="pos">+6&nbsp;027</td>
-          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:74%;background:#00ff88;"></div></div></td>
+          <td>
+            <div class="bar-wrap">
+              <div class="bar-track">
+                <div class="bar-fill" style="width:74%; background:var(--pos);"></div>
+              </div>
+            </div>
+          </td>
         </tr>
         <tr>
           <td>
-            <span class="ticker">SEB-C<span class="badge badge-live">LIVE</span></span>
-            <span class="stock-name">SEB C</span>
+            <div class="ticker">SEB-C<span class="badge badge-live">LIVE</span></div>
+            <div class="stock-name">SEB C</div>
           </td>
           <td>188,20</td>
-          <td>199,20</td>
-          <td class="pos">+1,74%</td>
-          <td class="pos">+5,85%</td>
-          <td class="pos">+5&nbsp;841</td>
-          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:72%;background:#00ff88;"></div></div></td>
+          <td>198,80</td>
+          <td class="pos">+1,53%</td>
+          <td class="pos">+5,63%</td>
+          <td class="pos">+5&nbsp;629</td>
+          <td>
+            <div class="bar-wrap">
+              <div class="bar-track">
+                <div class="bar-fill" style="width:69%; background:var(--pos);"></div>
+              </div>
+            </div>
+          </td>
         </tr>
         <tr>
           <td>
-            <span class="ticker">SWED-A<span class="badge badge-live">LIVE</span></span>
-            <span class="stock-name">Swedbank A</span>
+            <div class="ticker">SWED-A<span class="badge badge-live">LIVE</span></div>
+            <div class="stock-name">Swedbank A</div>
           </td>
           <td>336,10</td>
-          <td>359,10</td>
-          <td class="pos">+0,98%</td>
-          <td class="pos">+6,84%</td>
-          <td class="pos">+6&nbsp;831</td>
-          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:84%;background:#00ff88;"></div></div></td>
+          <td>359,20</td>
+          <td class="pos">+1,01%</td>
+          <td class="pos">+6,87%</td>
+          <td class="pos">+6&nbsp;861</td>
+          <td>
+            <div class="bar-wrap">
+              <div class="bar-track">
+                <div class="bar-fill" style="width:85%; background:var(--pos);"></div>
+              </div>
+            </div>
+          </td>
         </tr>
         <tr>
           <td>
-            <span class="ticker">AZA<span class="badge badge-live">LIVE</span></span>
-            <span class="stock-name">Avanza Bank Holding</span>
+            <div class="ticker">AZA<span class="badge badge-live">LIVE</span></div>
+            <div class="stock-name">Avanza Bank Holding</div>
           </td>
           <td>358,10</td>
           <td>387,20</td>
           <td class="pos">+1,92%</td>
           <td class="pos">+8,13%</td>
           <td class="pos">+8&nbsp;119</td>
-          <td class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:100%;background:#00ff88;"></div></div></td>
-        </tr>
-        <tr>
           <td>
-            <span class="ticker">TOTALT</span>
-            <span class="stock-name">7 positioner</span>
+            <div class="bar-wrap">
+              <div class="bar-track">
+                <div class="bar-fill" style="width:100%; background:var(--pos);"></div>
+              </div>
+            </div>
           </td>
-          <td>699&nbsp;475</td>
-          <td>841&nbsp;378</td>
-          <td class="neu">—</td>
-          <td class="pos">+20,29%</td>
-          <td class="pos">+141&nbsp;903</td>
-          <td class="bar-cell"></td>
+        </tr>
+        <tr class="total-row">
+          <td><div class="ticker">TOTALT</div></td>
+          <td style="color:rgba(0,229,255,0.6);">699&nbsp;475 kr</td>
+          <td style="color:rgba(0,229,255,0.6);">740&nbsp;852 kr</td>
+          <td>—</td>
+          <td class="pos">+5,91%</td>
+          <td class="pos">+41&nbsp;378</td>
+          <td></td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="footer">
-    Källa: Avanza &nbsp;&middot;&nbsp; Uppdateras var 15 min mån–fre 09:00–17:30
+    KÅLLA: Avanza &nbsp;&middot;&nbsp; UPPDATERAS VAR 15 MIN MÅN–FRE 09:00–17:30
   </div>
+
 </div>
 
 <script>
-  function tick() {
-    const now = new Date();
+  function updateClock() {
+    var now = new Date();
     document.getElementById('clock').textContent = now.toLocaleTimeString('sv-SE');
   }
-  tick();
-  setInterval(tick, 1000);
+  updateClock();
+  setInterval(updateClock, 1000);
 </script>
 </body>
 </html>
