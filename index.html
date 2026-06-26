@@ -3,197 +3,255 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>J.A.R.V.I.S. â€” Bankterminalen</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>J.A.R.V.I.S. Â· Bankterminalen</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #050c12;
-    --cyan: #00e5ff;
-    --green: #00ff88;
-    --red: #ff1744;
-    --amber: #ffab00;
-    --dim: rgba(0,229,255,0.15);
-    --dimmer: rgba(0,229,255,0.07);
-  }
-  body {
-    background: var(--bg);
-    color: var(--cyan);
-    font-family: 'Share Tech Mono', monospace;
-    min-height: 100vh;
-    padding: 0;
-    overflow-x: hidden;
-  }
-  /* Scanlines overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
-    pointer-events: none;
-    z-index: 100;
-  }
-  /* Vignette overlay */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
-    pointer-events: none;
-    z-index: 101;
-  }
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px 40px;
-  }
-  /* Header */
-  .header {
-    text-align: center;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--dim);
-    padding-bottom: 16px;
-  }
-  .logo {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2.4rem;
-    letter-spacing: 0.2em;
-    color: var(--cyan);
-    text-shadow: 0 0 20px rgba(0,229,255,0.5);
-  }
-  .subtitle {
-    font-size: 0.75rem;
-    color: rgba(0,229,255,0.5);
-    letter-spacing: 0.15em;
-    margin-top: 4px;
-    text-transform: uppercase;
-  }
-  /* Status bar */
-  .statusbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.72rem;
-    color: rgba(0,229,255,0.6);
-    margin-bottom: 20px;
-    padding: 6px 10px;
-    border: 1px solid var(--dim);
-    background: rgba(0,229,255,0.03);
-  }
-  .status-left { display: flex; align-items: center; gap: 8px; }
-  .status-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 6px var(--green);
-    flex-shrink: 0;
-  }
-  /* Summary cards */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .card {
-    border: 1px solid var(--dim);
-    background: rgba(0,229,255,0.03);
-    padding: 14px 16px;
-  }
-  .card-label {
-    font-size: 0.62rem;
-    color: rgba(0,229,255,0.45);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .card-value {
-    font-size: 1.15rem;
-    color: var(--cyan);
-  }
-  .card-sub {
-    font-size: 0.72rem;
-    margin-top: 4px;
-  }
-  .pos { color: var(--green); }
-  .neg { color: var(--red); }
-  /* Table */
-  .table-wrap { overflow-x: auto; }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.8rem;
-  }
-  thead th {
-    text-align: left;
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(0,229,255,0.5);
-    border-bottom: 1px solid var(--dim);
-    padding: 8px 10px;
-    white-space: nowrap;
-  }
-  tbody tr {
-    border-bottom: 1px solid rgba(0,229,255,0.07);
-  }
-  tbody tr:hover { background: rgba(0,229,255,0.04); }
-  tbody td { padding: 10px 10px; vertical-align: middle; }
-  .ticker-name {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.78rem;
-    color: var(--cyan);
-    letter-spacing: 0.05em;
-  }
-  .badge {
-    display: inline-block;
-    font-size: 0.55rem;
-    padding: 1px 5px;
-    border-radius: 2px;
-    margin-left: 6px;
-    vertical-align: middle;
-    letter-spacing: 0.08em;
-    font-family: 'Share Tech Mono', monospace;
-  }
-  .badge-live { background: rgba(0,255,136,0.15); color: var(--green); border: 1px solid rgba(0,255,136,0.4); }
-  .badge-fb { background: rgba(255,171,0,0.15); color: var(--amber); border: 1px solid rgba(255,171,0,0.4); }
-  .stock-full-name { font-size: 0.65rem; color: rgba(0,229,255,0.4); margin-top: 2px; }
-  /* Bar cell */
-  .bar-cell { min-width: 80px; }
-  .bar-outer { background: rgba(0,229,255,0.08); height: 6px; border-radius: 2px; width: 100%; }
-  .bar-inner { height: 100%; border-radius: 2px; }
-  /* Total row */
-  .total-row td {
-    border-top: 1px solid var(--dim);
-    font-size: 0.78rem;
-    color: var(--cyan);
-    padding-top: 12px;
-  }
-  .total-label {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-  }
-  /* Footer */
-  .footer {
-    margin-top: 28px;
-    text-align: center;
-    font-size: 0.6rem;
-    color: rgba(0,229,255,0.3);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    border-top: 1px solid var(--dim);
-    padding-top: 14px;
-  }
-  @media (max-width: 800px) {
-    .cards { grid-template-columns: repeat(2, 1fr); }
-    .logo { font-size: 1.6rem; }
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #050c12;
+  color: #b0ccd8;
+  font-family: 'Share Tech Mono', monospace;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Scanlines */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Vignette */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
+  pointer-events: none;
+  z-index: 999;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(0,229,255,0.15);
+}
+
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #00e5ff;
+  text-shadow: 0 0 20px rgba(0,229,255,0.5);
+  letter-spacing: 0.25em;
+}
+
+.subtitle {
+  font-size: 0.78rem;
+  color: rgba(0,229,255,0.5);
+  letter-spacing: 0.2em;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+/* Status bar */
+.statusbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,229,255,0.04);
+  border: 1px solid rgba(0,229,255,0.12);
+  border-radius: 4px;
+  padding: 8px 16px;
+  margin-bottom: 24px;
+  font-size: 0.75rem;
+}
+
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 6px #00ff88;
+  flex-shrink: 0;
+}
+
+.status-text { color: #00ff88; }
+.status-right { color: rgba(0,229,255,0.5); }
+
+/* Summary cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.card {
+  background: rgba(0,229,255,0.04);
+  border: 1px solid rgba(0,229,255,0.12);
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.card-label {
+  font-size: 0.65rem;
+  color: rgba(0,229,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+}
+
+.card-value {
+  font-size: 1.2rem;
+  color: #00e5ff;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+}
+
+.card-sub {
+  font-size: 0.72rem;
+  margin-top: 4px;
+}
+
+.positive { color: #00ff88; }
+.negative { color: #ff1744; }
+.neutral  { color: #00e5ff; }
+
+/* Table */
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+thead tr {
+  border-bottom: 1px solid rgba(0,229,255,0.2);
+}
+
+th {
+  color: rgba(0,229,255,0.5);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 8px 10px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+th:first-child { text-align: left; }
+
+tbody tr {
+  border-bottom: 1px solid rgba(0,229,255,0.06);
+}
+
+tbody tr:hover {
+  background: rgba(0,229,255,0.03);
+}
+
+td {
+  padding: 12px 10px;
+  text-align: right;
+  vertical-align: middle;
+}
+
+td:first-child { text-align: left; }
+
+.ticker-cell {}
+.ticker-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.82rem;
+  color: #00e5ff;
+  font-weight: 700;
+}
+.ticker-full {
+  font-size: 0.65rem;
+  color: rgba(0,229,255,0.4);
+  margin-top: 2px;
+}
+.badge {
+  display: inline-block;
+  font-size: 0.55rem;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+.badge-live {
+  background: rgba(0,255,136,0.12);
+  color: #00ff88;
+  border: 1px solid rgba(0,255,136,0.3);
+}
+.badge-fallback {
+  background: rgba(255,193,7,0.12);
+  color: #ffc107;
+  border: 1px solid rgba(255,193,7,0.3);
+}
+
+/* Bar */
+.bar-cell { min-width: 80px; }
+.bar-track {
+  background: rgba(0,229,255,0.07);
+  border-radius: 2px;
+  height: 6px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+/* Total row */
+.total-row {
+  border-top: 1px solid rgba(0,229,255,0.2) !important;
+  background: rgba(0,229,255,0.03);
+}
+
+.total-row td {
+  color: #00e5ff;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 32px;
+  font-size: 0.62rem;
+  color: rgba(0,229,255,0.25);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
 </style>
 </head>
 <body>
 <div class="container">
-  <header class="header">
+
+  <header>
     <div class="logo">J.A.R.V.I.S.</div>
     <div class="subtitle">Bankterminalen Â· Live PortfÃ¶ljÃ¶vervakning</div>
   </header>
@@ -201,17 +259,169 @@
   <div class="statusbar">
     <div class="status-left">
       <div class="status-dot" id="statusDot"></div>
-      <span id="statusText">7/7 live Â· StockholmsbÃ¶rsen</span>
+      <span class="status-text" id="statusText">7/7 live Â· StockholmsbÃ¶rsen Â· 26 jun 2026</span>
     </div>
-    <div id="clockEl"></div>
+    <div class="status-right">Uppdaterad: <span id="clockDisplay">12:39:31</span></div>
   </div>
 
   <div class="cards">
     <div class="card">
       <div class="card-label">Investerat</div>
       <div class="card-value">699 475 kr</div>
-      <div class="card-sub" style="color:rgba(0,229,255,0.4)">Nollpunkt 9 jun 2026</div>
+      <div class="card-sub neutral">Nollpunkt 9 jun 2026</div>
     </div>
     <div class="card">
-      <div class="card-label">PortfÃ¶ljö¯‘É‘”ğ½‘¥Øø(€€€€€€ñ‘¥Ø±…ÍÌô‰…ÉµÙ…±Õ”ˆ¥ô‰…É‘Y…É‘”ˆûŠPğ½‘¥Øø(€€€€ğ½‘¥Øø(€€€€ñ‘¥Ø±…ÍÌô‰…Éˆø(€€€€€€ñ‘¥Ø±…ÍÌô‰…Éµ±…‰•°ˆùQ½Ñ…°@™…µÀí0ğ½‘¥Øø(€€€€€€ñ‘¥Ø±…ÍÌô‰…ÉµÙ…±Õ”ˆ¥ô‰…É‘A°ˆûŠPğ½‘¥Øø(€€€€€€ñ‘¥Ø±…ÍÌô‰…ÉµÍÕˆˆ¥ô‰…É‘A±AĞˆûŠPğ½‘¥Øø(€€€€ğ½‘¥Øø(€€€€ñ‘¥Ø±…ÍÌô‰…Éˆø(€€€€€€ñ‘¥Ø±…ÍÌô‰…Éµ±…‰•°ˆù‘ÍĞ€¼O‘µÍĞ€¡ÙÌ¹½±°¤ğ½‘¥Øø(€€€€€€ñ‘¥Ø±…ÍÌô‰…ÉµÙ…±Õ”ˆ¥ô‰…É‘	•ÍĞˆÍÑå±”ô‰™½¹ĞµÍ¥é”èÀ¸äÕÉ•´ˆûŠPğ½‘¥Øø(€€€€€€ñ‘¥Ø±…ÍÌô‰…ÉµÍÕˆˆ¥ô‰…É‘]½ÉÍĞˆûŠPğ½‘¥Øø(€€€€ğ½‘¥Øø(€€ğ½‘¥Øø((€€ñ‘¥Ø±…ÍÌô‰Ñ…‰±”µİÉ…Àˆø(€€€€ñÑ…‰±”ø(€€€€€€ñÑ¡•…ø(€€€€€€€€ñÑÈø(€€€€€€€€€€ñÑ ù­Ñ¥”ğ½Ñ ø(€€€€€€€€€€ñÑ ù9½±±­ÕÉÌğ½Ñ ø(€€€€€€€€€€ñÑ ù-ÕÉÌğ½Ñ ø(€€€€€€€€€€ñÑ ù…œ€”ğ½Ñ ø(€€€€€€€€€€ñÑ ùYÌ¹½±°€”ğ½Ñ ø(€€€€€€€€€€ñÑ ù@™…µÀí0€¡M,¤ğ½Ñ ø(€€€€€€€€€€ñÑ øğ½Ñ ø(€€€€€€€€ğ½ÑÈø(€€€€€€ğ½Ñ¡•…ø(€€€€€€ñÑ‰½‘ä¥ô‰Ñ…‰±•	½‘äˆøğ½Ñ‰½‘äø(€€€€ğ½Ñ…‰±”ø(€€ğ½‘¥Øø((€€ñ™½½Ñ•È±…ÍÌô‰™½½Ñ•Èˆø(€€€/11èÙ…¹é„ƒ
-ÜUAAQILYH€ÄÔ5%87;ŠMI€ÀäèÀÃŠLÄÜèÌÀ(€€ğ½™½½Ñ•Èø(ğ½‘¥Øø((ñÍÉ¥ÁĞø)½¹ÍĞMQ=-L€ôl(€ìÑ¥­•Èè€9µMœ°¹…µ”è€9½É‘•„	…¹¬œ°€€€€€€€¹½±°è€ÄÜÔ¸ÈÔ°…¹Ñ…°è€ÔÜÀ°€¥¹Øè€ääàäÈ¸ÔÀ°€­ÕÉÌè€ÄÜä¸ÔÔ°‘…AĞè€À¸ÄÄ°€ÍÑ…ÑÕÌè€1%Yœô°(€ìÑ¥­•Èè€M!µœ°€¹…µ”è€!…¹‘•±Í‰…¹­•¸œ°€€€¹½±°è€ÄÌÔ¸ÄÔ°…¹Ñ…°è€ÜĞÀ°€¥¹Øè€ÄÀÀÀÄÄ¸ÀÀ°­ÕÉÌè€ÄĞÄ¸ÈÔ°‘…AĞè€À¸ÀÜ°€ÍÑ…ÑÕÌè€1%Yœô°(€ìÑ¥­•Èè€M!µœ°€¹…µ”è€!…¹‘•±Í‰…¹­•¸œ°€€€¹½±°è€ÈÈĞ¸ÈÀ°…¹Ñ…°è€ĞĞØ°€¥¹Øè€ääääÌ¸ÈÀ°€­ÕÉÌè€ÈÌĞ¸ØÀ°‘…AĞè€À¸ÈØ°€ÍÑ…ÑÕÌè€1%Yœô°(€ìÑ¥­•Èè€Mµœ°€¹…µ”è€Mœ°€€€€€€€€€€€€€¹½±°è€ÄàĞ¸ÀÀ°…¹Ñ…°è€ÔĞÌ°€¥¹Øè€äääÄÈ¸ÀÀ°€­ÕÉÌè€Äàä¸äÀ°‘…AĞè€´À¸Äà°ÍÑ…ÑÕÌè€1%Yœô°(€ìÑ¥­•Èè€Mµœ°€¹…µ”è€Mœ°€€€€€€€€€€€€€¹½±°è€Äàà¸ÈÀ°…¹Ñ…°è€ÔÌÄ°€¥¹Øè€äääÌĞ¸ÈÀ°€­ÕÉÌè€ÄäÈ¸ÀÀ°‘…AĞè€´À¸ĞÄ°ÍÑ…ÑÕÌè€1%Yœô°(€ìÑ¥­•Èè€M]µœ°¹…µ”è€Mİ•‘‰…¹¬œ°€€€€€€€€€¹½±°è€ÌÌØ¸ÄÀ°…¹Ñ…°è€ÈäÜ°€¥¹Øè€ääàÈÄ¸ÜÀ°€­ÕÉÌè€ÌÔà¸àÀ°‘…AĞè€À¸ØÔ°€ÍÑ…ÑÕÌè€1%Yœô°(€ìÑ¥­•Èè€iœ°€€€¹…µ”è€Ù…¹é„	…¹¬!½±‘¥¹œœ°¹½±°è€ÌÔà¸ÄÀ°…¹Ñ…°è€ÈÜä°€¥¹Øè€äääÀä¸äÀ°€­ÕÉÌè€ÌàÜ¸ÜÀ°‘…AĞè€À¸äÄ°€ÍÑ…ÑÕÌè€1%Yœô°)tì()½¹ÍĞM,€ô¸€ôø5…Ñ ¹É½Õ¹¡¸¤¹Ñ½1½…±•MÑÉ¥¹œ ÍØµMœ¤ì)½¹ÍĞAP€ô¸€ôø€¡¸€øô€À€ü€œ¬œ€è€œœ¤€¬¸¹Ñ½¥á• È¤€¬€œ”œì)½¹ÍĞ±È€ô¸€ôø¸€øô€À€ü€œŒÀÁ™˜ààœ€è€œ™˜ÄÜĞĞœì((¼¼½µÁÕÑ”@™0)MQ=-L¹™½É… ¡Ì€ôøì(€Ì¹Ù…É‘”€ôÌ¹­ÕÉÌ€¨Ì¹…¹Ñ…°ì(€Ì¹Á°€ôÌ¹Ù…É‘”€´Ì¹¥¹Øì(€Ì¹Á±AĞ€ô€¡Ì¹Á°€¼Ì¹¥¹Ø¤€¨€ÄÀÀì(€Ì¹ÙÍ9½±°€ô€¡Ì¹­ÕÉÌ€´Ì¹¹½±°¤€¼Ì¹¹½±°€¨€ÄÀÀì)ô¤ì()½¹ÍĞÑ½Ñ…±Y…É‘”€ôMQ=-L¹É•‘Õ” ¡„°Ì¤€ôø„€¬Ì¹Ù…É‘”°€À¤ì)½¹ÍĞÑ½Ñ…±A°€ôMQ=-L¹É•‘Õ” ¡„°Ì¤€ôø„€¬Ì¹Á°°€À¤ì)½¹ÍĞÑ½Ñ…±%¹Ø€ô€ØääĞÜĞ¸ÔÀì)½¹ÍĞÑ½Ñ…±A±AĞ€ô€¡Ñ½Ñ…±A°€¼Ñ½Ñ…±%¹Ø¤€¨€ÄÀÀì((¼¼	•ÍĞ½]½ÉÍĞ‰äÙÍ9½±°)½¹ÍĞÍ½ÉÑ•€ôl¸¸¹MQ=-Mt¹Í½ÉĞ ¡„°ˆ¤€ôøˆ¹ÙÍ9½±°€´„¹ÙÍ9½±°¤ì)½¹ÍĞ‰•ÍĞ€ôÍ½ÉÑ•‘lÁtì)½¹ÍĞİ½ÉÍĞ€ôÍ½ÉÑ•‘mÍ½ÉÑ•¹±•¹Ñ €´€Åtì((¼¼5…àñÁ±AÑğ™½È‰…ÈÍ…±¥¹œ)½¹ÍĞµ…áA±AĞ€ô5…Ñ ¹µ…à ¸¸¹MQ=-L¹µ…À¡Ì€ôø5…Ñ ¹…‰Ì¡Ì¹Á±AĞ¤¤¤ì((¼¼UÁ‘…Ñ”…É‘Ì)‘½Õµ•¹Ğ¹•Ñ±•µ•¹Ñ	å% …É‘Y…É‘”œ¤¹Ñ•áÑ½¹Ñ•¹Ğ€ôM,¡Ñ½Ñ…±Y…É‘”¤€¬€œ­Èœì)‘½Õµ•¹Ğ¹•Ñ±•µ•¹Ñ	å% …É‘A°œ¤¹¥¹¹•É!Q50€ô€ñÍÁ…¸ÍÑå±”ô‰½±½Èè‘í±È¡Ñ½Ñ…±A°¥ôˆø‘íÑ½Ñ…±A°€øô€À€ü€œ¬œ€è€œô‘íM,¡Ñ½Ñ…±A°¥ô­Èğ½ÍÁ…¸ù€ì)‘½Õµ•¹Ğ¹•Ñ±•µ•¹Ñ	å% …É‘A±AĞœ¤¹¥¹¹•É!Q50€ô€ñÍÁ…¸ÍÑå±”ô‰½±½Èè‘í±È¡Ñ½Ñ…±A±AĞ¥ôˆø‘íAP¡Ñ½Ñ…±A±AĞ¥ôğ½ÍÁ…¸ù€ì)‘½Õµ•¹Ğ¹•Ñ±•µ•¹Ñ	å% …É‘	•ÍĞœ¤¹¥¹¹•É!Q50€ô€ñÍÁ…¸ÍÑå±”ô‰½±½ÈèŒÀÁ™˜ààˆø‘í‰•ÍĞ¹Ñ¥­•Éô€‘íAP¡‰•ÍĞ¹ÙÍ9½±°¥ôğ½ÍÁ…¸ù€ì)‘½Õµ•¹Ğ¹•Ñ±•µ•¹Ñ	å% …É‘]½ÉÍĞœ¤¹¥¹¹•É!Q50€ô€ñÍÁ…¸ÍÑå±”ô‰½±½Èè‘í±È¡İ½ÉÍĞ¹ÙÍ9½±°¥ôˆø‘íİ½ÉÍĞ¹Ñ¥­•Éô€‘íAP¡İ½ÉÍĞ¹ÙÍ9½±°¥ôğ½ÍÁ…¸ù€ì((¼¼	Õ¥±Ñ…‰±”)½¹ÍĞÑ‰½‘ä€ô‘½Õµ•¹Ğ¹•Ñ±•µ•¹Ñ	å% Ñ…‰±•	½‘äœ¤ì)MQ=-L¹™½É… ¡Ì€ôøì(€½¹ÍĞ‰…É\€ôµ…áA±AĞ€ø€À€ü€¡5…Ñ ¹…‰Ì¡Ì¹Á±AĞ¤€¼µ…áA±AĞ€¨€ÄÀÀ¤¹Ñ½¥á• Ä¤€è€Àì(€½¹ÍĞ‰…É½±½È€ôÌ¹Á±AĞ€øô€À€ü€œŒÀÁ™˜ààœ€è€œ™˜ÄÜĞĞœì(€½¹ÍĞ‰…‘”€ôÌ¹ÍÑ…ÑÕÌ€ôôô€1%Yœ(€€€€ü€œñÍÁ…¸±…ÍÌô‰‰…‘”‰…‘”µ±¥Ù”ˆù1%Yğ½ÍÁ…¸øœ(€€€€è€ñÍÁ…¸±…ÍÌô‰‰…‘”‰…‘”µ™ˆˆù11	,ğ½ÍÁ…¸ù€ì(€½¹ÍĞÑÈ€ô‘½Õµ•¹Ğ¹É•…Ñ•±•µ•¹Ğ ÑÈœ¤ì(€ÑÈ¹¥¹¹•É!Q50€ô€(€€€€ñÑø(€€€€€€ñ‘¥Ø±…ÍÌô‰Ñ¥­•Èµ¹…µ”ˆø‘íÌ¹Ñ¥­•Éô‘í‰…‘•ôğ½‘¥Øø(€€€€€€ñ‘¥Ø±…ÍÌô‰ÍÑ½¬µ™Õ±°µ¹…µ”ˆø‘íÌ¹¹…µ•ôğ½‘¥Øø(€€€€ğ½Ñø(€€€€ñÑø‘íÌ¹¹½±°¹Ñ½1½…±•MÑÉ¥¹œ ÍØµMœ°íµ¥¹¥µÕµÉ…Ñ¥½¹¥¥ÑÌèÈ±µ…á¥µÕµÉ…Ñ¥½¹¥¥ÑÌèÉô¥ô­Èğ½Ñø(€€€€ñÑø‘íÌ¹­ÕÉÌ¹Ñ½1½…±•MÑÉ¥¹œ ÍØµMœ°íµ¥¹¥µÕµÉ…Ñ¥½¹¥¥ÑÌèÈ±µ…á¥µÕµÉ…Ñ¥½¹¥¥ÑÌèÉô¥ô­Èğ½Ñø(€€€€ñÑÍÑå±”ô‰½±½Èè‘í±È¡Ì¹‘…AĞ¥ôˆø‘íÌ¹‘…AĞ€„ô¹Õ±°€üAP¡Ì¹‘…AĞ¤€è€ŸŠLôğ½Ñø(€€€€ñÑÍÑå±”ô‰½±½Èè‘í±È¡Ì¹ÙÍ9½±°¥ôˆø‘íAP¡Ì¹ÙÍ9½±°¥ôğ½Ñø(€€€€ñÑÍÑå±”ô‰½±½Èè‘í±È¡Ì¹Á°¥ôˆø‘íÌ¹Á°€øô€À€ü€œ¬œ€è€œô‘íM,¡Ì¹Á°¥ôğ½Ñø(€€€€ñÑ±…ÍÌô‰‰…Èµ•±°ˆø(€€€€€€ñ‘¥Ø±…ÍÌô‰‰…Èµ½ÕÑ•Èˆøñ‘¥Ø±…ÍÌô‰‰…Èµ¥¹¹•ÈˆÍÑå±”ô‰İ¥‘Ñ è‘í‰…É]ô”í‰…­É½Õ¹è‘í‰…É½±½Éôˆøğ½‘¥Øøğ½‘¥Øø(€€€€ğ½Ñù€ì(€Ñ‰½‘ä¹…ÁÁ•¹‘¡¥±¡ÑÈ¤ì)ô¤ì((¼¼Q½Ñ…°É½Ü)½¹ÍĞÑ½Ñ…±I½Ü€ô‘½Õµ•¹Ğ¹É•…Ñ•±•µ•¹Ğ ÑÈœ¤ì)Ñ½Ñ…±I½Ü¹±…ÍÍ9…µ”€ô€Ñ½Ñ…°µÉ½Üœì)Ñ½Ñ…±I½Ü¹¥¹¹•É!Q50€ô€(€€ñÑ±…ÍÌô‰Ñ½Ñ…°µ±…‰•°ˆùQ=Q1Pğ½Ñø(€€ñÑø‘íM,¡Ñ½Ñ…±%¹Ø¥ô­Èğ½Ñø(€€ñÑø‘íM,¡Ñ½Ñ…±Y…É‘”¥ô­Èğ½Ñø(€€ñÑûŠLğ½Ñø(€€ñÑÍÑå±”ô‰½±½Èè‘í±È¡Ñ½Ñ…±A±AĞ¥ôˆø‘íAP¡Ñ½Ñ…±A±AĞ¥ôğ½Ñø(€€ñÑÍÑå±”ô‰½±½Èè‘í±È¡Ñ½Ñ…±A°¥ôˆø‘íÑ½Ñ…±A°€øô€À€ü€œ¬œ€è€œô‘íM,¡Ñ½Ñ…±A°¥ôğ½Ñø(€€ñÑøğ½Ñù€ì)Ñ‰½‘ä¹…ÁÁ•¹‘¡¥±¡Ñ½Ñ…±I½Ü¤ì((¼¼±½¬)™Õ¹Ñ¥½¸Ñ¥¬ ¤ì(€½¹ÍĞ¹½Ü€ô¹•Ü…Ñ” ¤ì(€‘½Õµ•¹Ğ¹•Ñ±•µ•¹Ñ	å% ±½­°œ¤¹Ñ•áÑ½¹Ñ•¹Ğ€ô€UÁÁ‘…Ñ•É…è€œ€¬¹½Ü¹Ñ½1½…±•Q¥µ•MÑÉ¥¹œ ÍØµMœ¤ì)ô)Ñ¥¬ ¤ì)Í•Ñ%¹Ñ•ÉÙ…°¡Ñ¥¬°€ÄÀÀÀ¤ì(ğ½ÍÉ¥ÁĞø(ğ½‰½‘äø(ğ½¡Ñµ°ø(
+      <div class="card-label">PortfÃ¶ljö¯arde</div>
+      <div class="card-value" id="totalVardeCard">731 780 kr</div>
+      <div class="card-sub neutral">Aktuellt marknadsvÃ¤rde</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Total P&amp;L</div>
+      <div class="card-value positive" id="totalPlCard">+32 306 kr</div>
+      <div class="card-sub positive" id="totalPlPctCard">+4,62%</div>
+    </div>
+    <div class="card">
+      <div class="card-label">BÃ¤st / SÃ¤mst</div>
+      <div class="card-value positive" id="bestCard">AZA +8,21%</div>
+      <div class="card-sub negative" id="worstCard">NDA-SE +2,63%</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Aktie</th>
+          <th>Nollkurs</th>
+          <th>Kurs</th>
+          <th>Dag %</th>
+          <th>Vs noll %</th>
+          <th>P&amp;L (SEK)</th>
+          <th class="bar-cell"></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <footer>KÃ„LLA: Avanza Â· Uppdateras var 15 min mÃ¥nâ€“fre 09:00â€“17:30</footer>
+</div>
+
+<script>
+const DATA = [
+  { ticker: 'NDA-SE', name: 'Nordea Bank',          noll: 175.25, kurs: 179.85, dag: 0.28,  antal: 570,  investerat: 99892.50,  live: true },
+  { ticker: 'SHB-A',  name: 'Handelsbanken A',       noll: 135.15, kurs: 141.25, dag: 0.07,  antal: 740,  investerat: 100011.00, live: true },
+  { ticker: 'SHB-B',  name: 'Handelsbanken B',       noll: 224.20, kurs: 234.60, dag: 0.26,  antal: 446,  investerat: 99993.20,  live: true },
+  { ticker: 'SEB-A',  name: 'SEB A',                 noll: 184.00, kurs: 189.95, dag: -0.16, antal: 543,  investerat: 99912.00,  live: true },
+  { ticker: 'SEB-C',  name: 'SEB C',                 noll: 188.20, kurs: 192.60, dag: -0.10, antal: 531,  investerat: 99934.20,  live: true },
+  { ticker: 'SWED-A', name: 'Swedbank A',             noll: 336.10, kurs: 358.90, dag: 0.67,  antal: 297,  investerat: 99821.70,  live: true },
+  { ticker: 'AZA',    name: 'Avanza Bank Holding',   noll: 358.10, kurs: 387.50, dag: 0.86,  antal: 279,  investerat: 99909.90,  live: true },
+];
+
+const INVESTERAT_TOT = 699474.50;
+
+// Compute derived values
+let totalVarde = 0;
+let totalPl = 0;
+let maxAbsPlPct = 0;
+
+DATA.forEach(d => {
+  d.varde     = d.kurs * d.antal;
+  d.pl        = d.varde - d.investerat;
+  d.plPct     = (d.pl / d.investerat) * 100;
+  d.vsNollPct = ((d.kurs - d.noll) / d.noll) * 100;
+  totalVarde += d.varde;
+  totalPl    += d.pl;
+  if (Math.abs(d.plPct) > maxAbsPlPct) maxAbsPlPct = Math.abs(d.plPct);
+});
+
+const totalPlPct    = (totalPl / INVESTERAT_TOT) * 100;
+const totalVsNoll   = ((totalVarde - INVESTERAT_TOT) / INVESTERAT_TOT) * 100;
+
+// Best / Worst by vsNollPct
+const sorted    = [...DATA].sort((a,b) => b.vsNollPct - a.vsNollPct);
+const best      = sorted[0];
+const worst     = sorted[sorted.length - 1];
+
+// Update summary cards
+document.getElementById('totalVardeCard').textContent =
+  Math.round(totalVarde).toLocaleString('sv-SE') + ' kr';
+
+const plSign = totalPl >= 0 ? '+' : '';
+document.getElementById('totalPlCard').textContent =
+  plSign + Math.round(totalPl).toLocaleString('sv-SE') + ' kr';
+document.getElementById('totalPlCard').className = 'card-value ' + (totalPl >= 0 ? 'positive' : 'negative');
+
+document.getElementById('totalPlPctCard').textContent =
+  plSign + totalPlPct.toFixed(2).replace('.', ',') + '%';
+document.getElementById('totalPlPctCard').className = 'card-sub ' + (totalPl >= 0 ? 'positive' : 'negative');
+
+const bestSign  = best.vsNollPct  >= 0 ? '+' : '';
+const worstSign = worst.vsNollPct >= 0 ? '+' : '';
+document.getElementById('bestCard').textContent  = best.ticker  + ' ' + bestSign  + best.vsNollPct.toFixed(2).replace('.', ',')  + '%';
+document.getElementById('worstCard').textContent = worst.ticker + ' ' + worstSign + worst.vsNollPct.toFixed(2).replace('.', ',') + '%';
+document.getElementById('worstCard').className = 'card-sub ' + (worst.vsNollPct >= 0 ? 'positive' : 'negative');
+
+// Render table
+const tbody = document.getElementById('tableBody');
+
+DATA.forEach(d => {
+  const dagSign    = d.dag >= 0 ? '+' : '';
+  const plSign     = d.pl >= 0 ? '+' : '';
+  const vsSign     = d.vsNollPct >= 0 ? '+' : '';
+  const dagColor   = d.dag >= 0 ? '#00ff88' : '#ff1744';
+  const plColor    = d.pl >= 0 ? '#00ff88' : '#ff1744';
+  const vsColor    = d.vsNollPct >= 0 ? '#00ff88' : '#ff1744';
+  const barColor   = d.plPct >= 0 ? '#00ff88' : '#ff1744';
+  const barWidth   = maxAbsPlPct > 0 ? Math.abs(d.plPct) / maxAbsPlPct * 100 : 0;
+  const badge      = d.live
+    ? '<span class="badge badge-live">LIVE</span>'
+    : '<span class="badge badge-fallback">FALLBACK</span>';
+
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="ticker-cell">
+      <div class="ticker-name">${d.ticker}${badge}</div>
+      <div class="ticker-full">${d.name}</div>
+    </td>
+    <td>${d.noll.toFixed(2).replace('.', ',')}</td>
+    <td style="color:#00e5ff">${d.kurs.toFixed(2).replace('.', ',')}</td>
+    <td style="color:${dagColor}">${dagSign}${d.dag.toFixed(2).replace('.', ',')}%</td>
+    <td style="color:${vsColor}">${vsSign}${d.vsNollPct.toFixed(2).replace('.', ',')}%</td>
+    <td style="color:${plColor}">${plSign}${Math.round(d.pl).toLocaleString('sv-SE')}</td>
+    <td class="bar-cell">
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${barWidth.toFixed(1)}%;background:${barColor}"></div>
+      </div>
+    </td>
+  `;
+  tbody.appendChild(tr);
+});
+
+// Total row
+const totalVsNollSign = totalVsNoll >= 0 ? '+' : '';
+const totalPlSignStr  = totalPl >= 0 ? '+' : '';
+const totalRow = document.createElement('tr');
+totalRow.className = 'total-row';
+totalRow.innerHTML = `
+  <td><span class="ticker-name">TOTALT</span></td>
+  <td>${INVESTERAT_TOT.toLocaleString('sv-SE')} kr</td>
+  <td>${Math.round(totalVarde).toLocaleString('sv-SE')} kr</td>
+  <td>â€“</td>
+  <td style="color:${totalVsNoll >= 0 ? '#00ff88' : '#ff1744'}">${totalVsNollSign}${totalVsNoll.toFixed(2).replace('.', ',')}%</td>
+  <td style="color:${totalPl >= 0 ? '#00ff88' : '#ff1744'}">${totalPlSignStr}${Math.round(totalPl).toLocaleString('sv-SE')}</td>
+  <td></td>
+`;
+tbody.appendChild(totalRow);
+
+// Live clock
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clockDisplay').textContent =
+    now.toLocaleTimeString('sv-SE');
+}
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+</body>
+</html>
