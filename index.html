@@ -2,63 +2,215 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>J.A.R.V.I.S. - Bankterminalen</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J.A.R.V.I.S. · Bankterminalen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#050c12;color:#a0c8d8;font-family:'Share Tech Mono',monospace;padding:20px}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent 2px,rgba(0,229,255,0.015) 2px 4px);pointer-events:none;z-index:100}
-.w{max-width:1200px;margin:0 auto;position:relative;z-index:1}
-h1{font-family:'Orbitron',sans-serif;font-size:2.4rem;color:#00e5ff;letter-spacing:.3em;text-shadow:0 0 20px rgba(0,229,255,.5);text-align:center;margin-bottom:6px}
-.sub{text-align:center;color:rgba(0,229,255,.5);font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:18px}
-.sb{display:flex;justify-content:space-between;background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.15);padding:8px 14px;margin-bottom:18px;font-size:.78rem}
-.dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:#00ff88;box-shadow:0 0 6px #00ff88;margin-right:8px}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.card{background:rgba(0,229,255,.04);border:1px solid rgba(0,229,255,.2);padding:14px}
-.cl{font-size:.68rem;color:rgba(0,229,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
-.cv{font-size:1.3rem;color:#00e5ff}
-.cs{font-size:.72rem;margin-top:3px}
-table{width:100%;border-collapse:collapse;font-size:.8rem}
-th{padding:8px 10px;text-align:left;color:rgba(0,229,255,.45);font-weight:normal;text-transform:uppercase;font-size:.68rem;border-bottom:1px solid rgba(0,229,255,.25)}
-th:not(:first-child){text-align:right}
-td{padding:10px 10px;border-bottom:1px solid rgba(0,229,255,.06)}
-td:not(:first-child){text-align:right}
-tr:hover td{background:rgba(0,229,255,.03)}
-.pos{color:#00ff88}.neg{color:#ff1744}.n{color:rgba(0,229,255,.4)}
-.bl{font-size:.58rem;padding:1px 4px;background:rgba(0,255,136,.12);border:1px solid rgba(0,255,136,.35);color:#00ff88;margin-left:5px}
-.bf{font-size:.58rem;padding:1px 4px;background:rgba(255,165,0,.12);border:1px solid rgba(255,165,0,.35);color:#ffa500;margin-left:5px}
-.bt{background:rgba(255,255,255,.05);height:5px;width:80px;position:relative}
-.bf2{height:100%;position:absolute;left:0;top:0;opacity:.7}
-.tr2{border-top:1px solid rgba(0,229,255,.25)!important}
-.tr2 td{color:#00e5ff;padding-top:12px}
-small{font-size:.65rem;color:rgba(0,229,255,.35)}
-.footer{text-align:center;font-size:.62rem;color:rgba(0,229,255,.25);margin-top:24px;text-transform:uppercase;letter-spacing:.1em}
-@media(max-width:800px){.cards{grid-template-columns:repeat(2,1fr)}h1{font-size:1.5rem}}
+  :root{
+    --bg:#050c12; --accent:#00e5ff; --pos:#00ff88; --neg:#ff1744;
+    --amber:#ffb300; --dim:#5a7a86; --panel:rgba(0,229,255,0.04);
+    --border:rgba(0,229,255,0.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:#cfeef5;font-family:'Share Tech Mono',monospace;min-height:100%}
+  body{padding:24px 18px 60px;position:relative;overflow-x:hidden}
+  .scanlines{position:fixed;inset:0;pointer-events:none;z-index:9;
+    background:repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px)}
+  .vignette{position:fixed;inset:0;pointer-events:none;z-index:8;
+    background:radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%)}
+  .wrap{max-width:1080px;margin:0 auto;position:relative;z-index:10}
+
+  header{text-align:center;margin-bottom:22px}
+  .logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(30px,6vw,54px);
+    letter-spacing:.18em;color:var(--accent);text-shadow:0 0 20px rgba(0,229,255,0.5)}
+  .subtitle{color:var(--dim);font-size:13px;letter-spacing:.22em;margin-top:6px;text-transform:uppercase}
+  .clock{font-family:'Orbitron',sans-serif;font-size:20px;color:#9fe9f5;margin-top:10px;letter-spacing:.1em}
+
+  .statusbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
+    border:1px solid var(--border);background:var(--panel);padding:10px 16px;border-radius:6px;margin-bottom:20px;font-size:13px}
+  .stat-left{display:flex;align-items:center;gap:10px;letter-spacing:.06em}
+  .dot{width:11px;height:11px;border-radius:50%}
+  .dot.green{background:var(--pos);box-shadow:0 0 10px var(--pos)}
+  .dot.amber{background:var(--amber);box-shadow:0 0 10px var(--amber)}
+  .dot.red{background:var(--neg);box-shadow:0 0 10px var(--neg)}
+  .stat-right{color:var(--dim);letter-spacing:.06em}
+
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+  @media(max-width:760px){.cards{grid-template-columns:repeat(2,1fr)}}
+  .card{border:1px solid var(--border);background:var(--panel);border-radius:8px;padding:16px 16px 18px}
+  .card .label{color:var(--dim);font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px}
+  .card .value{font-family:'Orbitron',sans-serif;font-size:clamp(18px,2.4vw,26px);font-weight:700;color:#e8fbff}
+  .card .sub{font-size:13px;margin-top:6px}
+
+  .tablewrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:rgba(0,12,18,0.55)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  thead th{background:rgba(0,229,255,0.08);color:var(--accent);font-weight:400;text-align:right;
+    padding:12px 14px;letter-spacing:.08em;font-size:11.5px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+  thead th:first-child{text-align:left}
+  tbody td{padding:11px 14px;text-align:right;border-bottom:1px solid rgba(0,229,255,0.07);white-space:nowrap}
+  tbody td:first-child{text-align:left}
+  tbody tr:hover{background:rgba(0,229,255,0.04)}
+  .tick{font-family:'Orbitron',sans-serif;font-weight:700;color:#e8fbff;font-size:14px;letter-spacing:.04em}
+  .name{display:block;color:var(--dim);font-size:11px;margin-top:3px;letter-spacing:.04em}
+  .badge{display:inline-block;font-size:9.5px;padding:2px 6px;border-radius:3px;margin-left:8px;letter-spacing:.1em;vertical-align:middle}
+  .badge.live{background:rgba(0,255,136,0.14);color:var(--pos);border:1px solid rgba(0,255,136,0.4)}
+  .badge.fb{background:rgba(255,179,0,0.14);color:var(--amber);border:1px solid rgba(255,179,0,0.4)}
+  .pos{color:var(--pos)} .neg{color:var(--neg)} .muted{color:var(--dim)}
+  .barcell{width:120px}
+  .bar{height:9px;border-radius:4px;background:rgba(255,255,255,0.05);overflow:hidden;position:relative}
+  .bar > span{display:block;height:100%;border-radius:4px}
+  tr.total td{border-top:2px solid var(--border);border-bottom:none;background:rgba(0,229,255,0.06);
+    font-family:'Orbitron',sans-serif;font-weight:700;font-size:13px;padding-top:14px;padding-bottom:14px}
+  tr.total td:first-child{color:var(--accent);letter-spacing:.1em}
+
+  footer{text-align:center;color:var(--dim);font-size:11px;letter-spacing:.18em;margin-top:26px;text-transform:uppercase}
 </style>
 </head>
 <body>
-<div class="w">
-<h1>J.A.R.V.I.S.</h1>
-<div class="sub">Bankterminalen &middot; Live Portföljövervakning</div>
-<div class="sb">
-  <div><span class="dot"></span><span style="color:#00ff88">7/7 live &middot; Stockholmsbörsen</span></div>
-  <div style="color:rgba(0,229,255,.5)">Uppdaterad: 26 Jun 2026 23:08</div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+<div class="wrap">
+  <header>
+    <div class="logo">J.A.R.V.I.S.</div>
+    <div class="subtitle">Bankterminalen · Live Portföljövervakning</div>
+    <div class="clock" id="clock">--:--:--</div>
+  </header>
+
+  <div class="statusbar">
+    <div class="stat-left"><span class="dot" id="statusDot"></span><span id="statusText"></span></div>
+    <div class="stat-right" id="updatedText"></div>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag%</th>
+          <th>Vs noll%</th><th>P&amp;L (SEK)</th><th class="barcell">&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <footer>KÄLLA: Avanza · UPPDATERAS VAR 15 MIN MÅN–FRE 09:00–17:30</footer>
 </div>
-<div class="cards">
-  <div class="card"><div class="cl">Investerat</div><div class="cv">699&thinsp;475 kr</div><div class="cs n">Nollpunkt 9 jun 2026</div></div>
-  <div class="card"><div class="cl">Portföljvärde</div><div class="cv">733 138&thinsp;kr</div><div class="cs"><span class="pos">+33 663 kr</span></div></div>
-  <div class="card"><div class="cl">Total P&amp;L</div><div class="cv"><span class="pos">+33 663 kr</span></div><div class="cs"><span class="pos">+4,81%</span> vs nollpunkt</div></div>
-  <div class="card"><div class="cl">Bäst / Sämst</div><div class="cv" style="font-size:1rem"><span class="pos">AZA +8,18%</span></div><div class="cs"><span class="pos">SEB-C +2,87%</span></div></div>
-</div>
-<table>
-<thead><tr><th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag%</th><th>Vs noll%</th><th>P&amp;L (kr)</th><th></th></tr></thead>
-<tbody>
-<tr><td><b>NDA-SE</b><span class="bl">LIVE</span><br><small>Nordea Bank</small></td><td>175,25</td><td><b>180,55</b></td><td class="pos">+0,67%</td><td class="pos">+3,02%</td><td class="pos">+3 021</td><td><div class="bt"><div class="bf2" style="width:37.0%;background:#00ff88"></div></div></td></tr><tr><td><b>SHB-A</b><span class="bl">LIVE</span><br><small>Handelsbanken A</small></td><td>135,15</td><td><b>141,60</b></td><td class="pos">+0,32%</td><td class="pos">+4,77%</td><td class="pos">+4 773</td><td><div class="bt"><div class="bf2" style="width:58.3%;background:#00ff88"></div></div></td></tr><tr><td><b>SHB-B</b><span class="bl">LIVE</span><br><small>Handelsbanken B</small></td><td>224,20</td><td><b>233,80</b></td><td class="neg">-0,09%</td><td class="pos">+4,28%</td><td class="pos">+4 282</td><td><div class="bt"><div class="bf2" style="width:52.3%;background:#00ff88"></div></div></td></tr><tr><td><b>SEB-A</b><span class="bl">LIVE</span><br><small>SEB A</small></td><td>184,00</td><td><b>190,95</b></td><td class="pos">+0,37%</td><td class="pos">+3,78%</td><td class="pos">+3 774</td><td><div class="bt"><div class="bf2" style="width:46.2%;background:#00ff88"></div></div></td></tr><tr><td><b>SEB-C</b><span class="bl">LIVE</span><br><small>SEB C</small></td><td>188,20</td><td><b>193,60</b></td><td class="pos">+0,41%</td><td class="pos">+2,87%</td><td class="pos">+2 867</td><td><div class="bt"><div class="bf2" style="width:35.1%;background:#00ff88"></div></div></td></tr><tr><td><b>SWED-A</b><span class="bl">LIVE</span><br><small>Swedbank A</small></td><td>336,10</td><td><b>358,90</b></td><td class="pos">+0,67%</td><td class="pos">+6,78%</td><td class="pos">+6 772</td><td><div class="bt"><div class="bf2" style="width:82.9%;background:#00ff88"></div></div></td></tr><tr><td><b>AZA</b><span class="bl">LIVE</span><br><small>Avanza Bank Holding</small></td><td>358,10</td><td><b>387,40</b></td><td class="pos">+0,83%</td><td class="pos">+8,18%</td><td class="pos">+8 175</td><td><div class="bt"><div class="bf2" style="width:100.0%;background:#00ff88"></div></div></td></tr>
-<tr class="tr2"><td><b>TOTALT</b></td><td>699 474&thinsp;kr</td><td><b>733 138&thinsp;kr</b></td><td class="n">-</td><td class="pos">+4,81%</td><td class="pos">+33 663</td><td></td></tr>
-</tbody>
-</table>
-<div class="footer">Källa: Yahoo Finance &nbsp;&middot;&nbsp; Uppdateras var 15 min mån-fre 09-18</div>
-</div>
+
+<script>
+  // ---- Hämtad data (nollpunkt 9 juni 2026 10:30) ----
+  var INVESTERAT_TOTAL = 699474.50;
+  var UPDATED = "2026-06-29 09:08:49";
+  var stocks = [
+    {ticker:"NDA-SE", namn:"Nordea Bank",        noll:175.25, antal:570, inv:99892.50, kurs:180.55, dag:0.00, status:"LIVE"},
+    {ticker:"SHB-A",  namn:"Handelsbanken A",    noll:135.15, antal:740, inv:100011.00, kurs:141.60, dag:0.00, status:"LIVE"},
+    {ticker:"SHB-B",  namn:"Handelsbanken B",    noll:224.20, antal:446, inv:99993.20, kurs:233.80, dag:0.00, status:"LIVE"},
+    {ticker:"SEB-A",  namn:"SEB A",              noll:184.00, antal:543, inv:99912.00, kurs:190.95, dag:0.00, status:"LIVE"},
+    {ticker:"SEB-C",  namn:"SEB C",              noll:188.20, antal:531, inv:99934.20, kurs:193.60, dag:0.00, status:"LIVE"},
+    {ticker:"SWED-A", namn:"Swedbank A",         noll:336.10, antal:297, inv:99821.70, kurs:358.90, dag:0.00, status:"LIVE"},
+    {ticker:"AZA",    namn:"Avanza Bank Holding",noll:358.10, antal:279, inv:99909.90, kurs:387.40, dag:0.00, status:"LIVE"}
+  ];
+
+  function nf(n,dec){return n.toLocaleString('sv-SE',{minimumFractionDigits:dec,maximumFractionDigits:dec});}
+  function sek(n){return n.toLocaleString('sv-SE',{maximumFractionDigits:0});}
+  function signPct(n){return (n>=0?'+':'')+nf(n,2)+' %';}
+  function cls(n){return n>=0?'pos':'neg';}
+
+  // ---- Beräkna ----
+  var totalVarde=0, totalPl=0, liveCount=0, maxAbs=0;
+  stocks.forEach(function(s){
+    s.varde = s.kurs * s.antal;
+    s.pl = s.varde - s.inv;
+    s.plPct = s.pl / s.inv * 100;
+    s.vsNoll = (s.kurs - s.noll) / s.noll * 100;
+    totalVarde += s.varde; totalPl += s.pl;
+    if(s.status==="LIVE") liveCount++;
+    if(Math.abs(s.plPct) > maxAbs) maxAbs = Math.abs(s.plPct);
+  });
+  var totalPlPct = totalPl / INVESTERAT_TOTAL * 100;
+  var totalVsNoll = (totalVarde - INVESTERAT_TOTAL) / INVESTERAT_TOTAL * 100;
+
+  var sorted = stocks.slice().sort(function(a,b){return b.plPct - a.plPct;});
+  var best = sorted[0], worst = sorted[sorted.length-1];
+
+  // ---- Statusrad ----
+  var dot = document.getElementById('statusDot');
+  var stxt = document.getElementById('statusText');
+  if(liveCount===7){ dot.className='dot green'; stxt.textContent='7/7 live · Stockholmsbörsen'; }
+  else if(liveCount===0){ dot.className='dot red'; stxt.textContent='0/7 live · '+UPDATED.slice(0,10); }
+  else { dot.className='dot amber'; stxt.textContent=liveCount+'/7 live · '+UPDATED.slice(0,10); }
+
+  // ---- Kort ----
+  var cardData = [
+    {label:'Investerat', value:sek(INVESTERAT_TOTAL)+' kr', sub:''},
+    {label:'Portföljvärde', value:sek(totalVarde)+' kr', sub:''},
+    {label:'Total P&L', value:(totalPl>=0?'+':'')+sek(totalPl)+' kr',
+      sub:'<span class="'+cls(totalPl)+'">'+signPct(totalPlPct)+'</span>', subRaw:true, valCls:cls(totalPl)},
+    {label:'Bäst / Sämst',
+      value:best.ticker+' '+signPct(best.plPct),
+      sub:'<span class="'+cls(best.plPct)+'">'+best.ticker+' '+signPct(best.plPct)+'</span> · <span class="'+cls(worst.plPct)+'">'+worst.ticker+' '+signPct(worst.plPct)+'</span>',
+      subRaw:true, valCls:cls(best.plPct), valText:true}
+  ];
+  var cardsHtml='';
+  cardsHtml += card('Investerat', sek(INVESTERAT_TOTAL)+' kr', '', '');
+  cardsHtml += card('Portföljvärde', sek(totalVarde)+' kr', '', '');
+  cardsHtml += card('Total P&L', (totalPl>=0?'+':'')+sek(totalPl)+' kr',
+      '<span class="'+cls(totalPl)+'">'+signPct(totalPlPct)+'</span>', cls(totalPl));
+  cardsHtml += card('Bäst / Sämst',
+      '<span class="'+cls(best.plPct)+'">'+best.ticker+'</span> '+signPct(best.plPct),
+      '<span class="muted">vs nollkurs · sämst </span><span class="'+cls(worst.plPct)+'">'+worst.ticker+' '+signPct(worst.plPct)+'</span>', '');
+  document.getElementById('cards').innerHTML = cardsHtml;
+
+  function card(label,value,sub,valCls){
+    return '<div class="card"><div class="label">'+label+'</div>'+
+      '<div class="value '+(valCls||'')+'">'+value+'</div>'+
+      (sub?'<div class="sub">'+sub+'</div>':'')+'</div>';
+  }
+
+  // ---- Tabell ----
+  var rows='';
+  stocks.forEach(function(s){
+    var badge = s.status==="LIVE"
+      ? '<span class="badge live">LIVE</span>'
+      : '<span class="badge fb">'+UPDATED.slice(0,10)+'</span>';
+    var dagTxt = (s.dag===null||s.dag===undefined) ? '<span class="muted">–</span>'
+      : '<span class="'+cls(s.dag)+'">'+signPct(s.dag)+'</span>';
+    var pct = maxAbs>0 ? Math.abs(s.plPct)/maxAbs*100 : 0;
+    var barColor = s.plPct>=0 ? 'var(--pos)' : 'var(--neg)';
+    var bar = '<div class="bar"><span style="width:'+pct.toFixed(1)+'%;background:'+barColor+'"></span></div>';
+    rows += '<tr>'+
+      '<td><span class="tick">'+s.ticker+'</span>'+badge+'<span class="name">'+s.namn+'</span></td>'+
+      '<td>'+nf(s.noll,2)+'</td>'+
+      '<td>'+nf(s.kurs,2)+'</td>'+
+      '<td>'+dagTxt+'</td>'+
+      '<td class="'+cls(s.vsNoll)+'">'+signPct(s.vsNoll)+'</td>'+
+      '<td class="'+cls(s.pl)+'">'+(s.pl>=0?'+':'')+sek(s.pl)+'</td>'+
+      '<td class="barcell">'+bar+'</td>'+
+    '</tr>';
+  });
+  rows += '<tr class="total">'+
+    '<td>TOTALT</td>'+
+    '<td>'+sek(INVESTERAT_TOTAL)+'</td>'+
+    '<td>'+sek(totalVarde)+'</td>'+
+    '<td class="muted">–</td>'+
+    '<td class="'+cls(totalVsNoll)+'">'+signPct(totalVsNoll)+'</td>'+
+    '<td class="'+cls(totalPl)+'">'+(totalPl>=0?'+':'')+sek(totalPl)+'</td>'+
+    '<td class="barcell"></td>'+
+  '</tr>';
+  document.getElementById('tbody').innerHTML = rows;
+
+  // ---- Klocka ----
+  function tick(){
+    var now = new Date();
+    var t = now.toLocaleTimeString('sv-SE');
+    document.getElementById('clock').textContent = t;
+    document.getElementById('updatedText').textContent = 'Uppdaterad: '+UPDATED.slice(11);
+  }
+  tick();
+  setInterval(tick,1000);
+</script>
 </body>
 </html>
