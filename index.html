@@ -8,66 +8,54 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#050c12; --accent:#00e5ff; --pos:#00ff88; --neg:#ff1744;
-    --panel:rgba(0,229,255,0.04); --border:rgba(0,229,255,0.18);
-    --muted:#5b7a85; --text:#cdeaf2;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace}
-  body{min-height:100vh;padding:28px 20px 60px;position:relative;overflow-x:hidden}
-  #scanlines{position:fixed;inset:0;pointer-events:none;z-index:9998;
-    background:repeating-linear-gradient(0deg,transparent 2px,rgba(0,229,255,0.015) 2px 4px)}
-  #vignette{position:fixed;inset:0;pointer-events:none;z-index:9997;
-    background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,0.6) 100%)}
-  .wrap{max-width:1080px;margin:0 auto;position:relative;z-index:1}
-  header{text-align:center;margin-bottom:22px}
-  .logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(30px,6vw,54px);
-    letter-spacing:6px;color:var(--accent);text-shadow:0 0 20px rgba(0,229,255,0.5)}
-  .subtitle{margin-top:6px;color:var(--muted);letter-spacing:3px;font-size:13px;text-transform:uppercase}
-  .statusbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
-    border:1px solid var(--border);background:var(--panel);border-radius:6px;
-    padding:10px 16px;margin-bottom:22px;font-size:13px;letter-spacing:1px}
-  .status-left{display:flex;align-items:center;gap:10px}
-  .dot{width:11px;height:11px;border-radius:50%;display:inline-block}
-  .dot.green{background:var(--pos);box-shadow:0 0 10px var(--pos)}
-  .dot.amber{background:#ffb300;box-shadow:0 0 10px #ffb300}
-  .dot.red{background:var(--neg);box-shadow:0 0 10px var(--neg)}
-  .status-right{color:var(--muted)}
-  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
-  @media(max-width:760px){.cards{grid-template-columns:repeat(2,1fr)}}
-  .card{border:1px solid var(--border);background:var(--panel);border-radius:8px;padding:16px 18px}
-  .card .label{color:var(--muted);font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
-  .card .value{font-size:24px;color:var(--text)}
-  .card .sub{font-size:14px;margin-top:6px}
-  .pos{color:var(--pos)} .neg{color:var(--neg)}
-  table{width:100%;border-collapse:collapse;border:1px solid var(--border);
-    background:var(--panel);border-radius:8px;overflow:hidden}
-  thead th{font-family:'Orbitron',sans-serif;font-weight:500;font-size:11px;letter-spacing:1px;
-    color:var(--accent);text-transform:uppercase;text-align:right;padding:12px 14px;
-    border-bottom:1px solid var(--border);background:rgba(0,229,255,0.06)}
-  thead th:first-child{text-align:left}
-  tbody td{padding:12px 14px;text-align:right;font-size:14px;border-bottom:1px solid rgba(0,229,255,0.07)}
-  tbody td:first-child{text-align:left}
-  tbody tr:last-child td{border-bottom:none}
-  .tick{font-family:'Orbitron',sans-serif;font-weight:700;font-size:14px;color:var(--text);
-    display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .name{display:block;color:var(--muted);font-size:11px;margin-top:3px;font-family:'Share Tech Mono',monospace}
-  .badge{font-family:'Share Tech Mono',monospace;font-weight:400;font-size:9px;letter-spacing:1px;
-    padding:2px 6px;border-radius:3px}
-  .badge.live{color:var(--pos);border:1px solid rgba(0,255,136,0.5);background:rgba(0,255,136,0.08)}
-  .badge.fb{color:#ffb300;border:1px solid rgba(255,179,0,0.5);background:rgba(255,179,0,0.08)}
-  .bar-wrap{width:120px;height:10px;background:rgba(255,255,255,0.05);border-radius:5px;
-    overflow:hidden;display:inline-block;vertical-align:middle}
-  .bar{height:100%;border-radius:5px}
-  .total-row td{border-top:2px solid var(--border);font-weight:700;font-size:15px;
-    background:rgba(0,229,255,0.05);color:var(--text)}
-  footer{text-align:center;margin-top:26px;color:var(--muted);font-size:11px;letter-spacing:2px}
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { background:#050c12; color:#cfe9f0; font-family:'Share Tech Mono',monospace; }
+  body { min-height:100vh; padding:24px 18px 60px; position:relative; overflow-x:hidden; }
+  .scanlines { position:fixed; inset:0; pointer-events:none; z-index:9;
+    background:repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px); }
+  .vignette { position:fixed; inset:0; pointer-events:none; z-index:8;
+    background:radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%); }
+  .wrap { max-width:1100px; margin:0 auto; position:relative; z-index:1; }
+  header { text-align:center; margin-bottom:18px; }
+  .logo { font-family:'Orbitron',sans-serif; font-weight:900; font-size:clamp(28px,5vw,52px);
+    letter-spacing:6px; color:#00e5ff; text-shadow:0 0 20px rgba(0,229,255,0.5); }
+  .subtitle { font-size:13px; letter-spacing:3px; color:#5fa9bb; margin-top:6px; text-transform:uppercase; }
+  .statusbar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    border:1px solid rgba(0,229,255,0.25); border-radius:6px; padding:10px 16px; margin:16px 0 22px;
+    background:rgba(0,229,255,0.04); font-size:13px; letter-spacing:1px; }
+  .statusleft { display:flex; align-items:center; gap:10px; }
+  .dot { width:11px; height:11px; border-radius:50%; background:#00ff88; box-shadow:0 0 10px #00ff88; display:inline-block; }
+  .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:26px; }
+  @media(max-width:760px) { .cards { grid-template-columns:repeat(2,1fr); } }
+  .card { border:1px solid rgba(0,229,255,0.22); border-radius:8px; padding:16px 14px;
+    background:linear-gradient(180deg, rgba(0,229,255,0.06), rgba(0,229,255,0.01)); }
+  .card .label { font-size:11px; letter-spacing:2px; color:#5fa9bb; text-transform:uppercase; margin-bottom:8px; }
+  .card .value { font-size:clamp(18px,2.6vw,26px); font-weight:700; font-family:'Orbitron',sans-serif; }
+  .card .sub { font-size:13px; margin-top:5px; }
+  table { width:100%; border-collapse:collapse; font-size:13.5px;
+    border:1px solid rgba(0,229,255,0.22); border-radius:8px; overflow:hidden; }
+  thead th { background:rgba(0,229,255,0.08); color:#7fcfe0; font-weight:400; letter-spacing:1px;
+    text-transform:uppercase; font-size:11px; padding:11px 12px; text-align:right; border-bottom:1px solid rgba(0,229,255,0.25); }
+  thead th:first-child { text-align:left; }
+  tbody td { padding:11px 12px; border-bottom:1px solid rgba(0,229,255,0.08); vertical-align:middle; }
+  .num { text-align:right; }
+  .kurs { color:#00e5ff; }
+  .aktie .tk { font-family:'Orbitron',sans-serif; font-weight:700; font-size:14px; color:#e6f7fb; letter-spacing:1px; }
+  .aktie .nm { font-size:11px; color:#5fa9bb; margin-top:3px; }
+  .badge { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:1px; padding:2px 6px;
+    border-radius:3px; margin-left:6px; vertical-align:middle; }
+  .badge.live { color:#00ff88; border:1px solid rgba(0,255,136,0.5); background:rgba(0,255,136,0.08); }
+  .badge.fb { color:#ffb300; border:1px solid rgba(255,179,0,0.5); background:rgba(255,179,0,0.08); }
+  .barwrap { width:120px; height:9px; background:rgba(255,255,255,0.06); border-radius:5px; overflow:hidden; }
+  .bar { height:100%; border-radius:5px; }
+  .totalrow td { border-top:2px solid rgba(0,229,255,0.4); font-weight:700; background:rgba(0,229,255,0.05); }
+  .totalrow .tk { color:#00e5ff; }
+  footer { text-align:center; margin-top:26px; font-size:11px; letter-spacing:2px; color:#3f7686; text-transform:uppercase; }
 </style>
 </head>
 <body>
-<div id="scanlines"></div>
-<div id="vignette"></div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
 <div class="wrap">
   <header>
     <div class="logo">J.A.R.V.I.S.</div>
@@ -75,110 +63,129 @@
   </header>
 
   <div class="statusbar">
-    <div class="status-left">
-      <span class="dot green"></span>
-      <span>7/7 live · Stockholmsbörsen</span>
-    </div>
-    <div class="status-right">Uppdaterad: <span id="clock">09:54:07</span></div>
+    <div class="statusleft"><span class="dot"></span><span>7/7 live · Stockholmsbörsen</span></div>
+    <div>Uppdaterad: <span id="clock">--:--:--</span></div>
   </div>
 
   <div class="cards">
     <div class="card">
       <div class="label">Investerat</div>
-      <div class="value">699 475 kr</div>
+      <div class="value">699 474 kr</div>
     </div>
     <div class="card">
       <div class="label">Portföljvärde</div>
-      <div class="value">734 799 kr</div>
+      <div class="value">735 105 kr</div>
     </div>
     <div class="card">
       <div class="label">Total P&amp;L</div>
-      <div class="value pos">+35 324 kr</div>
-      <div class="sub pos">+5,05 %</div>
+      <div class="value" style="color:#00ff88">+35 630 kr</div>
+      <div class="sub" style="color:#00ff88">+5,09%</div>
     </div>
     <div class="card">
       <div class="label">Bäst / Sämst</div>
-      <div class="value pos" style="font-size:18px">AZA +9,72 %</div>
-      <div class="sub pos">SEB-C +2,55 %</div>
+      <div class="value" style="font-size:18px"><span style="color:#00ff88">AZA +9,72%</span></div>
+      <div class="sub"><span style="color:#00ff88">SEB-C +2,76%</span></div>
     </div>
   </div>
 
   <table>
     <thead>
       <tr>
-        <th>Aktie</th>
-        <th>Nollkurs</th>
-        <th>Kurs</th>
-        <th>Dag%</th>
-        <th>Vs noll%</th>
-        <th>P&amp;L (SEK)</th>
-        <th>Utveckling</th>
+        <th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag%</th><th>Vs noll%</th><th>P&amp;L (SEK)</th><th></th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><div class="tick">NDA-SE <span class="badge live">LIVE</span></div><span class="name">Nordea Bank</span></td>
-        <td>175,25</td><td>180,50</td>
-        <td class="neg">−0,03</td>
-        <td class="pos">+3,00</td>
-        <td class="pos">+2 993</td>
-        <td><span class="bar-wrap"><span class="bar" style="width:30.8%;background:var(--pos)"></span></span></td>
+        <td class="aktie">
+          <div class="tk">NDA-SE <span class="badge live">LIVE</span></div>
+          <div class="nm">Nordea Bank</div>
+        </td>
+        <td class="num">175,25</td>
+        <td class="num kurs">180,70</td>
+        <td class="num" style="color:#00ff88">+0,08%</td>
+        <td class="num" style="color:#00ff88">+3,11%</td>
+        <td class="num" style="color:#00ff88">+3 106</td>
+        <td><div class="barwrap"><div class="bar" style="width:32.0%;background:#00ff88;box-shadow:0 0 8px #00ff88"></div></div></td>
       </tr>
       <tr>
-        <td><div class="tick">SHB-A <span class="badge live">LIVE</span></div><span class="name">Handelsbanken A</span></td>
-        <td>135,15</td><td>141,65</td>
-        <td class="pos">+0,04</td>
-        <td class="pos">+4,81</td>
-        <td class="pos">+4 810</td>
-        <td><span class="bar-wrap"><span class="bar" style="width:49.5%;background:var(--pos)"></span></span></td>
+        <td class="aktie">
+          <div class="tk">SHB-A <span class="badge live">LIVE</span></div>
+          <div class="nm">Handelsbanken A</div>
+        </td>
+        <td class="num">135,15</td>
+        <td class="num kurs">141,75</td>
+        <td class="num" style="color:#00ff88">+0,11%</td>
+        <td class="num" style="color:#00ff88">+4,88%</td>
+        <td class="num" style="color:#00ff88">+4 884</td>
+        <td><div class="barwrap"><div class="bar" style="width:50.3%;background:#00ff88;box-shadow:0 0 8px #00ff88"></div></div></td>
       </tr>
       <tr>
-        <td><div class="tick">SHB-B <span class="badge live">LIVE</span></div><span class="name">Handelsbanken B</span></td>
-        <td>224,20</td><td>235,00</td>
-        <td class="pos">+0,51</td>
-        <td class="pos">+4,82</td>
-        <td class="pos">+4 817</td>
-        <td><span class="bar-wrap"><span class="bar" style="width:49.6%;background:var(--pos)"></span></span></td>
+        <td class="aktie">
+          <div class="tk">SHB-B <span class="badge live">LIVE</span></div>
+          <div class="nm">Handelsbanken B</div>
+        </td>
+        <td class="num">224,20</td>
+        <td class="num kurs">234,60</td>
+        <td class="num" style="color:#00ff88">+0,34%</td>
+        <td class="num" style="color:#00ff88">+4,64%</td>
+        <td class="num" style="color:#00ff88">+4 638</td>
+        <td><div class="barwrap"><div class="bar" style="width:47.7%;background:#00ff88;box-shadow:0 0 8px #00ff88"></div></div></td>
       </tr>
       <tr>
-        <td><div class="tick">SEB-A <span class="badge live">LIVE</span></div><span class="name">SEB A</span></td>
-        <td>184,00</td><td>190,55</td>
-        <td class="neg">−0,21</td>
-        <td class="pos">+3,56</td>
-        <td class="pos">+3 557</td>
-        <td><span class="bar-wrap"><span class="bar" style="width:36.6%;background:var(--pos)"></span></span></td>
+        <td class="aktie">
+          <div class="tk">SEB-A <span class="badge live">LIVE</span></div>
+          <div class="nm">SEB A</div>
+        </td>
+        <td class="num">184,00</td>
+        <td class="num kurs">190,65</td>
+        <td class="num" style="color:#ff1744">-0,16%</td>
+        <td class="num" style="color:#00ff88">+3,61%</td>
+        <td class="num" style="color:#00ff88">+3 611</td>
+        <td><div class="barwrap"><div class="bar" style="width:37.2%;background:#00ff88;box-shadow:0 0 8px #00ff88"></div></div></td>
       </tr>
       <tr>
-        <td><div class="tick">SEB-C <span class="badge live">LIVE</span></div><span class="name">SEB C</span></td>
-        <td>188,20</td><td>193,00</td>
-        <td class="neg">−0,31</td>
-        <td class="pos">+2,55</td>
-        <td class="pos">+2 549</td>
-        <td><span class="bar-wrap"><span class="bar" style="width:26.2%;background:var(--pos)"></span></span></td>
+        <td class="aktie">
+          <div class="tk">SEB-C <span class="badge live">LIVE</span></div>
+          <div class="nm">SEB C</div>
+        </td>
+        <td class="num">188,20</td>
+        <td class="num kurs">193,40</td>
+        <td class="num" style="color:#ff1744">-0,10%</td>
+        <td class="num" style="color:#00ff88">+2,76%</td>
+        <td class="num" style="color:#00ff88">+2 761</td>
+        <td><div class="barwrap"><div class="bar" style="width:28.4%;background:#00ff88;box-shadow:0 0 8px #00ff88"></div></div></td>
       </tr>
       <tr>
-        <td><div class="tick">SWED-A <span class="badge live">LIVE</span></div><span class="name">Swedbank A</span></td>
-        <td>336,10</td><td>359,30</td>
-        <td class="pos">+0,11</td>
-        <td class="pos">+6,90</td>
-        <td class="pos">+6 890</td>
-        <td><span class="bar-wrap"><span class="bar" style="width:71.0%;background:var(--pos)"></span></span></td>
+        <td class="aktie">
+          <div class="tk">SWED-A <span class="badge live">LIVE</span></div>
+          <div class="nm">Swedbank A</div>
+        </td>
+        <td class="num">336,10</td>
+        <td class="num kurs">359,40</td>
+        <td class="num" style="color:#00ff88">+0,14%</td>
+        <td class="num" style="color:#00ff88">+6,93%</td>
+        <td class="num" style="color:#00ff88">+6 920</td>
+        <td><div class="barwrap"><div class="bar" style="width:71.3%;background:#00ff88;box-shadow:0 0 8px #00ff88"></div></div></td>
       </tr>
       <tr>
-        <td><div class="tick">AZA <span class="badge live">LIVE</span></div><span class="name">Avanza Bank Holding</span></td>
-        <td>358,10</td><td>392,90</td>
-        <td class="pos">+1,42</td>
-        <td class="pos">+9,72</td>
-        <td class="pos">+9 709</td>
-        <td><span class="bar-wrap"><span class="bar" style="width:100%;background:var(--pos)"></span></span></td>
+        <td class="aktie">
+          <div class="tk">AZA <span class="badge live">LIVE</span></div>
+          <div class="nm">Avanza Bank Holding</div>
+        </td>
+        <td class="num">358,10</td>
+        <td class="num kurs">392,90</td>
+        <td class="num" style="color:#00ff88">+1,42%</td>
+        <td class="num" style="color:#00ff88">+9,72%</td>
+        <td class="num" style="color:#00ff88">+9 709</td>
+        <td><div class="barwrap"><div class="bar" style="width:100.0%;background:#00ff88;box-shadow:0 0 8px #00ff88"></div></div></td>
       </tr>
-      <tr class="total-row">
-        <td>TOTALT</td>
-        <td>699 475</td>
-        <td>734 799</td>
-        <td>–</td>
-        <td class="pos">+5,05</td>
-        <td class="pos">+35 324</td>
+      <tr class="totalrow">
+        <td class="aktie"><div class="tk">TOTALT</div></td>
+        <td class="num">699 474</td>
+        <td class="num kurs">735 105</td>
+        <td class="num">–</td>
+        <td class="num" style="color:#00ff88">+5,09%</td>
+        <td class="num" style="color:#00ff88">+35 630</td>
         <td></td>
       </tr>
     </tbody>
@@ -187,12 +194,13 @@
   <footer>KÄLLA: Avanza · UPPDATERAS VAR 15 MIN MÅN–FRE 09:00–17:30</footer>
 </div>
 <script>
-  function tick(){
-    document.getElementById('clock').textContent =
-      new Date().toLocaleTimeString('sv-SE');
+  function tick() {
+    var d = new Date();
+    var el = document.getElementById('clock');
+    if (el) el.textContent = d.toLocaleTimeString('sv-SE');
   }
   tick();
-  setInterval(tick,1000);
+  setInterval(tick, 1000);
 </script>
 </body>
 </html>
