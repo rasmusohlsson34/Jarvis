@@ -2,9 +2,10 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>J.A.R.V.I.S. — Bankterminalen</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -12,121 +13,123 @@
     --accent:#00e5ff;
     --pos:#00ff88;
     --neg:#ff1744;
-    --amber:#ffb300;
     --panel:#0a1620;
     --panel-border:rgba(0,229,255,0.18);
-    --text-dim:#7fa8b5;
+    --text-dim:#5b7f8c;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{
     background:var(--bg);
-    color:#d6f3fa;
+    color:#d8f4ff;
     font-family:'Share Tech Mono', monospace;
     min-height:100vh;
-    position:relative;
     overflow-x:hidden;
   }
-  .scanlines{
+  .overlay-scanlines{
     position:fixed;inset:0;
+    pointer-events:none;
     background:repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
-    pointer-events:none;
-    z-index:2;
+    z-index:100;
   }
-  .vignette{
+  .overlay-vignette{
     position:fixed;inset:0;
-    background:radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
     pointer-events:none;
-    z-index:3;
+    background:radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
+    z-index:101;
   }
   .wrap{
     position:relative;
-    z-index:1;
     max-width:1180px;
     margin:0 auto;
-    padding:40px 24px 60px;
+    padding:36px 24px 60px;
   }
   header{
     display:flex;
     justify-content:space-between;
-    align-items:flex-end;
+    align-items:flex-start;
     flex-wrap:wrap;
     gap:16px;
     border-bottom:1px solid var(--panel-border);
     padding-bottom:20px;
-    margin-bottom:24px;
+    margin-bottom:20px;
   }
   .logo{
     font-family:'Orbitron', sans-serif;
     font-weight:900;
-    font-size:2.4rem;
-    letter-spacing:4px;
+    font-size:2.1rem;
+    letter-spacing:3px;
     color:var(--accent);
     text-shadow:0 0 20px rgba(0,229,255,0.5);
   }
   .subtitle{
-    color:var(--text-dim);
     font-size:0.85rem;
-    letter-spacing:2px;
-    margin-top:4px;
-    text-transform:uppercase;
+    color:var(--text-dim);
+    letter-spacing:1px;
+    margin-top:6px;
   }
   .clock{
     font-family:'Orbitron', sans-serif;
     font-size:1.6rem;
     color:var(--accent);
-    letter-spacing:2px;
     text-shadow:0 0 12px rgba(0,229,255,0.4);
+    text-align:right;
   }
-  .statusrow{
+  .clock-date{
+    font-size:0.75rem;
+    color:var(--text-dim);
+    text-align:right;
+    margin-top:4px;
+    letter-spacing:1px;
+  }
+  .status-row{
     display:flex;
     justify-content:space-between;
     align-items:center;
     flex-wrap:wrap;
     gap:10px;
-    margin-bottom:28px;
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:6px;
+    padding:10px 18px;
+    margin-bottom:26px;
     font-size:0.85rem;
-    letter-spacing:1px;
-    color:var(--text-dim);
+    letter-spacing:0.5px;
   }
   .status-left{display:flex;align-items:center;gap:10px;}
-  .dot{
+  .status-dot{
     width:10px;height:10px;border-radius:50%;
     display:inline-block;
     box-shadow:0 0 8px currentColor;
   }
-  .dot.green{background:var(--pos);color:var(--pos);}
-  .dot.amber{background:var(--amber);color:var(--amber);}
-  .dot.red{background:var(--neg);color:var(--neg);}
+  .dot-green{background:var(--pos);color:var(--pos);}
+  .dot-amber{background:#ffb300;color:#ffb300;}
+  .dot-red{background:var(--neg);color:var(--neg);}
+  .status-right{color:var(--text-dim);}
+
   .cards{
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    grid-template-columns:repeat(4, 1fr);
     gap:16px;
-    margin-bottom:32px;
+    margin-bottom:30px;
   }
   .card{
     background:var(--panel);
     border:1px solid var(--panel-border);
-    border-radius:6px;
+    border-radius:8px;
     padding:18px 20px;
-    position:relative;
-  }
-  .card::before{
-    content:'';
-    position:absolute;top:0;left:0;right:0;height:2px;
-    background:linear-gradient(90deg, var(--accent), transparent);
   }
   .card-label{
     font-size:0.72rem;
-    letter-spacing:2px;
     color:var(--text-dim);
+    letter-spacing:1.5px;
     text-transform:uppercase;
     margin-bottom:10px;
   }
   .card-value{
     font-family:'Orbitron', sans-serif;
-    font-size:1.55rem;
+    font-size:1.5rem;
     font-weight:700;
-    color:#e8fbff;
+    color:#d8f4ff;
   }
   .card-sub{
     font-size:0.85rem;
@@ -135,57 +138,60 @@
   }
   .pos{color:var(--pos);}
   .neg{color:var(--neg);}
+
   table{
     width:100%;
     border-collapse:collapse;
     background:var(--panel);
     border:1px solid var(--panel-border);
-    border-radius:6px;
+    border-radius:8px;
     overflow:hidden;
-    font-size:0.9rem;
   }
   thead th{
     text-align:left;
-    padding:12px 14px;
-    background:rgba(0,229,255,0.06);
-    color:var(--accent);
     font-size:0.72rem;
     letter-spacing:1.5px;
     text-transform:uppercase;
+    color:var(--accent);
+    padding:14px 16px;
     border-bottom:1px solid var(--panel-border);
   }
   tbody td{
-    padding:12px 14px;
+    padding:14px 16px;
     border-bottom:1px solid rgba(0,229,255,0.08);
+    font-size:0.95rem;
     vertical-align:middle;
   }
   tbody tr:last-child td{border-bottom:none;}
-  tbody tr:hover{background:rgba(0,229,255,0.04);}
+  tr.total-row td{
+    border-top:1px solid var(--panel-border);
+    font-weight:700;
+    background:rgba(0,229,255,0.04);
+  }
   .ticker{
     font-family:'Orbitron', sans-serif;
     font-weight:700;
     font-size:1rem;
-    color:#e8fbff;
-    display:flex;
-    align-items:center;
-    gap:8px;
+    color:#d8f4ff;
   }
-  .name{
+  .badge{
+    display:inline-block;
+    font-size:0.62rem;
+    letter-spacing:1px;
+    font-weight:700;
+    padding:2px 6px;
+    border-radius:3px;
+    margin-left:8px;
+    vertical-align:middle;
+  }
+  .badge-live{background:rgba(0,255,136,0.15);color:var(--pos);border:1px solid rgba(0,255,136,0.4);}
+  .badge-fallback{background:rgba(255,179,0,0.15);color:#ffb300;border:1px solid rgba(255,179,0,0.4);}
+  .company-name{
     font-size:0.72rem;
     color:var(--text-dim);
     margin-top:3px;
   }
-  .badge{
-    font-family:'Share Tech Mono', monospace;
-    font-size:0.62rem;
-    letter-spacing:1px;
-    padding:2px 6px;
-    border-radius:3px;
-    font-weight:bold;
-  }
-  .badge.live{background:rgba(0,255,136,0.15);color:var(--pos);border:1px solid rgba(0,255,136,0.4);}
-  .badge.fallback{background:rgba(255,179,0,0.15);color:var(--amber);border:1px solid rgba(255,179,0,0.4);}
-  .bar-cell{min-width:120px;}
+  .bar-cell{width:140px;}
   .bar-track{
     width:100%;
     height:8px;
@@ -197,73 +203,70 @@
     height:100%;
     border-radius:4px;
   }
-  .bar-fill.pos{background:var(--pos);box-shadow:0 0 6px rgba(0,255,136,0.6);}
-  .bar-fill.neg{background:var(--neg);box-shadow:0 0 6px rgba(255,23,68,0.6);}
-  .total-row td{
-    background:rgba(0,229,255,0.05);
-    font-weight:bold;
-    color:#e8fbff;
-    border-top:1px solid var(--panel-border);
-  }
+  .bar-fill.pos{background:var(--pos);box-shadow:0 0 6px rgba(0,255,136,0.5);}
+  .bar-fill.neg{background:var(--neg);box-shadow:0 0 6px rgba(255,23,68,0.5);}
+
   footer{
     margin-top:28px;
     text-align:center;
     font-size:0.72rem;
-    letter-spacing:1.5px;
+    letter-spacing:1px;
     color:var(--text-dim);
-    text-transform:uppercase;
   }
-  @media (max-width:700px){
-    table, thead, tbody, th, td, tr{display:block;}
-    thead{display:none;}
-    tbody td{border-bottom:none;padding:6px 14px;}
-    tbody tr{border-bottom:1px solid var(--panel-border);padding:10px 0;}
-    .bar-cell{min-width:0;}
+
+  @media (max-width:900px){
+    .cards{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:600px){
+    .cards{grid-template-columns:1fr;}
+    table{font-size:0.8rem;}
+    .bar-cell{width:80px;}
   }
 </style>
 </head>
 <body>
-<div class="scanlines"></div>
-<div class="vignette"></div>
+
+<div class="overlay-scanlines"></div>
+<div class="overlay-vignette"></div>
+
 <div class="wrap">
   <header>
     <div>
       <div class="logo">J.A.R.V.I.S.</div>
-      <div class="subtitle">Bankterminalen · Live Portföljövervakning</div>
+      <div class="subtitle">Bankterminalen &middot; Live Portf&ouml;lj&ouml;vervakning</div>
     </div>
-    <div class="clock" id="clock">--:--:--</div>
+    <div>
+      <div class="clock" id="clock">--:--:--</div>
+      <div class="clock-date" id="clockDate">----</div>
+    </div>
   </header>
 
-  <div class="statusrow">
+  <div class="status-row">
     <div class="status-left">
-      <span class="dot green"></span>
-      <span id="status-text">7/7 live · Stockholmsbörsen</span>
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">Laddar...</span>
     </div>
-    <div id="updated-text">Uppdaterad: 14:23:18</div>
+    <div class="status-right" id="updatedText">Uppdaterad: --:--:--</div>
   </div>
 
   <div class="cards">
     <div class="card">
       <div class="card-label">Investerat</div>
-      <div class="card-value">699 475 kr</div>
-      <div class="card-sub">Nollpunkt 9 juni 2026</div>
+      <div class="card-value" id="cardInvested">–</div>
     </div>
     <div class="card">
-      <div class="card-label">Portföljvärde</div>
-      <div class="card-value">746 071 kr</div>
-      <div class="card-sub">7 innehav</div>
+      <div class="card-label">Portf&ouml;ljv&auml;rde</div>
+      <div class="card-value" id="cardValue">–</div>
     </div>
     <div class="card">
       <div class="card-label">Total P&amp;L</div>
-      <div class="card-value pos">+46 597 kr</div>
-      <div class="card-sub pos">+6,66 %</div>
+      <div class="card-value" id="cardPL">–</div>
+      <div class="card-sub" id="cardPLPct">–</div>
     </div>
     <div class="card">
-      <div class="card-label">Bäst / Sämst</div>
-      <div class="card-value" style="font-size:1.1rem;">
-        <span class="pos">AZA +9,94%</span>
-      </div>
-      <div class="card-sub">SEB-C +4,78 % (vs nollkurs)</div>
+      <div class="card-label">B&auml;st / S&auml;mst</div>
+      <div class="card-value" id="cardBest">–</div>
+      <div class="card-sub" id="cardWorst">–</div>
     </div>
   </div>
 
@@ -276,95 +279,129 @@
         <th>Dag%</th>
         <th>Vs noll%</th>
         <th>P&amp;L (SEK)</th>
-        <th>Utveckling</th>
+        <th>&nbsp;</th>
       </tr>
     </thead>
-    <tbody id="table-body"></tbody>
+    <tbody id="tableBody"></tbody>
   </table>
 
-  <footer>KÄLLA: Avanza · UPPDATERAS VAR 15 MIN MÅN–FRE 09:00–17:30</footer>
+  <footer>K&Auml;LLA: Avanza &middot; UPPDATERAS VAR 15 MIN M&Aring;N&ndash;FRE 09:00&ndash;17:30</footer>
 </div>
 
 <script>
-const data = [
-  {t:"NDA-SE", name:"Nordea Bank", noll:175.25, antal:570, invest:99892.50, kurs:185.80, dag:1.78, live:true},
-  {t:"SHB-A", name:"Handelsbanken A", noll:135.15, antal:740, invest:100011.00, kurs:143.25, dag:1.13, live:true},
-  {t:"SHB-B", name:"Handelsbanken B", noll:224.20, antal:446, invest:99993.20, kurs:236.80, dag:0.94, live:true},
-  {t:"SEB-A", name:"SEB A", noll:184.00, antal:543, invest:99912.00, kurs:195.60, dag:1.64, live:true},
-  {t:"SEB-C", name:"SEB C", noll:188.20, antal:531, invest:99934.20, kurs:197.20, dag:0.92, live:true},
-  {t:"SWED-A", name:"Swedbank A", noll:336.10, antal:297, invest:99821.70, kurs:362.90, dag:1.40, live:true},
-  {t:"AZA", name:"Avanza Bank Holding", noll:358.10, antal:279, invest:99909.90, kurs:393.70, dag:0.95, live:true},
-];
+  // ---- Nollpunkt (9 juni 2026, kl 10:30 Stockholm) ----
+  const stocks = [
+    { ticker:"NDA-SE", name:"Nordea Bank",        noll:175.25, antal:570, invest:99892.50,  kurs:185.45, dag:1.59, live:true },
+    { ticker:"SHB-A",  name:"Handelsbanken A",     noll:135.15, antal:740, invest:100011.00, kurs:143.10, dag:1.02, live:true },
+    { ticker:"SHB-B",  name:"Handelsbanken B",     noll:224.20, antal:446, invest:99993.20,  kurs:235.80, dag:0.51, live:true },
+    { ticker:"SEB-A",  name:"SEB A",               noll:184.00, antal:543, invest:99912.00,  kurs:195.70, dag:1.69, live:true },
+    { ticker:"SEB-C",  name:"SEB C",               noll:188.20, antal:531, invest:99934.20,  kurs:196.80, dag:0.72, live:true },
+    { ticker:"SWED-A", name:"Swedbank A",           noll:336.10, antal:297, invest:99821.70,  kurs:362.40, dag:1.26, live:true },
+    { ticker:"AZA",    name:"Avanza Bank Holding",  noll:358.10, antal:279, invest:99909.90,  kurs:393.90, dag:1.00, live:true }
+  ];
+  const UPDATED_AT = "2026-07-02T14:53:30+02:00";
 
-const dateBadge = "02 jul";
+  function fmtSEK(n){
+    return Math.round(n).toLocaleString('sv-SE');
+  }
+  function fmtPct(n, decimals){
+    decimals = decimals === undefined ? 2 : decimals;
+    const sign = n > 0 ? '+' : (n < 0 ? '' : '±');
+    return sign + n.toFixed(decimals).replace('-', '−') + '%';
+  }
+  function signClass(n){
+    return n >= 0 ? 'pos' : 'neg';
+  }
 
-data.forEach(d=>{
-  d.varde = d.kurs * d.antal;
-  d.pl = d.varde - d.invest;
-  d.vsNoll = (d.kurs - d.noll) / d.noll * 100;
-});
+  // Derived calculations
+  let totalInvest = 0, totalVarde = 0;
+  stocks.forEach(s => {
+    s.varde = s.kurs * s.antal;
+    s.pl = s.varde - s.invest;
+    s.vsNollPct = ((s.kurs - s.noll) / s.noll) * 100;
+    totalInvest += s.invest;
+    totalVarde += s.varde;
+  });
+  const totalPL = totalVarde - totalInvest;
+  const totalPLPct = (totalPL / totalInvest) * 100;
+  const maxAbsVsNoll = Math.max(...stocks.map(s => Math.abs(s.vsNollPct)));
 
-const maxAbs = Math.max(...data.map(d=>Math.abs(d.vsNoll)));
-const totalInvest = data.reduce((s,d)=>s+d.invest,0);
-const totalVarde = data.reduce((s,d)=>s+d.varde,0);
-const totalPl = totalVarde - totalInvest;
-const totalPlPct = totalPl/totalInvest*100;
+  const liveCount = stocks.filter(s => s.live).length;
+  const statusDot = document.getElementById('statusDot');
+  const statusText = document.getElementById('statusText');
+  if(liveCount === stocks.length){
+    statusDot.className = 'status-dot dot-green';
+    statusText.textContent = liveCount + '/' + stocks.length + ' live · Stockholmsbörsen';
+  } else if(liveCount === 0){
+    statusDot.className = 'status-dot dot-red';
+    statusText.textContent = liveCount + '/' + stocks.length + ' live · ' + new Date(UPDATED_AT).toLocaleDateString('sv-SE');
+  } else {
+    statusDot.className = 'status-dot dot-amber';
+    statusText.textContent = liveCount + '/' + stocks.length + ' live · ' + new Date(UPDATED_AT).toLocaleDateString('sv-SE');
+  }
+  document.getElementById('updatedText').textContent = 'Uppdaterad: ' + new Date(UPDATED_AT).toLocaleTimeString('sv-SE');
 
-function fmtSEK(n){
-  return Math.round(n).toLocaleString('sv-SE');
-}
-function fmtPct(n){
-  const s = n>=0 ? '+' : '';
-  return s + n.toLocaleString('sv-SE',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
-}
+  // Cards
+  document.getElementById('cardInvested').textContent = fmtSEK(totalInvest) + ' kr';
+  document.getElementById('cardValue').textContent = fmtSEK(totalVarde) + ' kr';
+  const plEl = document.getElementById('cardPL');
+  plEl.textContent = (totalPL >= 0 ? '+' : '−') + fmtSEK(Math.abs(totalPL)) + ' kr';
+  plEl.className = 'card-value ' + signClass(totalPL);
+  const plPctEl = document.getElementById('cardPLPct');
+  plPctEl.textContent = fmtPct(totalPLPct);
+  plPctEl.className = 'card-sub ' + signClass(totalPLPct);
 
-const tbody = document.getElementById('table-body');
-data.forEach(d=>{
-  const tr = document.createElement('tr');
-  const barPct = maxAbs ? Math.abs(d.vsNoll)/maxAbs*100 : 0;
-  const barClass = d.vsNoll >= 0 ? 'pos' : 'neg';
-  const dagClass = d.dag == null ? '' : (d.dag >= 0 ? 'pos' : 'neg');
-  const vsClass = d.vsNoll >= 0 ? 'pos' : 'neg';
-  const plClass = d.pl >= 0 ? 'pos' : 'neg';
-  const badge = d.live
-    ? `<span class="badge live">LIVE</span>`
-    : `<span class="badge fallback">${dateBadge}</span>`;
-  tr.innerHTML = `
-    <td>
-      <div class="ticker">${d.t} ${badge}</div>
-      <div class="name">${d.name}</div>
-    </td>
-    <td>${d.noll.toLocaleString('sv-SE',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
-    <td>${d.kurs.toLocaleString('sv-SE',{minimumFractionDigits:2,maximumFractionDigits:2})}</td>
-    <td class="${dagClass}">${d.dag==null ? '–' : fmtPct(d.dag)}</td>
-    <td class="${vsClass}">${fmtPct(d.vsNoll)}</td>
-    <td class="${plClass}">${d.pl>=0?'+':''}${fmtSEK(d.pl)}</td>
-    <td class="bar-cell"><div class="bar-track"><div class="bar-fill ${barClass}" style="width:${barPct}%"></div></div></td>
-  `;
-  tbody.appendChild(tr);
-});
+  const best = stocks.reduce((a,b) => b.vsNollPct > a.vsNollPct ? b : a);
+  const worst = stocks.reduce((a,b) => b.vsNollPct < a.vsNollPct ? b : a);
+  const bestEl = document.getElementById('cardBest');
+  bestEl.innerHTML = best.ticker + ' <span class="' + signClass(best.vsNollPct) + '">' + fmtPct(best.vsNollPct) + '</span>';
+  document.getElementById('cardWorst').innerHTML = 'Sämst: ' + worst.ticker + ' <span class="' + signClass(worst.vsNollPct) + '">' + fmtPct(worst.vsNollPct) + '</span> (vs nollkurs)';
 
-const totalRow = document.createElement('tr');
-totalRow.className = 'total-row';
-const totalPlClass = totalPl >= 0 ? 'pos' : 'neg';
-totalRow.innerHTML = `
-  <td>TOTALT</td>
-  <td>${fmtSEK(totalInvest)}</td>
-  <td>${fmtSEK(totalVarde)}</td>
-  <td>–</td>
-  <td class="${totalPlClass}">${fmtPct(totalPlPct)}</td>
-  <td class="${totalPlClass}">${totalPl>=0?'+':''}${fmtSEK(totalPl)}</td>
-  <td></td>
-`;
-tbody.appendChild(totalRow);
+  // Table rows
+  const tbody = document.getElementById('tableBody');
+  stocks.forEach(s => {
+    const tr = document.createElement('tr');
+    const barPct = maxAbsVsNoll > 0 ? Math.min(100, Math.abs(s.vsNollPct) / maxAbsVsNoll * 100) : 0;
+    const barClass = s.vsNollPct >= 0 ? 'pos' : 'neg';
+    tr.innerHTML =
+      '<td><span class="ticker">' + s.ticker + '</span>' +
+        '<span class="badge ' + (s.live ? 'badge-live' : 'badge-fallback') + '">' +
+          (s.live ? 'LIVE' : new Date(UPDATED_AT).toLocaleDateString('sv-SE')) +
+        '</span>' +
+        '<div class="company-name">' + s.name + '</div>' +
+      '</td>' +
+      '<td>' + s.noll.toFixed(2).replace('.', ',') + '</td>' +
+      '<td>' + s.kurs.toFixed(2).replace('.', ',') + '</td>' +
+      '<td class="' + signClass(s.dag) + '">' + (s.dag === null ? '–' : fmtPct(s.dag)) + '</td>' +
+      '<td class="' + signClass(s.vsNollPct) + '">' + fmtPct(s.vsNollPct) + '</td>' +
+      '<td class="' + signClass(s.pl) + '">' + (s.pl >= 0 ? '+' : '−') + fmtSEK(Math.abs(s.pl)) + '</td>' +
+      '<td class="bar-cell"><div class="bar-track"><div class="bar-fill ' + barClass + '" style="width:' + barPct.toFixed(1) + '%"></div></div></td>';
+    tbody.appendChild(tr);
+  });
 
-function tick(){
-  const now = new Date();
-  const timeStr = now.toLocaleTimeString('sv-SE');
-  document.getElementById('clock').textContent = timeStr;
-}
-setInterval(tick, 1000);
-tick();
+  // Total row
+  const totalBarPct = maxAbsVsNoll > 0 ? Math.min(100, Math.abs(totalPLPct) / maxAbsVsNoll * 100) : 0;
+  const totalRow = document.createElement('tr');
+  totalRow.className = 'total-row';
+  totalRow.innerHTML =
+    '<td>TOTALT</td>' +
+    '<td>' + fmtSEK(totalInvest) + ' kr</td>' +
+    '<td>' + fmtSEK(totalVarde) + ' kr</td>' +
+    '<td>–</td>' +
+    '<td class="' + signClass(totalPLPct) + '">' + fmtPct(totalPLPct) + '</td>' +
+    '<td class="' + signClass(totalPL) + '">' + (totalPL >= 0 ? '+' : '−') + fmtSEK(Math.abs(totalPL)) + '</td>' +
+    '<td class="bar-cell"><div class="bar-track"><div class="bar-fill ' + (totalPL >= 0 ? 'pos' : 'neg') + '" style="width:' + totalBarPct.toFixed(1) + '%"></div></div></td>';
+  tbody.appendChild(totalRow);
+
+  // Live clock
+  function tickClock(){
+    const now = new Date();
+    document.getElementById('clock').textContent = now.toLocaleTimeString('sv-SE');
+    document.getElementById('clockDate').textContent = now.toLocaleDateString('sv-SE', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
 </script>
+
 </body>
 </html>
