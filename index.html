@@ -4,74 +4,68 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>J.A.R.V.I.S. — Bankterminalen</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
     background:#050c12;
     color:#c8e6f0;
-    font-family:'Share Tech Mono', ui-monospace, 'Courier New', monospace;
+    font-family:'Share Tech Mono', monospace;
     min-height:100vh;
-    padding:24px 28px 40px;
+    padding:28px 32px 40px;
   }
   .scanlines {
-    position:fixed; inset:0; pointer-events:none; z-index:9998;
+    position:fixed; inset:0; pointer-events:none; z-index:10;
     background:repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
   }
   .vignette {
-    position:fixed; inset:0; pointer-events:none; z-index:9999;
+    position:fixed; inset:0; pointer-events:none; z-index:9;
     background:radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
   }
   header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
   .logo {
-    font-family:'Orbitron', 'Share Tech Mono', sans-serif;
-    font-weight:900; font-size:34px; letter-spacing:6px; color:#00e5ff;
-    text-shadow:0 0 20px rgba(0,229,255,0.5);
+    font-family:'Orbitron', sans-serif; font-weight:900; font-size:34px; letter-spacing:6px;
+    color:#00e5ff; text-shadow:0 0 20px rgba(0,229,255,0.5);
   }
-  .subtitle { color:#4a7a8c; font-size:13px; letter-spacing:2px; margin-top:4px; }
+  .subtitle { color:#5a8a99; font-size:13px; margin-top:4px; letter-spacing:2px; }
   .clock { font-size:26px; color:#00e5ff; text-shadow:0 0 12px rgba(0,229,255,0.4); text-align:right; }
-  .clock small { display:block; font-size:12px; color:#4a7a8c; letter-spacing:1px; }
+  .clock-date { font-size:12px; color:#5a8a99; text-align:right; letter-spacing:1px; }
   .statusbar {
     display:flex; justify-content:space-between; align-items:center;
     border:1px solid rgba(0,229,255,0.25); background:rgba(0,229,255,0.04);
-    padding:8px 14px; font-size:13px; letter-spacing:1px; margin-bottom:18px;
+    padding:8px 16px; margin-bottom:20px; font-size:13px; letter-spacing:1px;
   }
-  .dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:8px; vertical-align:middle; }
-  .dot.green { background:#00ff88; box-shadow:0 0 8px #00ff88; }
-  .dot.amber { background:#ffb300; box-shadow:0 0 8px #ffb300; }
-  .dot.red   { background:#ff1744; box-shadow:0 0 8px #ff1744; }
-  .cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(210px,1fr)); gap:14px; margin-bottom:20px; }
+  .dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:9px; vertical-align:middle;
+    background:#00ff88; box-shadow:0 0 8px #00ff88; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-bottom:22px; }
   .card {
-    border:1px solid rgba(0,229,255,0.25); background:rgba(0,229,255,0.04);
-    padding:14px 16px;
+    border:1px solid rgba(0,229,255,0.22); background:rgba(0,229,255,0.035);
+    padding:14px 18px;
   }
-  .card .label { font-size:11px; color:#4a7a8c; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+  .card .label { font-size:11px; color:#5a8a99; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
   .card .value { font-size:24px; color:#e6f7ff; }
   .card .sub { font-size:13px; margin-top:4px; }
   .pos { color:#00ff88; }
   .neg { color:#ff1744; }
   table { width:100%; border-collapse:collapse; font-size:14px; }
   thead th {
-    text-align:right; color:#4a7a8c; font-size:11px; letter-spacing:2px; text-transform:uppercase;
-    border-bottom:1px solid rgba(0,229,255,0.35); padding:8px 10px;
+    text-align:right; font-size:11px; color:#00e5ff; letter-spacing:2px; text-transform:uppercase;
+    border-bottom:1px solid rgba(0,229,255,0.35); padding:8px 10px; font-weight:normal;
   }
   thead th:first-child { text-align:left; }
-  tbody td, tfoot td { padding:10px; text-align:right; border-bottom:1px solid rgba(0,229,255,0.12); }
+  tbody td, tfoot td { padding:10px; text-align:right; border-bottom:1px solid rgba(0,229,255,0.1); }
   tbody td:first-child, tfoot td:first-child { text-align:left; }
-  .ticker { font-family:'Orbitron', sans-serif; font-weight:700; font-size:14px; color:#e6f7ff; letter-spacing:1px; }
+  .tick { font-family:'Orbitron', sans-serif; font-weight:700; font-size:14px; color:#e6f7ff; letter-spacing:1px; }
   .badge {
-    font-size:9px; letter-spacing:1px; padding:2px 6px; margin-left:8px; vertical-align:middle;
-    border:1px solid #00ff88; color:#00ff88;
+    display:inline-block; font-size:9px; letter-spacing:1px; padding:2px 6px; margin-left:8px;
+    color:#00ff88; border:1px solid rgba(0,255,136,0.5); background:rgba(0,255,136,0.08); vertical-align:middle;
   }
-  .badge.fb { border-color:#ffb300; color:#ffb300; }
-  .name { font-size:11px; color:#4a7a8c; margin-top:3px; }
-  .barcell { width:120px; }
-  .bar { height:8px; background:rgba(255,255,255,0.06); position:relative; }
-  .bar span { position:absolute; left:0; top:0; bottom:0; }
-  tfoot td { border-top:2px solid rgba(0,229,255,0.4); border-bottom:none; color:#e6f7ff; font-weight:bold; }
-  footer { margin-top:26px; text-align:center; font-size:11px; color:#33586a; letter-spacing:2px; }
+  .name { font-size:11px; color:#5a8a99; margin-top:3px; }
+  .barwrap { width:120px; height:10px; background:rgba(255,255,255,0.06); margin-left:auto; }
+  .bar { height:100%; background:#00ff88; box-shadow:0 0 6px rgba(0,255,136,0.5); }
+  .bar.negbar { background:#ff1744; box-shadow:0 0 6px rgba(255,23,68,0.5); }
+  tfoot td { border-top:1px solid rgba(0,229,255,0.35); border-bottom:none; color:#e6f7ff; font-size:15px; padding-top:14px; }
+  footer { margin-top:28px; text-align:center; font-size:11px; color:#3d616e; letter-spacing:2px; }
 </style>
 </head>
 <body>
@@ -83,94 +77,101 @@
     <div class="logo">J.A.R.V.I.S.</div>
     <div class="subtitle">Bankterminalen · Live Portföljövervakning</div>
   </div>
-  <div class="clock"><span id="clock">--:--:--</span><small>STOCKHOLM</small></div>
+  <div>
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="clock-date" id="clockdate"></div>
+  </div>
 </header>
 
 <div class="statusbar">
-  <div><span class="dot green"></span>7/7 live · Stockholmsbörsen</div>
-  <div>Uppdaterad: 09:08:01</div>
+  <div><span class="dot"></span>7/7 live · Stockholmsbörsen</div>
+  <div>Uppdaterad: 09:22:53</div>
 </div>
 
-<div class="cards" id="cards"></div>
+<div class="cards">
+  <div class="card">
+    <div class="label">Investerat</div>
+    <div class="value">699 475 kr</div>
+    <div class="sub" style="color:#5a8a99;">Nollpunkt 9 juni 2026</div>
+  </div>
+  <div class="card">
+    <div class="label">Portföljvärde</div>
+    <div class="value">751 873 kr</div>
+    <div class="sub" style="color:#5a8a99;">7 innehav</div>
+  </div>
+  <div class="card">
+    <div class="label">Total P&amp;L</div>
+    <div class="value pos">+52 399 kr</div>
+    <div class="sub pos">+7,49 %</div>
+  </div>
+  <div class="card">
+    <div class="label">Bäst / Sämst</div>
+    <div class="value pos" style="font-size:18px;">AZA +10,22 %</div>
+    <div class="sub pos">SHB-B +5,80 %</div>
+  </div>
+</div>
 
 <table>
   <thead>
     <tr>
-      <th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag%</th><th>Vs noll%</th><th>P&amp;L (SEK)</th><th class="barcell"></th>
+      <th>Aktie</th><th>Nollkurs</th><th>Kurs</th><th>Dag%</th><th>Vs noll%</th><th>P&amp;L (SEK)</th><th></th>
     </tr>
   </thead>
-  <tbody id="rows"></tbody>
-  <tfoot id="foot"></tfoot>
+  <tbody>
+    <tr>
+      <td><span class="tick">NDA-SE</span><span class="badge">LIVE</span><div class="name">Nordea Bank</div></td>
+      <td>175,25</td><td>187,70</td><td class="pos">+0,13</td><td class="pos">+7,10</td><td class="pos">+7 097</td>
+      <td><div class="barwrap"><div class="bar" style="width:69.5%"></div></div></td>
+    </tr>
+    <tr>
+      <td><span class="tick">SHB-A</span><span class="badge">LIVE</span><div class="name">Handelsbanken A</div></td>
+      <td>135,15</td><td>144,10</td><td class="pos">+0,31</td><td class="pos">+6,62</td><td class="pos">+6 623</td>
+      <td><div class="barwrap"><div class="bar" style="width:64.8%"></div></div></td>
+    </tr>
+    <tr>
+      <td><span class="tick">SHB-B</span><span class="badge">LIVE</span><div class="name">Handelsbanken B</div></td>
+      <td>224,20</td><td>237,20</td><td class="pos">+0,17</td><td class="pos">+5,80</td><td class="pos">+5 798</td>
+      <td><div class="barwrap"><div class="bar" style="width:56.7%"></div></div></td>
+    </tr>
+    <tr>
+      <td><span class="tick">SEB-A</span><span class="badge">LIVE</span><div class="name">SEB A</div></td>
+      <td>184,00</td><td>197,95</td><td class="pos">+0,38</td><td class="pos">+7,58</td><td class="pos">+7 575</td>
+      <td><div class="barwrap"><div class="bar" style="width:74.2%"></div></div></td>
+    </tr>
+    <tr>
+      <td><span class="tick">SEB-C</span><span class="badge">LIVE</span><div class="name">SEB C</div></td>
+      <td>188,20</td><td>199,40</td><td class="pos">+0,50</td><td class="pos">+5,95</td><td class="pos">+5 947</td>
+      <td><div class="barwrap"><div class="bar" style="width:58.2%"></div></div></td>
+    </tr>
+    <tr>
+      <td><span class="tick">SWED-A</span><span class="badge">LIVE</span><div class="name">Swedbank A</div></td>
+      <td>336,10</td><td>366,90</td><td class="pos">+0,19</td><td class="pos">+9,16</td><td class="pos">+9 148</td>
+      <td><div class="barwrap"><div class="bar" style="width:89.7%"></div></div></td>
+    </tr>
+    <tr>
+      <td><span class="tick">AZA</span><span class="badge">LIVE</span><div class="name">Avanza Bank Holding</div></td>
+      <td>358,10</td><td>394,70</td><td class="pos">+1,21</td><td class="pos">+10,22</td><td class="pos">+10 211</td>
+      <td><div class="barwrap"><div class="bar" style="width:100%"></div></div></td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td><span class="tick">TOTALT</span></td>
+      <td>699 475</td><td>751 873</td><td>–</td><td class="pos">+7,49</td><td class="pos">+52 399</td><td></td>
+    </tr>
+  </tfoot>
 </table>
 
 <footer>KÄLLA: AVANZA · UPPDATERAS VAR 15 MIN MÅN–FRE 09:00–17:30</footer>
 
 <script>
-const DATA = [
-  { t:'NDA-SE', n:'Nordea Bank',         noll:175.25, antal:570, inv:99892.50,  kurs:187.45, dag:0.00, live:true },
-  { t:'SHB-A',  n:'Handelsbanken A',     noll:135.15, antal:740, inv:100011.00, kurs:143.65, dag:0.00, live:true },
-  { t:'SHB-B',  n:'Handelsbanken B',     noll:224.20, antal:446, inv:99993.20,  kurs:236.80, dag:0.00, live:true },
-  { t:'SEB-A',  n:'SEB A',               noll:184.00, antal:543, inv:99912.00,  kurs:197.20, dag:0.00, live:true },
-  { t:'SEB-C',  n:'SEB C',               noll:188.20, antal:531, inv:99934.20,  kurs:198.40, dag:0.00, live:true },
-  { t:'SWED-A', n:'Swedbank A',          noll:336.10, antal:297, inv:99821.70,  kurs:366.20, dag:0.00, live:true },
-  { t:'AZA',    n:'Avanza Bank Holding', noll:358.10, antal:279, inv:99909.90,  kurs:390.00, dag:0.00, live:true }
-];
-
-const sek = n => Math.round(n).toLocaleString('sv-SE');
-const sign = (n, d=2) => (n >= 0 ? '+' : '−') + Math.abs(n).toFixed(d).replace('.', ',');
-const cls = n => n >= 0 ? 'pos' : 'neg';
-
-let totInv = 0, totVarde = 0;
-const rows = DATA.map(a => {
-  const varde = a.kurs * a.antal;
-  const pl = varde - a.inv;
-  const plPct = pl / a.inv * 100;
-  const vsNoll = (a.kurs - a.noll) / a.noll * 100;
-  totInv += a.inv; totVarde += varde;
-  return { ...a, varde, pl, plPct, vsNoll };
-});
-const totPl = totVarde - totInv;
-const totPlPct = totPl / totInv * 100;
-const maxAbs = Math.max(...rows.map(r => Math.abs(r.plPct)));
-const best = rows.reduce((a,b) => b.vsNoll > a.vsNoll ? b : a);
-const worst = rows.reduce((a,b) => b.vsNoll < a.vsNoll ? b : a);
-
-document.getElementById('cards').innerHTML = `
-  <div class="card"><div class="label">Investerat</div><div class="value">${sek(totInv)} kr</div><div class="sub">Nollpunkt 9 juni 2026</div></div>
-  <div class="card"><div class="label">Portföljvärde</div><div class="value">${sek(totVarde)} kr</div><div class="sub">7 innehav</div></div>
-  <div class="card"><div class="label">Total P&amp;L</div><div class="value ${cls(totPl)}">${totPl>=0?'+':'−'}${sek(Math.abs(totPl))} kr</div><div class="sub ${cls(totPl)}">${sign(totPlPct)} %</div></div>
-  <div class="card"><div class="label">Bäst / Sämst</div>
-    <div class="value" style="font-size:17px"><span class="${cls(best.vsNoll)}">${best.t} ${sign(best.vsNoll)} %</span></div>
-    <div class="sub"><span class="${cls(worst.vsNoll)}">${worst.t} ${sign(worst.vsNoll)} %</span></div></div>`;
-
-document.getElementById('rows').innerHTML = rows.map(r => `
-  <tr>
-    <td><span class="ticker">${r.t}</span><span class="badge${r.live?'':' fb'}">${r.live?'LIVE':'6 JUL'}</span><div class="name">${r.n}</div></td>
-    <td>${r.noll.toFixed(2).replace('.', ',')}</td>
-    <td>${r.kurs.toFixed(2).replace('.', ',')}</td>
-    <td class="${r.dag===null?'':cls(r.dag)}">${r.dag===null?'–':sign(r.dag)+' %'}</td>
-    <td class="${cls(r.vsNoll)}">${sign(r.vsNoll)} %</td>
-    <td class="${cls(r.pl)}">${r.pl>=0?'+':'−'}${sek(Math.abs(r.pl))}</td>
-    <td class="barcell"><div class="bar"><span style="width:${maxAbs?Math.abs(r.plPct)/maxAbs*100:0}%;background:${r.plPct>=0?'#00ff88':'#ff1744'}"></span></div></td>
-  </tr>`).join('');
-
-document.getElementById('foot').innerHTML = `
-  <tr>
-    <td>TOTALT</td>
-    <td>${sek(totInv)}</td>
-    <td>${sek(totVarde)}</td>
-    <td>–</td>
-    <td class="${cls(totPlPct)}">${sign(totPlPct)} %</td>
-    <td class="${cls(totPl)}">${totPl>=0?'+':'−'}${sek(Math.abs(totPl))}</td>
-    <td class="barcell"></td>
-  </tr>`;
-
-function tick() {
-  document.getElementById('clock').textContent =
-    new Date().toLocaleTimeString('sv-SE', { timeZone:'Europe/Stockholm' });
-}
-tick();
-setInterval(tick, 1000);
+  function tick() {
+    var n = new Date();
+    document.getElementById('clock').textContent = n.toLocaleTimeString('sv-SE');
+    document.getElementById('clockdate').textContent = n.toLocaleDateString('sv-SE', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  }
+  tick();
+  setInterval(tick, 1000);
 </script>
 </body>
 </html>
