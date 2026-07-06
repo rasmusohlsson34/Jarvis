@@ -7,59 +7,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    background:#050c12;
-    color:#c8e6f0;
-    font-family:'Share Tech Mono', monospace;
-    min-height:100vh;
-    padding:28px 32px 40px;
-  }
-  .scanlines {
-    position:fixed; inset:0; pointer-events:none; z-index:10;
-    background:repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px);
-  }
-  .vignette {
-    position:fixed; inset:0; pointer-events:none; z-index:9;
-    background:radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
-  }
+  body { background:#050c12; color:#c8e6f0; font-family:'Share Tech Mono', monospace; min-height:100vh; padding:28px 32px 40px; }
+  .scanlines { position:fixed; inset:0; pointer-events:none; z-index:10; background:repeating-linear-gradient(0deg, transparent 2px, rgba(0,229,255,0.015) 2px 4px); }
+  .vignette { position:fixed; inset:0; pointer-events:none; z-index:9; background:radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%); }
   header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
-  .logo {
-    font-family:'Orbitron', sans-serif; font-weight:900; font-size:34px; letter-spacing:6px;
-    color:#00e5ff; text-shadow:0 0 20px rgba(0,229,255,0.5);
-  }
+  .logo { font-family:'Orbitron', sans-serif; font-weight:900; font-size:34px; letter-spacing:6px; color:#00e5ff; text-shadow:0 0 20px rgba(0,229,255,0.5); }
   .subtitle { color:#5a8a99; font-size:13px; margin-top:4px; letter-spacing:2px; }
   .clock { font-size:26px; color:#00e5ff; text-shadow:0 0 12px rgba(0,229,255,0.4); text-align:right; }
   .clock-date { font-size:12px; color:#5a8a99; text-align:right; letter-spacing:1px; }
-  .statusbar {
-    display:flex; justify-content:space-between; align-items:center;
-    border:1px solid rgba(0,229,255,0.25); background:rgba(0,229,255,0.04);
-    padding:8px 16px; margin-bottom:20px; font-size:13px; letter-spacing:1px;
-  }
-  .dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:9px; vertical-align:middle;
-    background:#00ff88; box-shadow:0 0 8px #00ff88; }
+  .statusbar { display:flex; justify-content:space-between; align-items:center; border:1px solid rgba(0,229,255,0.25); background:rgba(0,229,255,0.04); padding:8px 16px; margin-bottom:20px; font-size:13px; letter-spacing:1px; }
+  .dot { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:9px; vertical-align:middle; background:#00ff88; box-shadow:0 0 8px #00ff88; }
   .cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-bottom:22px; }
-  .card {
-    border:1px solid rgba(0,229,255,0.22); background:rgba(0,229,255,0.035);
-    padding:14px 18px;
-  }
+  .card { border:1px solid rgba(0,229,255,0.22); background:rgba(0,229,255,0.035); padding:14px 18px; }
   .card .label { font-size:11px; color:#5a8a99; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
   .card .value { font-size:24px; color:#e6f7ff; }
   .card .sub { font-size:13px; margin-top:4px; }
   .pos { color:#00ff88; }
   .neg { color:#ff1744; }
   table { width:100%; border-collapse:collapse; font-size:14px; }
-  thead th {
-    text-align:right; font-size:11px; color:#00e5ff; letter-spacing:2px; text-transform:uppercase;
-    border-bottom:1px solid rgba(0,229,255,0.35); padding:8px 10px; font-weight:normal;
-  }
+  thead th { text-align:right; font-size:11px; color:#00e5ff; letter-spacing:2px; text-transform:uppercase; border-bottom:1px solid rgba(0,229,255,0.35); padding:8px 10px; font-weight:normal; }
   thead th:first-child { text-align:left; }
   tbody td, tfoot td { padding:10px; text-align:right; border-bottom:1px solid rgba(0,229,255,0.1); }
   tbody td:first-child, tfoot td:first-child { text-align:left; }
   .tick { font-family:'Orbitron', sans-serif; font-weight:700; font-size:14px; color:#e6f7ff; letter-spacing:1px; }
-  .badge {
-    display:inline-block; font-size:9px; letter-spacing:1px; padding:2px 6px; margin-left:8px;
-    color:#00ff88; border:1px solid rgba(0,255,136,0.5); background:rgba(0,255,136,0.08); vertical-align:middle;
-  }
+  .badge { display:inline-block; font-size:9px; letter-spacing:1px; padding:2px 6px; margin-left:8px; color:#00ff88; border:1px solid rgba(0,255,136,0.5); background:rgba(0,255,136,0.08); vertical-align:middle; }
+  .badge.fb { color:#ffb300; border-color:rgba(255,179,0,0.5); background:rgba(255,179,0,0.08); }
   .name { font-size:11px; color:#5a8a99; margin-top:3px; }
   .barwrap { width:120px; height:10px; background:rgba(255,255,255,0.06); margin-left:auto; }
   .bar { height:100%; background:#00ff88; box-shadow:0 0 6px rgba(0,255,136,0.5); }
@@ -85,7 +57,7 @@
 
 <div class="statusbar">
   <div><span class="dot"></span>7/7 live · Stockholmsbörsen</div>
-  <div>Uppdaterad: 09:22:53</div>
+  <div>Uppdaterad: 09:38:12</div>
 </div>
 
 <div class="cards">
@@ -96,18 +68,18 @@
   </div>
   <div class="card">
     <div class="label">Portföljvärde</div>
-    <div class="value">751 873 kr</div>
+    <div class="value">752 418 kr</div>
     <div class="sub" style="color:#5a8a99;">7 innehav</div>
   </div>
   <div class="card">
     <div class="label">Total P&amp;L</div>
-    <div class="value pos">+52 399 kr</div>
-    <div class="sub pos">+7,49 %</div>
+    <div class="value pos">+52 943 kr</div>
+    <div class="sub pos">+7,57 %</div>
   </div>
   <div class="card">
     <div class="label">Bäst / Sämst</div>
-    <div class="value pos" style="font-size:18px;">AZA +10,22 %</div>
-    <div class="sub pos">SHB-B +5,80 %</div>
+    <div class="value pos" style="font-size:18px;">AZA +10,58 %</div>
+    <div class="sub pos">SHB-B +5,89 %</div>
   </div>
 </div>
 
@@ -120,44 +92,44 @@
   <tbody>
     <tr>
       <td><span class="tick">NDA-SE</span><span class="badge">LIVE</span><div class="name">Nordea Bank</div></td>
-      <td>175,25</td><td>187,70</td><td class="pos">+0,13</td><td class="pos">+7,10</td><td class="pos">+7 097</td>
-      <td><div class="barwrap"><div class="bar" style="width:69.5%"></div></div></td>
+      <td>175,25</td><td>188,05</td><td class="pos">+0,32</td><td class="pos">+7,30</td><td class="pos">+7 296</td>
+      <td><div class="barwrap"><div class="bar" style="width:69.0%"></div></div></td>
     </tr>
     <tr>
       <td><span class="tick">SHB-A</span><span class="badge">LIVE</span><div class="name">Handelsbanken A</div></td>
-      <td>135,15</td><td>144,10</td><td class="pos">+0,31</td><td class="pos">+6,62</td><td class="pos">+6 623</td>
-      <td><div class="barwrap"><div class="bar" style="width:64.8%"></div></div></td>
+      <td>135,15</td><td>144,35</td><td class="pos">+0,49</td><td class="pos">+6,81</td><td class="pos">+6 808</td>
+      <td><div class="barwrap"><div class="bar" style="width:64.3%"></div></div></td>
     </tr>
     <tr>
       <td><span class="tick">SHB-B</span><span class="badge">LIVE</span><div class="name">Handelsbanken B</div></td>
-      <td>224,20</td><td>237,20</td><td class="pos">+0,17</td><td class="pos">+5,80</td><td class="pos">+5 798</td>
-      <td><div class="barwrap"><div class="bar" style="width:56.7%"></div></div></td>
+      <td>224,20</td><td>237,40</td><td class="pos">+0,25</td><td class="pos">+5,89</td><td class="pos">+5 887</td>
+      <td><div class="barwrap"><div class="bar" style="width:55.6%"></div></div></td>
     </tr>
     <tr>
       <td><span class="tick">SEB-A</span><span class="badge">LIVE</span><div class="name">SEB A</div></td>
-      <td>184,00</td><td>197,95</td><td class="pos">+0,38</td><td class="pos">+7,58</td><td class="pos">+7 575</td>
-      <td><div class="barwrap"><div class="bar" style="width:74.2%"></div></div></td>
+      <td>184,00</td><td>197,85</td><td class="pos">+0,33</td><td class="pos">+7,53</td><td class="pos">+7 521</td>
+      <td><div class="barwrap"><div class="bar" style="width:71.1%"></div></div></td>
     </tr>
     <tr>
       <td><span class="tick">SEB-C</span><span class="badge">LIVE</span><div class="name">SEB C</div></td>
-      <td>188,20</td><td>199,40</td><td class="pos">+0,50</td><td class="pos">+5,95</td><td class="pos">+5 947</td>
-      <td><div class="barwrap"><div class="bar" style="width:58.2%"></div></div></td>
+      <td>188,20</td><td>199,40</td><td class="pos">+0,50</td><td class="pos">+5,95</td><td class="pos">+5 947</td>
+      <td><div class="barwrap"><div class="bar" style="width:56.2%"></div></div></td>
     </tr>
     <tr>
       <td><span class="tick">SWED-A</span><span class="badge">LIVE</span><div class="name">Swedbank A</div></td>
-      <td>336,10</td><td>366,90</td><td class="pos">+0,19</td><td class="pos">+9,16</td><td class="pos">+9 148</td>
-      <td><div class="barwrap"><div class="bar" style="width:89.7%"></div></div></td>
+      <td>336,10</td><td>366,10</td><td class="neg">-0,03</td><td class="pos">+8,93</td><td class="pos">+8 910</td>
+      <td><div class="barwrap"><div class="bar" style="width:84.3%"></div></div></td>
     </tr>
     <tr>
       <td><span class="tick">AZA</span><span class="badge">LIVE</span><div class="name">Avanza Bank Holding</div></td>
-      <td>358,10</td><td>394,70</td><td class="pos">+1,21</td><td class="pos">+10,22</td><td class="pos">+10 211</td>
-      <td><div class="barwrap"><div class="bar" style="width:100%"></div></div></td>
+      <td>358,10</td><td>396,00</td><td class="pos">+1,54</td><td class="pos">+10,58</td><td class="pos">+10 574</td>
+      <td><div class="barwrap"><div class="bar" style="width:100.0%"></div></div></td>
     </tr>
   </tbody>
   <tfoot>
     <tr>
       <td><span class="tick">TOTALT</span></td>
-      <td>699 475</td><td>751 873</td><td>–</td><td class="pos">+7,49</td><td class="pos">+52 399</td><td></td>
+      <td>699 475</td><td>752 418</td><td>–</td><td class="pos">+7,57</td><td class="pos">+52 943</td><td></td>
     </tr>
   </tfoot>
 </table>
